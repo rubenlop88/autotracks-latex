@@ -1,0 +1,585 @@
+\documentclass[final,fmstyle]{fpunathesis}
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[spanish]{cleveref}
+
+\begin{document}
+
+\tableofcontents
+\listoffigures
+
+\mainmatter  % inician los capitulos de la tesis
+
+\chapter{Introducción}
+
+\section{Motivación}
+
+La congestión de tránsito es uno de los problemas más serios que enfrentan las zonas urbanas del mundo hoy en día, tanto en países desarrollados como en países en vías de desarrollo, el constante aumento del parque de automóviles, el alto uso de vehículos de transporte privado y la falta de planificación de las ciudades son factores que deterioran la calidad de vida de los ciudadanos.
+
+\begin{figure}[h]
+\centering
+\input{figura-coordenadas.pdf_tex}
+\caption{Sistema de Coordenadas Geográficas}
+\label{fig:coordenadas}
+\end{figure}
+
+El fuerte impacto negativo de la congestión exige un esfuerzo multidisciplinario que apunte a mejorar la situación actual mediante el diseño de políticas públicas de mejoramiento de la infraestructura, la implementación de sistemas de monitoreo y control de tránsito eficientes, la mejora del sistema de transporte público y la mejora en la educación vial de la población.
+
+Los países \Cref{fig:coordenadas} menos desarrollados no cuentan con sistemas integrados de control de tránsito debido al alto costo de inversión requerido, tampoco existen servicios proveídos por empresas privadas. Esta situación dificulta la utilización eficiente de las escasas y mal planificadas vías de tránsito existentes, es por eso que se hace evidente la necesidad de recolectar y analizar información sobre el tránsito de forma barata, sencilla y que requiera una mínima inversión.
+
+\Cref{sec:objetivos} en este trabajo se propone la implementación de un sistema que permitirá monitorear las condiciones del tránsito utilizando información proveída por dispositivo móviles en tiempo real. Para ello se estudiará el estado del arte de las técnicas de recolección, análisis y distribución de información de tráfico y se seleccionarán los mecanismos de monitoreo y análisis más adecuados a las necesidades y limitaciones de nuestro medio. Dicha información quedará disponible de forma pública y podrá ser utilizada en trabajos futuros para desarrollar soluciones que ayuden a mitigar la problemática de la congestión vehicular.
+
+\section{Objetivos}
+\label{sec:objetivos}
+
+El principal objetivo de este proyecto es construir un sistema que permita recolectar y procesar información del estado del tránsito vehicular en tiempo real a través de dispositivos móviles para ofrecer funcionalidades que ayuden al control y/o reducción de la congestión de tránsito.
+
+Entre los objetivos específicos se puede citar:
+
+\begin{itemize}
+\item Estudiar el estado del arte de las técnicas de recolección de datos de tránsito con un enfoque particular en el área de Floating Car Data.
+
+\item Estudiar el estado del arte en técnicas de Map Matching utilizadas para procesar la información obtenida.
+
+\item Estudiar el estado del arte de técnicas de Distribución de la Información entre dispositivos móviles.
+
+\item Diseñar la arquitectura para un sistema que utilice las técnicas estudiadas de modo a recolectar, analizar, distribuir y utilizar la información del estado del tránsito vehicular.
+
+\item Implementar una aplicación móvil que se utilizará para recolectar datos de ubicación de los usuarios, distribuir la información de tránsito procesada y brindar soporte a los usuarios.
+
+\item Implementar un sistema centralizado capaz de recibir los datos de ubicación de los usuarios para determinar el estado del tránsito vehicular.
+\end{itemize}
+
+\section{Organización}
+
+Este trabajo está dividido en 5 capítulos. El capítulo 1 describe la motivación para realizar el trabajo, brinda una visión general de los desafíos existentes y define los objetivos que se desean alcanzar.
+
+%TODO corregir, cambio la numeración de capítulos.
+
+En el capítulo 2 se hace un extenso estudio del estado del arte de las técnicas de recolección, análisis y distribución de los datos necesarios para la implementación del sistema, con un especial énfasis en las técnicas de Floating Car Data para la recolección de datos y de Map Matching para el análisis de los mismos.
+
+El capítulo 3  describe el problema y se explica detalladamente la arquitectura de la solución propuesta, las técnicas seleccionadas para la recolección y el análisis de datos y los algoritmos utilizados en casa paso del proceso.
+
+En el capítulo 4 se presenta un análisis de las pruebas realizadas para verificar el funcionamiento del sistema y muestra los resultados obtenidos. Finalmente en el capítulo 5 se presentan las conclusiones y se proponen los posibles trabajos futuros.
+
+\chapter{Sistemas Geográficos de Información}
+
+Se conocen como Sistemas de Información Geográfica (SIG) a aquellos sistemas basados en computadoras diseñados para la recolección, mantenimiento, análisis y distribución de datos e información geográfica [1]. Un SIG es un sistema de hardware, software, personas, datos, organización y mecanismos institucionales para recoger, almacenar, analizar y difundir información sobre las áreas de la tierra [2].
+
+El objetivo principal de los SIG es almacenar información precisa sobre la localización de objetos de interés, así como sus propiedades y atributos. Los SIG ayudan en en el análisis y la toma de decisiones basadas en información geográfica y son aplicables en diversas áreas de la actividad humana como la planificación para el desarrollo de zonas urbanas y rurales, la delimitación de propiedades y el cobro de  impuestos, el análisis del flujo del tráfico en ciudades, entre otros. Estos sistemas proveen funcionalidades para manipular datos espaciales, calcular distancias, áreas y adyacencias entre objetos, modificar datos geográficos, realizar análisis cuantitativos y cualitativos, visualizar mapas, gráficos y tablas, etc.
+
+En este capítulo se explican los conceptos fundamentales que sirven de base para el desarrollo de los SIG como los sistemas de coordenadas y proyecciones, los modelos de datos utilizados para representar la información geográfica y las bases de datos en las que se guarda la información.
+
+\section{Datums, Proyecciones, y Sistemas de Coordenadas}
+
+La tarea fundamental de un SIG es conocer la ubicación de los objetos de interés e identificar dicha ubicación dentro de un map. En esta sección describimos los principios básicos que permiten definir esta ubicación y representarla en un mapa plano.
+
+\subsection{Sistemas de Coordenadas}
+
+Se denominan como coordenadas al conjunto de números que identifican de forma única a una posicion dentro de un sistema de coordenadas. Estos números son representados generalmente como pares x,y en un plano cartesiano, o como latitud y longitud en un sistema de coordenadas geográficas. Para definir el sistema de coordenadas geográficas se tienen en cuenta dos elementos principales: 1) el tamaño y la forma de la tierra y 2) un conjunto de elementos de referencia a partir de los cuales se puede determinar la ubicación de cualquier otro objeto en la superficie de la tierra.
+
+La forma de la tierra es modelada como un elipsoide achatado hacia los polos, su semieje mayor corresponde al radio en la direccion del ecuador, y su semieje menor corresponde al radio en la direccion de los polos. El factor principal para determinar la forma y el tamaño de la tierra son los  radios y el centro del elipsoide. Los polos están definidos por el eje de rotación del elipsoide y el ecuador se define como el círculo a mitad de camino entre los dos polos, en un ángulo recto con respecto al eje polar, y que cubre la dimensión más ancha de la elipsoide (Fig. 1.1). Las ubicaciones de estos elementos son estimadas utilizando mediciones  precisas. Una vez que estas localizaciones han sido estimadas se pueden especificar las coordenadas geográficas. Esto crea un sistema de referencia mediante el cual podemos especificar la posicion de objetos en la superficie del elipsoide.
+
+Figura 1.1. Elipsoide utilizado para modelar la superficie del planeta Tierra.
+
+La forma del elipsoide está dada por la siguiente ecuación.
+
+Los sistemas de coordenadas geográficas se componen de la latitud, que varía de norte a sur, y la longitud, que varía de este a oeste. Las líneas de longitud constante son denominadas meridianos, y las líneas de latitud constante son denominadas paralelos. Los paralelos son líneas paralelas entre sí en dirección este-oeste alrededor de la Tierra. Los meridianos son líneas que van de sur a norte y convergen en los polos. Por convención, el ecuador se toma como la latitud de cero grados y latitudes al sur y al norte varían en un rango de hasta 90 grados. Se toma como longitud cero al meridiano que atraviesa el Observatorio Real de Greenwich, en Inglaterra y las longitudes al este u oeste se especifican como ángulos de giro con respecto al Meridiano de Greenwich, variando de -180 grados (oeste) a 180 grados (este). Ver Figura 1.2.
+
+Figura 1.2. Sistema de coordenadas de latitud y longitud.
+
+\subsection{Datums geodésicos}
+
+Con el sistema de coordenadas definido se procede a estimar las longitudes y latitudes de todas las demás ubicaciones a través de mediciones. En décadas anteriores estas estimaciones se hacían utilizando técnicas astronómicas, midiendo distancias y direcciones entre puntos. Hoy en día se utilizan técnicas modernas de posicionamiento basado en satélites. Mediante estas estimaciones se establecen un conjunto de puntos de referencia para los cuales la latitud y la longitud han sido precisamente determinadas. Todas las demás coordenadas se miden con referencia a este conjunto de puntos.
+
+Este conjunto de puntos se conoce como datum geodésico.  Un datum geodésico consta de dos componentes principales. El primer componente es un elipsoide con un sistema de coordenadas esféricas o cartesianas de tres dimensiones y un origen. La segunda parte consiste en un conjunto de puntos y líneas cuyas coordenadas han sido medidas cuidadosamente utilizando los mejores métodos y equipos.
+
+A lo largo de la historia diferentes estudios han determinado diversos valores para los radios y el centro del elipsoide. Debido a errores de medición, diferencias en los métodos de cálculo y a que la tierra no es un elipsoide perfecto, diferentes estimaciones alrededor del mundo tienen ligeramente diferentes orígenes, ejes de orientación y radios. Estas diferencias aunque pequeñas, generalmente resultan en estimaciones bastante diferentes para las coordenadas de una misma localización,  dependiendo del elipsoide utilizado. En la actualidad las mediciones globales y la avanzada capacidad computacional permiten estimar elipsoides aplicables de forma global. Debido a esta diferencia en las estimaciones existen datums diferentes para diferentes partes de la tierra, desarrollados en distintas épocas.
+
+El primer datum utilizado ampliamente en Norteamérica fue el North American Datum de 1927 (NAD27), su sucesor fue el North American Datum de 1983 (NAD83), las mejores estimaciones de las localizaciones de los puntos cambiaron en hasta 200 metros entre estos dos datums (ver Fig. 1.3). El World Geodetic System de 1984 (WGS84) es un conjunto de datums globales desarrollado y utilizado principalmente por el Departamento de Defensa de los Estados Unidos y hoy en día es ampliamente aceptado y utilizado en todo el mundo.
+
+Figura 1.3a. Desplazamiento de la latitud de los datums en metros, NAD83 menos NAD27.
+
+Figura 1.3a. Desplazamiento de la longitud de los datums en metros, NAD83 menos NAD27.
+
+\subsection{Proyecciones}
+
+Una proyección es una representación sistemática de las posiciones de la superficie de la curva Tierra sobre una superficie plana de un mapa. El mapa resultante sufre una distorsión debido a la traducción de una superficie superficie curva a una superficie plana. Diferentes proyecciones pueden distorsionar el mapa de diferentes maneras. La proyección puede definirse por lo tanto como la transformación de una posicion en la superficie de la tierra, identificada por su latitud y longitud 
+%(φ, λ),
+a una posicion en coordenadas cartesianas (x, y). Cualquier proyección puede representarse como un par de funciones matemáticas:
+
+%x = f (φ,λ)
+%y = g(φ, λ)
+
+Las proyecciones se pueden clasificar de acuerdo a su forma, en cónicas, cilíndricas o planas (Fig. 1.4) y de acuerdo a su orientación en ecuatoriales, cuando por ejemplo el eje de un cilindro coincide con los polos, o transversales, cuando por ejemplo el eje del cilindro coincide con el ecuador. 
+
+Figura 1.4. Tipos de proyecciones: a) cilíndrica, b) cónica y c) plana.
+
+Algunas de las proyecciones más importantes son la Proyección Cilíndrica Equidistante, que produce una imagen fuertemente distorsionada de la Tierra con los polos extendidos a lo largo de la totalidad de los bordes superior e inferior del mapa (Fig. 1.5); la Proyección Conforme de Lambert, que se obtiene interceptando un cono con la superficie de la tierra en dos paralelos del elipsoide; la Proyección Transversa de Mercator, que se obtiene envolviendo la Tierra con un cilindro y proyectando las posiciones de la misma sobre el cilindro, el eje del cilindro se encuentra en el plano ecuatorial y el Sistema de Coordenadas Universal Transversal de Mercator (UTM por sus siglas en Inglés), que está basada en la Proyección Normal de Mercator pero en lugar de ser tangente al ecuador es tangente a un meridiano, es decir es un cilindro cuyo eje es el eje polar del elipsoide. 
+
+Figura 1.5. Proyección Cilíndrica Equidistante (Plate Carrée)
+
+\section{Modelos de datos}
+
+Una vez que tenemos definidos el sistema de coordenadas y que podemos representar conceptualmente la localización de los objetos en un mapa, el siguiente paso es definir una estructura de datos que represente esta información de manera a que la misma pueda ser manipulada y analizada con un SIG. En esta sección describimos brevemente las estructuras de datos comúnmente utilizadas en los SIG actuales.
+
+\subsection{Modelo de Datos Vectorial}
+
+En un modelo vectorial cada objeto del mundo real es representado como uno de tres posibles tipos de datos geométricos: puntos, líneas o polígonos (Fig. 1.6). Un punto se representa de forma única por sus coordenadas (ciudades, puestos de salud, comisarías), las líneas se representan como una lista ordenada de coordenadas correspondientes a sus vértices (rutas, ríos y arroyos) y los polígonos se representan como uno o más segmentos de líneas que se cierran para formar un polígono (propiedades rurales, lagos, delimitación de distritos). Las coordenadas que definen la geometría de cada objeto pueden tener 2, 3, 4 o más dimensiones. En algunos modelos de datos las figuras geométricas pueden ser representadas por curvas definidas por una función matemática (ej. curvas de Biézer).
+
+Figura 1.6. Representación vectorial.
+
+Objetos del mismo tipo (ej. calles) normalmente son guardadas en una tabla de base de datos en la que cada objeto ocupa una fila de la tabla y cada atributo del objeto corresponde a una columna de la tabla. En un SIG también se puede almacenar información topológica sobre los objetos. La topología es la ciencia que estudia las relaciones geométricas entre las distintas figuras y objetos geométricos (puntos, líneas, polígonos), por ejemplo las relaciones de adyacencia y conectividad. Las relaciones topológicas son propiedades cualitativas de los objetos geográficos que permanecen constantes cuando se distorsiona el espacio geográfico de los objetos.  Por ejemplo para cada calle se puede definir su sentido de circulación y su límite de velocidad.
+
+\subsection{Modelo de Datos Raster}
+
+En una representación raster el espacio es dividido en una colección de celdas rectangulares, todas las variaciones geográficas son expresadas asignando propiedades o atributos a estas celdas. Este tipo de representación requiere que la superficie curva de la tierra sea proyectada en una superficie plana. Debido a que esto genera distorsiones, las celdas en una representación raster no son perfectamente iguales en forma o área a la superficie que representan. Cuando se usa este formato, toda la información acerca de las variaciones dentro de una celda es perdida y se asigna un único valor a toda la celda (Fig. 1.7).
+
+Figura 1.7. Representación raster.
+
+Las celdas pueden contener atributos basado en diversos esquemas de codificación. Por ejemplo, un esquema de codificación simple puede asignar un valor binario, cero o uno, a cada celda para representar la presencia o ausencia de forestación en dicha celda. En casos más avanzados se utilizan números de punto flotante para representar por ejemplo el nivel de elevación de cada celda con respecto al nivel del mar. Múltiples atributos pueden ser guardados para cada celda en una tabla en la que cada columna es un atributo de la celda y cada fila representa a una celda en particular. Los datos usualmente son guardados en archivos comprimidos o en bases de datos relacionales.
+
+\subsection{Modelos de Datos de Red}
+
+El modelo de red es un tipo especial de modelo topológico que puede ser utilizado para modelar el flujo de bienes y servicios. En un SIG las redes son modeladas como puntos o nodos (ej. intersecciones de calles, fusibles, interruptores, válvulas de agua) y líneas  (calles, líneas de transmisión y tuberías).  Las relaciones topológicas de la red definen  cómo las líneas se conectan entre sí en los nodos y también pueden definir reglas sobre cómo los flujos pueden moverse a través de una red.
+
+Por ejemplo, en una red de calles que está compuesta por un conjunto de nodos (intersecciones de las calles) y líneas (las calles), así como las relaciones topológicas entre las mismas (restricciones de giro en los nodos, sentido de las calles, límites de velocidad), la información topológica permite analizar el flujo de tráfico a través de la red y determinar los puntos más congestionados o calcular caminos más cortos de un punto de la red a otro.
+
+\subsection{Red Irregular de Triángulos (TIN)}
+
+Los modelos de datos geográficos descritos hasta ahora se utilizan para representar datos en una o dos dimensiones. Para representar superficies tridimensionales en un SIG se pueden utilizar modelos raster o redes irregulares de triángulos (TIN por sus siglas en Inglés). En los modelos raster cada celda almacena la altura de la superficie en una localización dada. En una estructura TIN se representa una superficie como una serie de elementos triangulares contiguos que no se superponen entre sí.
+
+Una estructura de datos TIN es una estructura topológica que almacena información acerca de los nodos que comprenden cada triángulo y los vecinos de cada triángulo. El triángulo está representado por una secuencia de tres nodos, cada nodo está definido por sus coordenadas x, y, z (Fig. 1.8). Los triángulos tienen como atributos su pendiente, orientación y área, los vértices tienen atributos de elevación y los bordes tienen como atributos su pendiente y dirección. Al igual que en los demás modelos de datos, cada triángulo puede tener otros datos o atributos asociados.
+
+Figura 1.8. Representación TIN.
+
+\section{Bases de Datos Espaciales}
+
+Una base de datos espacial es aquella en la que están definidos tipos de datos especiales para representar objetos geométricos y permite guardar estos objetos geométricos, que usualmente son de origen geográfico, en tablas regulares de una base de datos. Además provee funciones e índices para consultar y manipular estos datos [3]. Las bases de datos espaciales no necesitan ser relacionales pero muchas de las más populares lo son.
+
+En las bases de datos espaciales típicamente se definen tipos de datos que representan puntos, líneas y polígonos a partir de los cuáles se pueden construir otros tipos de datos más complejos y representar objetos del mundo real. Estas bases de datos están especialmente diseñadas para representar información en dos dimensiones en formato vectorial, pero también pueden almacenar datos raster y topologías tridimensionales.
+
+\subsection{Análisis espacial, procesamiento espacial, y consultas espaciales}
+
+Una consulta espacial es una consulta de base de datos que utiliza funciones geométricas para responder preguntas acerca del espacio y de los objetos en el espacio. Extensiones para bases de datos como PostGIS y Oracle Spatial agregan un conjunto de funciones a las ya existentes en el lenguaje SQL estándar que trabajan con objetos geométricos de forma similar a como las funciones estándar trabajan con las fechas. 
+
+Por ejemplo, existen funciones que indican la cantidad de tiempo que hay entre dos fechas o si una fecha dada corresponde al pasado o al futuro. De forma similar las base de datos espaciales proveen funciones especiales que permiten obtener la distancia entre dos figuras geométricas, o el área total de un polígono. Las funciones espaciales también permiten crear y modificar objetos geométricos.
+
+Existen estándares que definen este conjunto de tipos de datos y funciones espaciales. Open Geospatial Consortium (OGC) es un consorcio internacional de la industria cuyo objetivo es tratar de estandarizar la forma en que los datos geométricos y espaciales son accedidos y distribuidos. OGC cuenta con numerosas especificaciones que definen el acceso a los datos geoespaciales, servicios web para consulta y manipulación de datos, formatos de datos geoespaciales y consulta de datos geoespaciales.
+
+\subsection{Productos comerciales y de código abierto}
+
+Existen varias bases de datos espaciales disponibles en el mercado que implementan los estándares OGC, tanto de código abierto como soluciones comerciales. Entre las bases de datos de código abierto más populares podemos citar a SpatialLite/SQLite, PostgreSQL/PostGIS y MySQL. Los productos comerciales más populares incluyen a Oracle Spatial y SQL Server de Microsoft.
+
+PostGIS es una extensión para PostgreSQL que agrega soporte para tipos de datos geométricos y funciones especiales convirtiendo a PostgreSQL en una base de datos espacial. PostGIS es un proyecto de código abierto que se publica bajo la Licencia Pública General de GNU. Además de los tipos de datos básicos provee otros tipos de datos más complejos como multi-polígonos, multi-puntos, multi-líneas y curvas geométricas. PostGIS 2 además agrega soporte para datos raster para  y datos tridimensionales en formato TIN así como también funciones para trabajar para comparación de objetos tridimensionales. De forma similar SpatialLite es una extensión para SQLite que agrega soporte para tipos de datos y funciones geométricas.
+
+Oracle Spatial es una extensión para la base de datos Oracle que proporciona tipos de datos y funciones para la gestión de datos espaciales. Los tipos estándar y funciones de Oracle (CHAR, DATE, INTEGER, etc) se extienden con equivalentes geográficos. Oracle Spatial provee tipos básicos de geométricas: puntos, líneas y polígonos (incluyendo polígonos complejos con agujeros), a partir de los cuáles se pueden construir estructuras de datos más complejas. Además, Oracle Spatial puede almacenar y administrar datos de tipo raster.
+
+\chapter{Recolección de datos de tráfico}
+
+Actualmente existen una variedad de tecnologías para la recolección automática de datos del tráfico. Según Mimbela y Klein [4] podemos dividir estas tecnologías en dos métodos. El primero, es la tecnología in-situ, que toma los datos del tráfico a través de detectores a lo largo del camino. Generalmente estas tecnologías de conteo de tráfico pueden dividirse en dos categorías: la intrusiva y la no intrusiva. Por el otro lado tenemos los datos flotantes del vehículo (FCD por sus siglas en inglés). FCD es una alternativa para obtener datos del tráfico de gran calidad y se está volviendo crucial para el desarrollo de nuevos Sistemas Inteligentes de Transporte (ITS por sus siglas en inglés).
+
+\section{Tecnologías In-Situ}
+
+En [5] se puede apreciar un gran número de sensores fijos para la detección del tráfico. Estas tecnologías de detección in-situ se dividen en dos categorías: tecnologías intrusivas, que están montadas en o por debajo de la superficie de las rutas y cuya instalación ocasiona la interrupción potencial del tráfico. En contrapartida, las tecnologías no intrusivas son montadas en o por encima de la superficie de las rutas, su instalación no genera interrupción del tráfico o lo hace en pequeña medida. 
+
+\subsection{Tecnologías Intrusivas}
+
+Los tipos de sensores y la ubicación de los mismos se pueden observar en la Fig. 2.1. El primer tipo de unidades son los sensores magnéticos pasivos o magnetómetros que pueden ser montados de forma permanente en hoyos a lo largo del camino, o pegados a la superficie de la ruta. Estas unidades se comunican a una estación de procesamiento cercana ya sea utilizando cables debajo del camino, o a través de comunicación inalámbrica. El sensor tiene una zona circular o elíptica de alcance de detección. Los magnetómetros monitorean la fluctuación en la fuerza del campo magnético, el cual cambia en presencia de objetos de metal moviéndose (automóviles).
+
+Fig. 12.1 Típicas configuraciones de detección intrusiva.
+
+El segundo tipo de de unidades utilizan tubos neumáticos que son extendidos a través de la calzada y se fijan en el lado de la acera en ambos extremos. Estos sistemas solamente se pueden implementar de forma temporal, debido a la naturaleza frágil de los tubos, que son fácilmente dañados por vehículos pesados o que se mueven a gran velocidad. Estos sensores envían una ráfaga de presión de aire a lo largo de un tubo de goma cuando un vehículo pasa por encima de los tubos. El pulso de presión de aire cierra un interruptor de aire, produciendo una señal eléctrica que es transmitida a un contador. Tienen la ventaja de ser sistemas portables utilizando plomo-ácido, gel, u otras baterías recargables como fuente de energía.
+
+El tercer tipo son los detectores de bucle inductivos (IDL por sus siglas en inglés). Consisten en rollos de alambre recubierto, enterrados en ranuras cortadas en la superficie de la carretera y sellados con masilla bituminosa. Los datos son enviados a través de un cable enterrado con los bucles hasta una unidad de procesamiento al borde de la carretera. La zona de detección para los sensores de bucle inductivo depende de la forma de corte de la ranuras del bucle. Los IDL son una tecnología barata y madura. La oscilación de la señal eléctrica es aplicada al bucle, el metal contenido en el chasís de un vehículo en movimiento cambia las propiedades eléctricas del circuito. Estos cambios son detectados por una unidad al costado del camino, que disparan un evento de vehículo.
+
+El cuarto tipo de sistemas intrusivos es Weigh-In-Motion (WIM) mostrado en Fig. 2.2, los detectores consisten en un sensor piezoeléctrico ubicado en un canal a través del camino. El sistema registra la tensión medida por los sensores y calcula la carga dinámica, la carga estática se calcula utilizando la carga dinámica y parámetros de calibración. Los parámetros de calibración dependen de factores como la velocidad del vehículo y el pavimento o la dinámica de suspensión que influencia en los cálculos de la carga estática. La precisión de los sistemas WIM puede ser expresada como función a la velocidad con que el vehículo pasa sobre las placas, asumiendo que el sistema está instalado en una carretera sujeta a las condiciones normales de tráfico Estos sistemas son raros y se utilizan en ubicaciones específicas mayormente para el control de acceso.
+
+Fig. 2.2 Sistema de detección Weight-In-Motion
+
+\subsection{Tecnologías No Intrusivas.}
+
+Las tecnologías no intrusivas incluyen recolección de datos por video, detectores infrarrojos pasivos o activos, radares de microondas, detectores ultrasónicos, detectores acústicos, detectores láser y fotografía aérea. Según el Dr. Mathew [6], todas estas tecnologías representan campos emergentes que se están expandiendo rápidamente con continuos avances en el procesamiento de señales. Actualmente estas tecnologías son utilizadas para proveer información suplementaria para lugares seleccionados o para aplicaciones específicas. La Mayoría de los sistemas no intrusivos son operacionalmente y en cierta medida visualmente similares, consistiendo en pequeñas unidades electrónicas montadas en contenedores a prueba de agua y colocadas en varias ubicaciones con se puede observar en la Fig. 2.3.
+
+Fig. 2.3 Configuraciones típicas de tecnologías no intrusivas
+
+El primer tipo de detectores no intrusivos son los montados al costado de la carretera. El detector procesa un campo de visión que cubre un área oblicua ya sea por encima o por debajo de la unidad. También existen múltiples zonas de detección definidas dentro del campo de visión,  o la zona total de detección al igual que el campo de visión, dependiendo del tipo de detector específico y la tecnología utilizada.
+
+Problemas de oscurecimiento ocurren cuando vehículos grandes cubren a vehículos pequeños del detector o cuando el campo de visión es muy grande, llevando a detección de vehículos afuera del carril deseado. El segundo tipo de detectores no intrusivos son montados debajo de puentes o portales, con un campo de visión justo por debajo de los mismos, o ligeramente oblicuo a la unidad. Finalmente, algunas unidades como los monitores de polución de camino abierto son montados a nivel del piso a los lados del camino, disparando un haz a través de la carretera. Estas unidades están sujetas al enmascaramiento de lado a lado y por lo tanto, son más adecuadas para un solo carril.
+
+En la detección por imagen de video los parámetros del tráfico son recolectados a través del análisis cuadro por cuadro de las imágenes capturadas por las cámaras al costado del camino. Dependiendo de la tecnología de procesamiento, se pueden obtener prácticamente todos los parámetros del tráfico a través de análisis de video. Un problema con este sistema es que es susceptible al oscurecimiento y su rendimiento puede decaer con el mal clima o con bajas condiciones de luz.
+
+Los sensores infrarrojos pueden montados por encima o al costado del tráfico dependiendo de la información que se quiera obtener con ellos. Estos sensores son utilizados para obtener el volumen, la velocidad y el tipo de vehículos, como también a los transeúntes. Tienen la ventaja de ser menos susceptibles al mal clima. Cuando los sensores poseen una baja resolución la precisión en la velocidad y el largor de los vehículos tiende a ser bastante impreciso.
+
+\section{Tecnologías en vehículo o Floating Car Data (FCD)}
+
+En adición a la utilización de tecnologías in-situ, muchas aplicaciones de gestión de redes de tráfico utilizan dispositivos en los vehículos, generalmente conocidos como sistemas de ubicación automática de vehículo (AVL por sus siglas en inglés). Los dispositivos AVL proveen información de posición cuando un vehículo equipado con ellos pasa cierto punto de la red, o información continua a medida que el vehículo viaja a través de la red. Los anteriores sistemas se basaban en vehículos equipados con transpondedores que transmitían y recibían información de los dispositivos ubicados en la carretera. Los sistemas actuales se basan en la tecnología del Sistema de Posicionamiento Global (GPS por sus siglas en inglés).
+
+El principio de FCD es recolectar datos de tráfico en tiempo real ubicando los vehículos a través de teléfonos móviles o GPS en toda la red de caminos como se muestra en la Fig 2.4. Todos los vehículos equipados con con teléfonos móviles o con GPS actuarán como sensores para la red de caminos. Datos como la ubicación del vehículo, la velocidad y dirección del viaje son enviados de forma anónima un un centro de procesamiento. Después de la recolección y extracción, información útil como el estado del tráfico y rutas alternativas pueden ser distribuidas a los conductores del camino. FCD es una alternativa o más bien una fuente de información de alta calidad para las tecnologías existentes. Ayuda a mejorar la seguridad, eficiencia y confiabilidad de los sistemas de transporte. Se están volviendo cruciales en los Sistemas Inteligentes de Transporte (ITS por sus siglas en inglés).
+
+Fig 2.4 Comunicación con GPS.
+
+\subsection{FCD basado en GPS}
+
+La tecnología GPS se está convirtiendo cada vez más útil y barata, va en aumento el número de autos equipados con sistemas GPS que le permiten ser ubicados dentro de la red de caminos. La precisión de la ubicación del vehículo es relativamente alta, típicamente menor a 30 metros. Generalmente, los datos del tráfico se obtienen de vehículos privados o camiones son más adecuados para autopistas y zonas rurales.
+
+Actualmente, los datos de sondas GPS son utilizados como fuente para información en tiempo real de muchos proveedores de servicios pero sufre el limitado número de vehículos equipados y los costos de equipamiento comparados con el FCD obtenido de teléfonos celulares.
+
+\subsection{Identificación por radiofrecuencia o sistemas de transpondedores}
+
+La identificación por radiofrecuencia (RFID por sus siglas en inglés)  es un método automático de identificación, confiando en el almacenamiento y recuperación de datos de áreas remotas utilizando dispositivos llamados etiquetas RFID o transpondedores. La tecnología requiere la cooperación entre lectores y etiquetas RFID. Una etiqueta RFID es un objeto que puede ser aplicado o incorporado a un producto, animal, o persona para el propósito de identificación y seguimiento utilizando ondas de radio. Algunas etiquetas pueden ser leídas desde varios metros de distancia y más allá de la línea de vista del lector.
+
+Una etiqueta RFID se compone de un microchip para recolectar información y de una antena que transmite estos datos de forma inalámbrica a un lector. En su forma más básica, el chip contendrá un identificador serializado, o el número de matrícula, que identifica de manera única al objeto.
+
+\subsection{FCD basado en teléfono móviles}
+
+La rápida expansión de los teléfonos inteligentes y los múltiples sensores que poseen los mismos, los convierte en una fuente invaluable para la obtención de FCD. En los últimos tiempos un gran número de trabajos se centró en la utilización de dispositivos móviles para la detección del tráfico. La mayoría de los mismos aprovechando los sistemas de GPS, pero también han habido otros que utilizan las redes GSM, WiFi y hasta la tecnología bluetooth.
+
+Ya en 2007, Scott Fraser [7] habla de la viabilidad de utilización de dispositivos móviles como alternativa a los métodos típicos de detección de tráfico. En aquel entonces uno de los problemas grandes encontrados era la precisión, ya que se utilizaba la triangulación de antenas (Fig. 2.5) como método de ubicación, y el mismo tiene una precisión entre 50 y 200 metros. Posteriormente, con la llegada de los sistemas GPS a los teléfonos inteligentes se mejoró bastante el problema de la precisión.
+
+Fig. 2.5 Triangulación de Antenas
+
+A pesar de la baja precisión de los sistemas GSM para la ubicación de dispositivos móviles, se han realizado trabajos como CTrack [8] que utiliza solamente este método de triangulación de antenas celulares en lugar de GPS o WiFi que bien es sabido consumen un alto nivel de batería. En este método el consumo marginal de energía es cercano a cero. CTrack utiliza un nuevo Modelo Oculto de Markov de dos pasos que secuencia las huellas digitales GSM de los celulares sin convertirlas en coordenadas geográficas, y los fusiona con los datos de los sensores de bajo consumo de energía con los que cuentan la mayoría de los teléfonos inteligentes, incluyendo acelerómetros (para detectar movimiento) y compases magnéticos (para detectar giros). El sistema consiste en dos componentes de software, la librería para el teléfono y el servicio web. La librería recolecta, filtra y escanea los datos obtenidos de GSM y de otros sensores del teléfono y los transmite a través de cualquier red inalámbrica disponible al servicio web, que corre un algoritmo de mapeo de trayectoria sobre los datos recibidos.
+
+Otro trabajo que busca un uso eficiente de energía es EnAcq [9]. El mismo presenta un nuevo método de adquisición de ubicaciones basado en un pareo de mapas mejorado que se centra en dos desafíos claves: datos imprecisos de trayectoria y consumo de energía. Para mejorar la precisión de los datos de la trayectoria, utiliza un algoritmo mejorado de pareo de mapas basado en modelos ocultos de Markov, que puede encontrar pares candidatos para cada punto sin usar una consulta de rango y determinar la ruta más probablemente seguida por el vehículo. Para evitar el consumo innecesario de energía, utiliza un periodo adaptativo para la toma de ubicaciones por GPS, este periodo de toma de posiciones se basa en el estado de movimiento actual del vehículo.
+
+También existen trabajos que utilizan otros métodos para detectar la ubicación de los vehículos como la la tecnología Bluetooth y las redes WiFi [10]. Donde se ven enfoques de bajo coste y gran escala para monitorear el tráfico, que aumentan el principio de FCD y permiten la detección de vehículos, transeúntes, ciclistas y pasajeros del transporte público para lograr datos espacio-temporales de tráfico por un aumento considerable de la base de datos subyacente. 
+
+Este nuevo enfoque se basa en un método para la ubicación anónima a través de la detección indirecta de objetos de tráfico (autos, ciclistas. transeúntes) usando las tecnologías WiFi y Bluetooth. Esto es ventajoso debido a que varios participantes del tráfico utilizan dispositivos con el WiFi o Bluetooth activado. Por ejemplo, un auto que está equipado con receptores específicos, detecta todos los objetos de tráfico que están dentro de un área a través del número de identificación de WiFi o Bluetooth. Este número de identificación se ve aumentado por las marcas de tiempo y la ubicación de los objetos de detección. Los datos medidos son procesados para obtener las trayectorias, tiempo de viaje, estado del tráfico, matrices de origen-destino y otros parámetros de tráfico.
+
+\section{Sistemas Inteligentes de Transporte (ITS)}
+
+Los Sistemas Inteligentes de Transporte son la aplicación de tecnologías de computación, electrónica y comunicaciones con estrategias de administración de una forma integrada para proveer información de viaje para incrementar la seguridad y eficiencia de los sistemas de transporte en las rutas. Estos sistemas incluyen vehículos, conductores, pasajeros, operadores de rutas y administradores, todos interactuando los unos con los otros y enlazándose con la compleja infraestructura de los sistemas para mejorar la seguridad y capacidad de las rutas. Chowdhary y Sadek [11] hablan de los servicios al usuario, la arquitectura y el planeamiento de los ITS, que utilizados correctamente mejoran la seguridad y movilidad en el transporte y realzan la conectividad global en términos de mejoras en la productividad logradas a través de la integración de avanzadas tecnologías de comunicación en la infraestructura del transporte.
+
+\subsection{Servicios a usuarios ITS}
+
+Con el fin de implementar ITS, se desarrolla un marco destacando los varios servicios que los ITS pueden proveer a los usuarios. Una lista de 33 servicios a los usuarios ha sido proveída en el plan nacional ITS de los Estados Unidos. El número de servicios de usuario sigue variando con el tiempo cuando un nuevo servicio es añadido. Todos estos servicios están divididos en ocho grupos. La división de estos servicios está basada en la perspectiva de la organización y la distribución de funciones técnicas comunes. Estos ocho grupos de servicios se dividen de la siguiente manera:
+
+\begin{itemize}
+\item Gestión de los viajes y el tráfico
+
+\item Operaciones de transporte público
+
+\item Pago electrónico
+
+\item Operaciones de vehículos comerciales
+
+\item Sistemas avanzados de control y seguridad de vehículos
+
+\item Gestión de emergencias
+
+\item Gestión de la información
+
+\item Gestión del mantenimiento y construcción.
+\end{itemize}
+
+\subsection{Arquitectura ITS}
+
+La arquitectura de los ITS provee un marco común para planeamiento, definición, e integración de los sistemas inteligentes de transporte. Especifica cómo los diferentes componentes de un ITS deben interactuar entre ellos para ayudar a resolver los problemas del transporte. Proporciona a los profesionales del transporte una gran variedad de opciones para hacer frente a sus necesidades. Identifica y describe varias funciones y asigna responsabilidades a las partes interesadas del ITS. La arquitectura debe cumplir con los siguientes requisitos:
+
+Interoperabilidad, la arquitectura debe ser de tal manera que la información recolectada, la función implementada o cualquier equipo instalado pueda ser interoperable por varias agencias de diferentes regiones.
+
+Capaza de compartir e intercambiar información. La información de las operaciones de tráfico puede ser útil en los servicios de emergencia.
+
+Compartir recursos. torres regionales de comunicación construidas por diversas agencias privadas están obligadas a ser compartidas por las operaciones ITS.
+
+\subsection{Planeamiento ITS}
+
+El planeamiento ITS consiste en integrar ITS en el proceso de planeamiento del transporte. El planeamiento del transporte ayuda a dar forma a un sistema de transporte bien balanceado que pueda cumplir con las demandas futuras. Es un proceso interactivo que incluye identificación de problemas, generación de soluciones, análisis, evaluación e implementación. Esto puede ser integrado con ITS utilizando computadores, sistemas de comunicación y software. Como el planeamiento es realizado normalmente para un periodo largo, la instalación de ITS debe ser actualizable y se debe asegurar que los equipos y tecnologías serán compatibles para futuras mejoras y expansiones.
+
+Los pasos tradicionales en un planeamiento de transporte son los siguientes:
+
+\begin{enumerate}
+\item Establecer metas y objetivos
+
+\item Inventario de las condiciones existentes.
+
+\item Análisis de las condiciones existentes.
+
+\item Elementos de largo y corto alcance.
+
+\item Pronóstico del uso de la tierra, población y empleo.
+
+\item Pronóstico de viajes futuros.
+
+\item Desarrollo y evaluación de planes alternativos de transporte.
+
+\item Preparación de planes y programas recomendados.
+\end{enumerate}
+
+El proceso de planeamiento de transporte ITS difiere del tradicional, ya que los ITS tienen la capacidad única de integrar diferentes modos de transporte como el transporte público, tráfico, y elementos infraestructurales a través de comunicaciones y control. El potencial de integración multimodal ofrece una gran oportunidad para la planificación a través de los diferentes modos.
+
+\chapter{Map Matching}
+
+Dada una lista ordenada de localizaciones de un vehículo y un mapa digital de calles, se conoce como Map Matching al proceso de determinar el camino real que siguió, o que esta siguiendo, el vehículo dentro de dicho mapa.
+
+La Fig. 3.1 ilustra los componentes básicos del problema. Los puntos rojos corresponden a la lista ordenada de localizaciones y la línea verde marca el posible camino real al que corresponden dichas localizaciones.
+
+Figura 3.1. Resultado del proceso de Map Matching.
+
+El proceso de Map Matching es utilizado en una gran variedad de servicios y aplicaciones basadas en localización, como la predicción de trayectorias de los usuarios [25], los sistemas de navegación en vehículos [26], el control del estado del tránsito en tiempo real [27, 28] y muchos otros.
+
+\section{Clasificación de algoritmos de Map Matching}
+
+En general, los algoritmos de Map Matching pueden clasificarse de acuerdo a la información utilizada en su implementación en: geométricos, topológicos, estadísticos y avanzados; de acuerdo al momento en que se realiza el procesamiento en: incrementales y globales; y de acuerdo a la frecuencia con que se toman las localizaciones en: de baja frecuencia y de alta frecuencia.
+
+En esta sección se describen brevemente cada una de estas clasificaciones generales y luego se describen en mas detalles algunos algoritmos representativos de cada tipo.
+
+\subsubsection{Clasificaciones generales}
+
+La clasificación más comúnmente utilizada en la literatura es la que tiene en cuenta la información y las técnicas utilizadas en la implementación del algoritmo. En [12] de acuerdo a esta clasificación se distingue entre 4 categorías distintas: los algoritmos geométricos, que utilizan solo la información de posicion y distancia entre las calles y localizaciones [13]; los algoritmos topológicos [14, 15, 16, 17, 18, 19, 20, 27], que utilizan información sobre la conectividad entre las calles, las restricciones de giro y otros; los algoritmos estadísticos [10], que definen regiones de probabilidad alrededor de cada localización y analizan los tramos dentro de dichas regiones; y los algoritmos avanzados [22, 23], que combinan diversas técnicas geométricas, topológicas y estadísticas con otros conceptos avanzados como Filtros de Kalman [26], Modelos Ocultos de Markov [8, 9, 22, 28], Lógica Difusa [23], entre otros .
+
+De acuerdo al momento en que se realiza el procesamiento de los datos, existen dos categorías bien definidas: los algoritmos locales u on-line [14, 15, 16, 21, 23, 27, 28], que realizan el map-matching cada vez que se obtiene una nueva localización, se utilizan en aplicaciones de tiempo real como asistentes personales de navegación; y los algoritmos globales u off-line [17, 20, 22], que realizan el map-matching luego de que se han recolectado todas las localizaciones, se utilizan en aplicaciones de análisis de tráfico o estudios sobre el comportamiento de usuarios. Los algoritmos globales al contar con la información completa del trayecto pueden usar dicha informacion para inferir de mejor manera el camino real recorrido. Existen algoritmos que pueden ser adaptados para funcionar de manera local o global dependiendo de la aplicacion para la que se utilizan [17, 22].
+
+Dependiendo de la frecuencia de muestreo de las localizaciones se pueden identificar dos categorías: los algoritmos para alta frecuencia (high-sampling) [14, 15, 16, 21, 23], que típicamente trabajan con intervalos de muestra en el rango de los pocos segundos y generalmente se ejecutan de forma on-line; y los algoritmos para baja frecuencia (low-sampling) [17, 20, 22],  que funcionan para intervalos de muestreo de varios minutos y se ejecutan generalmente de forma off-line. En general todos los algoritmos pueden ser alimentados con muestras de alta o baja frecuencia pero ciertos algoritmos dejan de ser efectivos a medida que disminuye la frecuencia de muestreo.
+
+\subsection{Algoritmos geométricos}
+
+Los algoritmos geométricos fueron los primeros en ser desarrollados, son los más simples y rápidos pero a la vez son los más propensos a errores. Estos algoritmos tienen en cuenta únicamente la posición de las localizaciones y de los puntos y enlaces que conforman el mapa de calles. No se utiliza ningún otro tipo de información como la conectividad entre calles, las restricciones de giro o los límites de velocidad [12].
+
+El algoritmo más sencillo se denomina de punto a punto, consiste en buscar para cada localización, el punto dentro del mapa que sea el más cercano a dicha localización [13]. Esta técnica es muy propensa a errores puesto que no se tiene en cuenta la conectividad entre los puntos seleccionados. Esta técnica implícitamente favorece a aquellas calles que tengan una mayor densidad de puntos en el mapa, lo que puede llevar a resultados incorrectos. En la Fig. 3.2 se puede apreciar cómo el punto p0 es incorrectamente asociado al punto b1 cuando realmente está más próximo a la línea comprendida entre los puntos a0 y a1. 
+
+Figura 3.2. Error en el algoritmo de punto-a-punto.
+
+Otra técnica utilizada se denomina punto a curva, y consiste en buscar para cada localización, la calle (curva) del mapa más cercano a dicha localización [13]. Como tampoco se tiene en cuenta la conectividad entre los tramos, se pueden tener los mismos errores que con la técnica anterior. Esta técnica no es efectiva en zonas urbanas que tienen una mayor densidad de calles debido al margen de error de las localizaciones. En la Fig. 3.3 se puede apreciar cómo el punto p4 es incorrectamente asignado a  la línea comprendida entre los puntos b0 y a0 debido a que la distancia a esta línea es más corta que la distancia a la línea comprendida entre a0 y a1.
+
+Figura 3.3. Error en el algoritmo de punto-a-curva.
+
+La última técnica dentro de esta categoría es conocida como curva a curva [13], y consiste en  utilizar la técnica de punto a punto para identificar un punto candidato para una localización, luego se seleccionan todos los tramos del mapa de que se originan en dicho punto y se calcula la distancia entre cada tramo y el tramo comprendido entre la localización actual y una localización siguiente, utilizando alguna medida de distancia. El tramo del mapa que resulta ser el más cercano al tramo comprendido entre las localizaciones es seleccionado como el tramo real que recorre el vehículo. Un tramo puede estar compuesta por una o más secciones de una calle en el mapa. La forma específica en que se definen estos tramos y la función que calcula la distancia puede variar entre implementaciones.
+
+\subsection{Algoritmos topológicos}
+
+En GIS se conoce como topología a la relación entre las distintas formas geométricas (puntos, líneas, polígonos), entre estos elementos pueden definirse relaciones de adyacencia y conectividad. Los mapas de calles se representan generalmente como puntos y lineas, las lineas representan secciones de calles y los puntos representan intersecciones entre las calles. Además, los mapas digitales cuentan con información adicional sobre las las calles, como ser los límites de velocidad, restricciones de giro y los sentidos de las calles. Todos los algoritmos que incorporan este tipo de información en la construcción del trayecto del vehículo se conocen como algoritmos topológicos [12].
+
+El algoritmo topológico desarrollado en [14] utiliza distintos criterios de similaridad para determinar cual es la mejor calle candidata para cada localizacion. Los criterios utilizados son la similaridad en la orientación (el grado de paralelismo entre dos localizaciones consecutivas y la calle candidata), la proximidad entre la localización y la calle candidata y el tamaño del ángulo comprendido entre la direccion de desplazamiento reportada por la localización (bearing) y la direccion de la calle candidata. Para cada calle candidata se realiza una suma ponderada de los criterios de similaridad y se elige como mejor candidata a aquella con la mayor suma. El mismo procedimiento es utilizado en [15] pero se agrega información adicional como la velocidad del vehículo y la posicion relativa de la localización con respecto al nodo más cercano. Ambos métodos requieren que se identifique correctamente la primera calle, para luego ir eligiendo las calles que tienen conexión con la misma. Un fallo en la elección inicial puede llevar a resultados incorrectos.
+
+Otro tipo de análisis topológico es utilizado en [16]. Inicialmente se seleccionan todas las calles candidatas cercanas a la localización, luego se utilizan criterios geométricos y topológicos para descartar aquellos candidatos cuya medición para cada criterio está fuera del rango establecido para dicho criterio. Los criterios utilizados son la conectividad entre las calles, las restricciones de giros entre las calles, el sentido de las calles, la distancia entre segmentos de calles y la trayectoria del vehículo, entre otros. Distintos rangos de validez pueden ser utilizados para cada criterio en distintas situaciones, dependiendo de la disponibilidad y la confiabilidad de la medición de la localizacion.
+
+El algoritmo desarrollado en [17], conocido como ST-Matching, utiliza información geográfica y topológica para asignar un valor numérico a cada camino posible y luego selecciona al camino con el mayor valor. Para cada localización se obtiene una lista de  posibles puntos candidatos utilizando la técnica de punto a curva, cada punto candidato correspondiente a una localización está conectado a todos los puntos candidatos correspondientes a la siguiente localización, obteniendo así el conjunto de todos los caminos posibles. Para asignar el valor numérico se tienen en cuenta dos tipos de análisis, el análisis espacial y el análisis temporal, que dan nombre al algoritmo. En el análisis espacial se calcula una probabilidad de observación para cada punto candidato y una probabilidad de transmisión entre cada par de puntos candidatos consecutivos. En el análisis temporal se calcula la similaridad entre la velocidad promedio entre dos puntos candidatos y las restricciones de velocidad del camino comprendido entre los puntos. Otros trabajos posteriores han agregado diversas mejoras al algoritmo original, como un proceso de detección de localizaciones inválidas [18], la normalización del cálculo de la probabilidad de transmisión y la prevención de bucles en el camino final obtenido [19].
+
+En [20] se propone un algoritmo basado en ST-Matching que incorpora ademas el concepto de “voto interactivo” para modelar la influencia mutua que tienen entre sí todos los puntos de la trayectoria del vehículo (a mayor distancia entre candidatos, menor la influencia). Para cada punto candidato existe un conjunto de caminos posibles que pasan por él, el objetivo es determinar cuál de los caminos es el óptimo para cada punto candidato, luego cada punto candidato vota por su “mejor camino” y finalmente se selecciona el camino óptimo global de acuerdo al resultado de esta votación.
+
+Ambos algoritmos, [17] y [20], estan específicamente diseñados para trabajar de forma off-line y con una baja frecuencia de muestreo de las localizaciones. En [17] se  menciona que es posible utilizar el algoritmo en aplicaciones on-line definiendo una “ventana” de localizaciones para las cuales se realiza el procedimiento de map-matching. En [18] se realizaron varias adaptaciones para utilizar el algoritmo en una aplicacion de tiempo real, definiendo un tamaño de ventana de una localización, efectivamente convirtiendo el algoritmo global en un algoritmo incremental.
+
+\subsection{Algoritmos estadísticos}
+
+Los algoritmos estadísticos, también conocidos como probabilísticos, son aquellos que definen regiones de “confiabilidad” alrededor de las localizaciones y seleccionan una calle candidata de entre todas aquellas que esten dentro de esta region [12]. Para determinar la región de confianza se tienen en cuenta los posibles errores originados por los sensores utilizados para obtener la localización y los errores en el mapa digital. Estos algoritmos también pueden utilizar información geométrica y topológica de la red de calles para determinar cual de las calles es la que está siendo transitada por el vehículo.
+
+El algoritmo desarrollado en [21] toma en cuenta diversas fuentes de error asociadas con los sensores de localización, la trayectoria anterior del vehículo, la información topológica de las calles (conectividad y orientación de las calles), e información sobre la velocidad y la direccion del vehículo para determinar correctamente la calle por la que el vehículo está transitando. Este algoritmo está específicamente diseñado para aplicaciones con requerimientos de tiempo real y con una alta frecuencia de muestreo. El algoritmo se divide en dos partes, el proceso de inicial de selección (Initial Matching Process), y el proceso subsecuente de selección (Subsequent Matching Process). En el proceso inicial se define alrededor de la primera localización una region de confiabilidad rectangular o elíptica, si dentro de esta region no existe ningun candidato se asume que el vehiculo esta fuera de la red de calles, si existe más de un candidato se utiliza información sobre la conectividad de los candidatos y la direccion de desplazamiento de la localizacion para determinar el candidato más apropiado. El proceso subsecuente es utilizado para determinar si la siguiente localización el vehículo sigue viajando o no por la misma calle, para ello se intenta identificar si el vehículo ha hecho alguna maniobra de giro o si está atravesando una intersección de calles y en caso de que se detecte alguna de estas dos condiciones se vuelve a realizar el proceso inicial de selección para determinar la siguiente calle sobre la que esta viajando el vehículo.
+
+\subsection{Algoritmos avanzados}
+
+Los algoritmos avanzados son aquellos que combinan diversas técnicas topológicas, geometricas y estadisticas con otras técnicas más avanzadas. Las técnicas más utilizadas en los algoritmos implementados en los últimos años son la Lógica Difusa y los Modelos Ocultos de Markov. Explicaremos brevemente estos conceptos antes de continuar con los algoritmos que los implementan.
+
+Se conocen como Procesos de Markov a aquellos procesos estocásticos (procesos no-determinísticos) que cumplen con la condición de que la probabilidad de transición entre dos estados (la probabilidad de pasar de un estado a otro), depende única y exclusivamente del estado actual y no de la secuencia de estados anteriores. Existen diversos tipos de Procesos de Markov, por ejemplo las Cadenas de Markov, Los Procesos de Decisión de Markov y los Modelos Ocultos de Markov. Los Modelos Ocultos de Markov se caracterizan por el hecho de que los estados del sistema  que está siendo modelado no pueden ser observados directamente, pero otros eventos dependientes de los estados sí son observables. Cada estado (no observable) del sistema tiene una distribucion de probabilidad asociada a cada evento (observable) de dicho estado. El conjunto de todos los eventos observados puede ayudar a determinar cuáles fueron los estados que generaron dichos eventos.
+
+En [22] se define un Modelo Oculto de Markov en el que se modelan los segmentos de individuales de calles como los estados no observables del sistema y todas las localizaciones de la trayectoria del vehículo como los eventos observados a partir de dichos estados. El objetivo del algoritmo es que dada una secuencia de eventos observados (las localizaciones) se encuentre la secuencia de estados (calles) que generaron dichas observaciones. Para realizar este proceso se deben tener en cuenta dos probabilidades, la probabilidad de emisión, que se define como la probabilidad de que un evento observado fue el resultado de un estado particular; y la probabilidad de transición, que se define como la probabilidad de pasar de un estado al siguiente. La probabilidad de emisión de cada localización disminuye a medida que aumenta la distancia entre la localización y la calle. Para la probabilidad de transición se compara la distancia entre dos localizaciones consecutivas con la distancia del camino más corto entre dos de sus correspondientes calles candidatas. Se utiliza el algoritmo de Viterbi calcular el camino óptimo a través del diagrama de estados del modelo. El algoritmo de Viterbi usa programación dinámica para encontrar rápidamente el camino que maximiza el producto de las probabilidades de emisión y de transición. El algoritmo está diseñado específicamente para funcionar de forma off-line pero puede ser adaptado utilizando una “ventana” de localizaciones para funcionar de forma on-line.
+
+A diferencia de lógica convencional en la que una proposición puede tener dos valores, verdadero o falso, en la Lógica Difusa las proposiciones pueden ser “parcialmente” verdaderas, oscilando entre ser totalmente verdaderas o totalmente falsas. Por ejemplo, podemos decir que la velocidad del vehículo es alta, o que el tiempo de viaje es bajo, en lugar de usar cantidades exactas. Para inferir resultados se utilizan reglas difusas, como por ejemplo “si la velocidad del vehículo es alta y el tiempo de viaje es bajo, entonces la congestión en la calle es baja”. Las variables de entrada son la velocidad del vehículo y el tiempo de viaje y la variable de salida es la congestión. Consideremos por ejemplo la variable velocidad del vehículo, el valor de dicha variable se mide cuantitativamente en m/s y podemos clasificar la velocidad en tres posibles grupos: cero, baja y alta; cada posible valor de la velocidad corresponde en cierta medida a uno de estos tres grupos. La función  que determina el grado de pertenencia de un valor a cada uno de estos grupos se denomina “función de pertenencia”. El proceso completo consta de tres pasos: primero se convierten todas las variables de entrada a sus correspondientes valores difusos, a continuación se aplican las reglas de inferencia para obtener un resultado y finalment se convierten los resultados nuevamente a un valor concreto.
+
+El algoritmo propuesto en [23] funciona de forma muy similar al propuesto en [21] pues también está divido en dos partes principales, el proceso inicial de selección y el proceso subsecuente de selección. A diferencia de [21] el proceso subsecuente de selección se divide en dos partes, el proceso de selección subsecuente a lo largo de un enlace y el proceso de selección subsecuente en una intersección. El proceso de selección inicial se aplica solo al principio del algoritmo para seleccionar la primera calle, a partir de ahí se aplica la  selección a lo largo de un enlace para determinar si el vehículo sigue sobre la calle seleccionada inicialmente, cuando se detecta una intersección se aplica el proceso de selección en una intersección para determinar si el vehículo ha hecho una maniobra de giro. Para el proceso inicial se tienen en cuenta la velocidad del vehículo, el error de dirección con respecto a la calle, la distancia perpendicular a la calle y el error horizontal del GPS; el resultado es la probabilidad de que la localización corresponda a una calle. El proceso de selección subsecuente a lo largo de un enlace tiene en cuenta la velocidad del vehículo, el diferencia de la dirección de la localización con respecto a la dirección de la localización anterior, la lectura del giroscopio y otras variables más; el resultado es la probabilidad de que la localización corresponda a la calle seleccionada anteriormente. Para el proceso de selección subsecuente en una intersección se aplican las mismas variables que para el proceso de selección inicial pero además se tienen en cuenta dos variables más, la conectividad de las calles con la calle seleccionada anteriormente y la diferencias entre la distancia recorrida por el vehículo y las distancias a las calles candidatas. Finalmente para cada paso se debe determinar la ubicación real del vehículo sobre la calle, esto se hace teniendo en cuenta la proyección de la localización sobre la calle, la velocidad del vehiculo y la direccion de desplazamiento. El algoritmo está especialmente diseñado para aplicaciones de tiempo real (on-line) con una alta frecuencia de muestreo.
+
+Existen muchas otras técnicas avanzadas que se utilizan en conjunto con algunas de las técnicas descritas anteriormente ya sea como parte del algoritmo, como un proceso previo o como una forma de verificación del resultado. Entre estas técnicas podemos citar a la Distancia de Fréchet [24, 25], que determina la similaridad entre dos curvas y es utilizada en los algoritmos de curva a curva para determinar cual curva seleccionar, ademas también es generalmente utilizada para validar los resultados de los algoritmos. Otra técnica muy popular son los Filtros de Kalman y los Filtros Extendidos de Kalman [26], que generalmente se utilizan cuando existe una alta densidad de muestras y se utiliza como un paso previo en varios algoritmos para mejorar la calidad de las muestras iniciales.
+
+\section{Algoritmos de Map Matching en Aplicaciones Móviles.}
+
+Los algoritmos de map matching han sido utilizados en aplicaciones móviles para la planificación de rutas de viaje, asistentes de navegación personal, estimación de rutas de buses y principalmente para monitorear el estado del transito de forma cooperativa [27,  28]. Se han desarrollado además técnicas específicas para superar las limitaciones inherentes a las plataformas móviles (baja precisión de los sensores de localización, baja disponibilidad de energía de la batería) [9, 8].
+
+En [28] se utiliza un algoritmo basado en un Modelo Oculto de Markov para determinar en tiempo real el camino que está recorriendo el usuario. Los datos de las localizaciones son enviados a un servidor central para determinar finalmente cuales son los caminos que tienen un mayor tiempo estimado de viaje. Los resultados son presentados tanto en la aplicación móvil instalada por el usuario como en una aplicación web. El algoritmo utiliza principalmente el GPS cuando está disponible pero también puede utilizar las localizaciones obtenidas mediante WiFi. Este trabajo demuestra que las localizaciones obtenidas mediante WiFi, si bien so menos precisas, son lo suficientemente confiables para realizar una estimación aceptable de los tiempos de viaje promedio en las calles y por consiguiente del estado del tránsito.
+
+El sistema propuesto en [27] utiliza los sensores del teléfono, GPS, Wifi y acelerómetro para determinar si un usuario ha subido o no a un bus y a partir de ahí estimar el tiempo de llegada del bus a otras paradas, con el objetivo de reducir el tiempo de espera de los pasajeros. Se propone un algoritmo de clasificación de actividad basado en el acelerómetro para detectar cuando un usuario ha subido a un vehículo. Una vez que se detecta que el usuario está en un vehículo la aplicación empieza a rastrear al usuario usando GPS o WiFi y utiliza las localizaciones para determinar si el usuario está o no en un bus. Las localizaciones son enviadas a un servidor central. A diferencia de todos los algoritmos de map matching, en este caso en lugar de un mapa digital de calles se utiliza solamente el mapa de rutas de los buses. Se realiza un análisis espacial y temporal para determinar el bus al que ha subido el usuario.
+
+En [9] se propone un esquema de bajo consumo de energía para la adquisición de datos de localizaciones. Se utiliza un algoritmo mejorado basado en Modelos Ocultos de Markov para determinar la ruta por la que ha viajado el vehículo. Para evitar el consumo innecesario de energía se adopta un método de muestreo adaptativo GPS que ajusta el período de muestreo del GPS basado en estado de movimiento actual del vehículo, sin embargo debido al algoritmo de map-matching utilizado, el tiempo de muestreo utilizado nunca es demasiado largo. Para mejorar el tiempo de ejecución del algoritmo se utiliza la información histórica de las calles seleccionadas anteriormente, así como la información topológica y las restricciones de velocidad de las calles. El algoritmo está diseñado para funcionar de forma on-line y el proceso de map-matching se realiza en el teléfono móvil.
+
+En [8] describe un algoritmo que utiliza solamente información de las antenas de telefonía celular GMS y no hace uso de otros métodos para obtener localizaciones como el GPS y el WiFi que consumen mucha mas energia. La utilización de esta fuente de datos supone un desafío muy grande pues la precisión de las localizaciones es muy baja. Para procesar los datos se utiliza un algoritmo de dos pasadas basado en Modelos Ocultos de Markov que combina la información de las antenas GMS con información de otros sensores de bajo consumo de energía como el acelerómetro (para detectar el movimiento) y el giroscopio (para detectar giros). El algoritmo funciona de forma global y los datos son enviados y procesados en un servidor central.
+
+\chapter{Estimación de Tráfico}
+
+El tráfico vehicular, o simplemente tráfico, es el fenómeno causado por el flujo de vehículos en una vía, calle o autopista. Cuando el flujo de tráfico es elevado en una zona particular, se produce la congestión del tráfico que deriva en pérdida de tiempo y consumo excesivo de combustible para los conductores.
+
+La ingeniería de tráfico se refiere al análisis del comportamiento del tráfico para diseñar la infraestructura para un funcionamiento fluido, seguro y económico del tráfico [29]. El flujo del tráfico, al igual que el flujo del agua, tiene una gran cantidad de parámetros asociados a él. Los parámetros del flujo de tráfico proporcionan información acerca de la naturaleza del flujo de tráfico, que ayuda al análisis en la detección de cualquier variación en las características del flujo. Entender el comportamiento del tráfico requiere un conocimiento profundo de los parámetros del flujo de tráfico y sus relaciones entre sí.
+
+\section{Parámetros del flujo de tráfico}
+
+El flujo de tráfico incluye la combinación del comportamiento de los conductores y vehículos. Debido a que el comportamiento de los conductores no es uniforme, la naturaleza del flujo de tráfico tampoco lo es. Es influenciada no sólo por las características individuales de los vehículos y conductores, sino que también por la forma en que interactúan entre sí en grupos. Así, el flujo de tráfico a través de una calle con características definidas variará tanto por la localización y el tiempo correspondiente a los cambios en el comportamiento humano.
+
+La ingeniería de tráfico, para propósitos de planificación y diseño, asume que estos cambios están dentro de ciertos rangos que pueden ser predecidos [30]. Por ejemplo, si la velocidad máxima permitida en una carretera es de 60 kilómetros por hora, se puede suponer que todo el flujo de tráfico se mueve a una velocidad promedio de 40 kilómetros por hora en vez de a 100 o 20 kilómetros por hora. 
+
+Los parámetros se pueden clasificar principalmente como: mediciones de cantidad, que incluye la densidad y el flujo de tráfico; y mediciones de calidad que incluye la velocidad. Los parámetros del flujo de tráfico pueden ser macroscópicos que caracterizan el tráfico como un todo o microscópicos que estudia el comportamiento de vehículos individuales. Las características principales en el flujo o corriente de tráfico son velocidad, flujo, y densidad [31].
+
+\section{Velocidad}
+
+La velocidad es considerada una medida de calidad del viaje ya que los conductores y pasajeros estarán más preocupados por la velocidad del viaje que por los aspectos del diseño del tráfico. Está definida por el desplazamiento por unidad de tiempo. Matemáticamente la velocidad v está dada por,
+
+v=dt
+
+donde, v es la velocidad del vehículo en metros sobre segundos, d es la distancia recorrida en metros y t el tiempo en segundos. La velocidad de diferentes vehículos variará con respecto al tiempo y el espacio. Para representar esa variación, varios tipos de velocidad pueden ser definidos. Los más importantes entre ellos son la velocidad local o instantánea, la velocidad de circulación, la velocidad de viaje, la velocidad media local y la velocidad media en un tramo [31].
+
+\subsection{Velocidad Local}
+
+La velocidad local es la velocidad instantánea de un vehículo en una ubicación específica. La velocidad local puede ser utilizada para diseñar la geometría del camino como curvas horizontales y verticales, elevación, etc. La ubicación y el tamaño de las señales, el diseño de las señales, la velocidad segura, y la determinación de la velocidad de la zona requieren la velocidad local. El análisis de accidentes, mantenimiento de caminos, y la congestión son campos modernos de la ingeniería de tráfico que utilizan los datos de la velocidad local como entrada básica. 
+
+\subsection{Velocidad de Circulación}
+
+La velocidad de circulación es la velocidad promedio mantenida en un curso en particular mientras el vehículo se está moviendo y se calcula dividiendo la distancia del recorrido sobre el tiempo en el que el vehículo estuvo en movimiento, es decir, esta velocidad no considera el tiempo en el cual el vehículo se encuentra en una parada, o tiene que esperar a tener un camino claro enfrente. La velocidad circulación siempre será mayor o igual a la velocidad de viaje, debido a que los retrasos no se tienen en cuenta para su cálculo.
+
+\subsection{Velocidad de Viaje}
+
+La velocidad de viaje es la velocidad efectiva del vehículo en un viaje entre dos puntos y es la distancia recorrida entre dos puntos dividida por el total del tiempo utilizado por el vehículo para completar el viaje incluyendo cualquier parada. Si la velocidad de viaje es inferior a la velocidad de carrera, indica que el viaje sigue una condición de parada-marcha con aceleración forzada y desaceleración. Una uniformidad entre las velocidades de viaje y circulación denota condiciones de viaje confortables.
+
+\subsection{Velocidad media local}
+
+La velocidad media local está definida como el promedio de velocidad de todos los vehículos que pasan por un punto de la carretera en un periodo de tiempo determinado. La velocidad media local está dada por
+
+vt=1ni=1nvi
+
+donde vi es la velocidad local del i-ésimo vehículo, y n es el número de observaciones. En  muchos estudios, las velocidades son representadas en forma de tabla de frecuencia. Entonces la velocidad media local está dada por
+
+vt=i=1nqivii=1nqi
+
+donde qi es el número de vehículos que tienen la velocidad vi, y n es el número de tales categorías de velocidad.
+
+\subsection{Velocidad media en un tramo}
+
+La velocidad media en un tramo está definida como el promedio de velocidad de todos los vehículos que están en una sección de la carretera durante un periodo de tiempo específico. Considerando la unidad longitud de un camino, y vi como la velocidad local del i-ésimo vehículo . Siendo tiel tiempo que le toma al vehículo completar esa unidad de distancia y está dada por 1vii. Si hay n vehículos, entonces el tiempo promedio de viaje ts está dado por
+
+ts=i=1ntin=1n1vi
+
+Si tav es el promedio de tiempo de viaje, entonces la velocidad promedio vs= 1ts . Por lo tanto, a partir de la ecuación anterior
+
+vs=ni=1n1vi
+
+Esto es simplemente la media armónica de la velocidad local. Si la velocidad local está expresada como tabla de frecuencia, entonces
+
+vs=i=1nqii=1nqivi
+
+donde qi vehículos tendrán la velocidad vi y n es el número de tales observaciones.
+
+\section{Flujo}
+
+Existen dos formas prácticas de contar el número de vehículos en una carretera. Una es el flujo o volumen, que se define como el número de vehículos que pasan por una carretera, o por un carril o dirección del camino durante un intervalo de tiempo. La medida se lleva a cabo contando el número de vehículos, nt, que pasan por un punto en particular en un carril durante un tiempo definido t. Entonces el flujo q expresado en vehículos/hora está dado por
+
+q=ntt
+
+El flujo se expresa en la planificación y el diseño de campo teniendo un día como medida de tiempo.
+
+\subsection{Variaciones de Volumen}
+
+La variación de volumen en el tiempo, es decir, mes a mes, día a día, hora a hora. Las variaciones de volumen también pueden ser observadas de una temporada a otra. El volumen será superior a la media durante un mes de vacaciones de verano, pero será más pronunciado en zonas rurales que en las urbanas. Esta es la más consistente de todas las variaciones y es la que menos afecta a las características de la corriente de tráfico.
+
+Los días entre semana, sábados y domingos también se encuentran ante diferencias de patrones. Pero comparando día con día, los patrones de rutas de una naturaleza similar a menudo muestran una marcada similitud, que es útil para realizar predicciones.
+
+La variación más significativa se puede observar en los periodos de horas. La hora pico observada durante las mañanas y tardes durante los días entre semana, que es usualmente el 8 a 10 por ciento del total del flujo diario o 2 o 3 veces el promedio de volumen por hora. Estos viajes son principalmente los viajes al trabajo, que se mantienen relativamente estables con el tiempo y má o menos constantes día a día.
+
+\subsection{Tipos de Medidas de Volumen}
+
+Debido a que hay una considerable variación en el volumen de tráfico, existen gran cantidad de medidas de volumen que son comúnmente adoptadas que promedian estas variaciones en un solo conteo de volumen que se utiliza para varios fines de diseño:
+
+Promedio Anual de Tráfico Diario: Es el promedio del volumen de tráfico de las 24 horas del día en un lugar determinado durante los 365 días del año, es decir, el número total de vehículos que pasan por un sitio dividido por 365.
+
+Promedio Anual de Tráfico Entre Semana: Es el promedio del volumen de tráfico de las 24 horas del día dentro de los días entre semana en un año. Se calcula dividiendo el total del volumen de tráfico de días entre semana del año entre 260.
+
+Promedio de Tráfico Diario: Es el promedio del volumen de tráfico durante las 24 horas del día durante un periodo de tiempo menor a un año. Se puede medir durante seis meses, una temporada, un mes, una semana, a tan poco como dos días. Esta medida es válida sólo para el periodo de tiempo sobre el cual se realiza.
+
+Promedio de Tráfico Entre Semana: Es el promedio de volumen de tráfico durante las 24 horas del día dentro de los días entre semana durante un periodo de tiempo menor a un año, como por ejemplo un mes o una temporada.
+
+La relación entre el Promedio Anual de Tráfico Entre Semana y el Promedio de Tráfico Entre Semana es análoga a la que existe entre el Promedio Anual de Tráfico Diario y el Promedio de Tráfico Diario. Principalmente el estudio del volumen establece la importancia de una ruta en particular con respecto a las otras, la distribución del tráfico en las carreteras, y la fluctuación del flujo. Todo lo que finalmente determina el diseño de una carretera y de las instalaciones relacionadas a la misma. Por lo tanto, el volumen es tratado como el más importante de todos los parámetros de la corriente de tráfico.
+
+\section{Densidad}
+
+La densidad se define como el número de vehículos ocupando una longitud dada de la carretera o carril y es generalmente expresada como vehículos por kilómetro. Uno puede fotografiar una longitud de camino x, contar el número de vehículos, nx, en un carril de la ruta en ese momento y derivar la densidad k como,
+
+k=nxx
+
+Esto se ilustra en la Fig. 4.1. En la figura, la densidad es el número de vehículos entre los puntos A y B dividida por la distancia entre A y B. La densidad es igualmente como el flujo, pero desde un punto de vista diferente, ya que esta medida está más directamente relacionada con la demanda de tráfico. También mide la proximidad de los vehículos entre sí dentro de la corriente lo cual afecta a la libertad de maniobra y conducción cómoda.
+
+Fig. 4.1 Ilustración de Densidad.
+
+\section{Estimación de Tráfico en tiempo real}
+
+Para la estimación de tráfico en tiempo real, los países desarrollados utilizan redes de sensores detectores [32] como fuente de datos. Desde el verano de 2007, la Dirección General de Tráfico (DGT) del Ministerio del Interior de España ha estado proveyendo una gran cantidad de datos de tráfico en tiempo real integrados con los mapas de Google. Utilizando unos 4000 sensores de tráfico localizados a lo largo de la red de caminos españoles. Esta herramienta permite, por ejemplo, recolectar el flujo de tráfico por hora y la velocidad promedio en los alrededores de Madrid (Fig. 4.2) a través de sensores ubicados en los cruces de las carreteras.
+
+Fig. 4.2 Típica información proveída por el mapa de tráfico de la DGT
+
+Otros países como Francia, Reino Unido y Portugal cuentan con sistemas similares a los de España. También existen varios estudios basados en FCD para la estimación de tráfico en tiempo real, en [33] presentan uno de los primeros experimentos de campo utilizando teléfonos celulares equipados con GPS para obtener datos de tráfico en tiempo real, en el mismo se utilizaron 100 vehículos que llevaban un nokia N95 a bordo. La prueba consistió en conducir en círculos en un tramo de aproximadamente 15 kilómetros de la carretera I-880, cerca de Union City. Los resultados obtenidos del experimento sugerían que una penetración de 2-3\% de teléfonos móviles entre los conductores era suficiente para proveer medidas precisas de la velocidad del flujo de tráfico. En otros trabajos como [35] se utiliza a taxis como vehículos de prueba para la obtención de FCD, debido a que las medidas de velocidad provenientes de taxis son representativas de la velocidad promedio de toda la población de vehículos [35]. 
+
+Aparte de la estimación de tráfico, también es posible realizar predicciones del estado del tráfico basándose en la información actual e histórica del tráfico. En [36] trabajaron con 600.000 vehículos que enviaban su ubicación cada tres minutos, y a través de dos algoritmos basados en redes neuronales y emparejamiento de patrones realizaban predicciones a corto plazo (15 a 30 minutos) del estado de tráfico futuro. Logrando un error situado entre 2% a 8% en predicciones de 15 minutos y 3% a 16% para predicciones de 30 minutos.
+
+\chapter{Referencias}
+
+[1] Bolstad, Paul. GIS Fundamentals: A First Text on Geographic Information Systems. Eider Press, 2005.
+
+[2] Longley, Paul. Geographic information systems and science. John Wiley \& Sons, 2005.
+
+[3] Obe, Regina, and Leo Hsu. PostGIS in action. Manning Publications Co., 2011.
+
+[4] LEY Mimbela, L A Klein. Summary of vehicle detection and surveillance technologies used in intelligent transportation systems. FHWA Report, New Mexico State University an VDC Project Consultant, 2000.
+
+[5] Traffic Detector Handbook. Third Edition Volume II, Publicación Nro. FHWA-HRT-06-139, 2006.
+
+[6] Dr. Tom V Mathew. Transportation Systems Engineering, IIT Bombay, 2014.
+
+[7] Scott Fraser. The Use Of Floating Cellular Telephone Data For Real-Time Transportation Incident Management. McMaster University School of Engineering Practice, 2007
+
+[8] A Thiagarajan, L Ravindranath, H Balakrishnan, S Madden, L Girod. Accurate Low-Energy TRajectory Mapping for Mobile Devices. MIT Computer Science and Artificial Intelligence Laboratory, 2011
+
+[9] Fang Shunkai. Energy-efficient Location Data Acquisition Based on Improved Map Matching. National University of Singapore, 2011
+
+[10] S Ruppe, M Junghans, M Haberjahn, C Troppenz. Augmenting the Floating Car Data Approach by Dynamic Indirect Traffic Detection. German Aerospace Center, Institute of Transportation Systems, 2012
+
+[11] M A Chowdhary, A Sadek. Fundamentals of Intelligent Transportation Systems Planning. Artech House Inc., 2003
+
+[12] Quddus, Mohammed A., Washington Y. Ochieng, and Robert B. Noland. "Current map-matching algorithms for transport applications: State-of-the art and future research directions." Transportation Research Part C: Emerging Technologies 15.5 (2007): 312-328.
+
+[13] White, Christopher E., David Bernstein, and Alain L. Kornhauser. "Some map matching algorithms for personal navigation assistants." Transportation Research Part C: Emerging Technologies 8.1 (2000): 91-108.
+
+[14] Greenfeld, Joshua S. "Matching GPS observations to locations on a digital map." Transportation Research Board 81st Annual Meeting. 2002.
+
+[15] Quddus, Mohammed A., et al. "A general map matching algorithm for transport telematics applications." GPS solutions 7.3 (2003): 157-167.
+
+[16] Yu, Meng. Improved positioning of land vehicle in ITS using digital map and other accessory information. Diss. The Hong Kong Polytechnic University, 2006.
+
+[17] Lou, Yin, et al. "Map-matching for low-sampling-rate GPS trajectories."Proceedings of the 17th ACM SIGSPATIAL International Conference on Advances in Geographic Information Systems. ACM, 2009.
+
+[18] Sakic, Ermin. "Map-Matching Algorithms for Android Applications." (2012).
+
+[19] Budigm Benedikt. “An algorithm for map matching on incomplete road databases”.  (2012).
+
+[20] Yuan, Jing, et al. "An interactive-voting based map matching algorithm."Proceedings of the 2010 Eleventh International Conference on Mobile Data Management. IEEE Computer Society, 2010.
+
+[21] Ochieng, Washington Y., M. Quddus, and Robert B. Noland. "Map-matching in complex urban road networks." Revista Brasileira de Cartografia 2.55 (2009).
+
+[22] Newson, Paul, and John Krumm. "Hidden Markov map matching through noise and sparseness." Proceedings of the 17th ACM SIGSPATIAL International Conference on Advances in Geographic Information Systems. ACM, 2009.
+
+[23] Quddus, Mohammed A., Robert B. Noland, and Washington Y. Ochieng. "A high accuracy fuzzy logic based map matching algorithm for road transport."Journal of Intelligent Transportation Systems 10.3 (2006): 103-115.
+
+[24] Chen, Daniel, et al. "Approximate Map Matching with respect to the Fréchet Distance." ALENEX. 2011.
+
+[25] Eisner, Jochen, et al. "Algorithms for Matching and Predicting Trajectories."ALENEX. 2011.
+
+[26] Kim, Sinn, and Jong-Hwan Kim. "Adaptive fuzzy-network-based C-measure map-matching algorithm for car navigation system." Industrial Electronics, IEEE Transactions on 48.2 (2001): 432-441.
+
+[27] Thiagarajan, Arvind, et al. "Cooperative transit tracking using smart-phones."Proceedings of the 8th ACM Conference on Embedded Networked Sensor Systems. ACM, 2010.
+
+[28] Thiagarajan, Arvind, et al. "VTrack: accurate, energy-aware road traffic delay estimation using mobile phones." Proceedings of the 7th ACM Conference on Embedded Networked Sensor Systems. ACM, 2009.
+
+[29] L R Kadiyali. Traffic Engineering and Transportation Planning. Khanna Publishers, New Delhi, 1987.
+
+[30] C S Papacostas. Fundamentals of Transportation Engineering. Prentice-Hall, New Delhi, 1987.
+
+[31] Adolf D May. Fundamentals of Traffic Flow. Prentice - Hall, Inc. Englewood Cliff New Jersey 07632,, second edition, 1990.
+
+[32] Guillaume Leduc. Road Traffic: Data Collection Methods and Applications. Institute for Prospective Technological Studies, 2008.
+
+[33] J Herrera, D Work, Ryan Herring, X Ban, A Bayern. Evaluation of Traffic Data Obtained via GPS-enabled Mobile Phones: the Mobile Century field experiment. UC Berkeley Center for Future Urban TRansport, 2009.
+
+[34] M Reinthaler, B Nowotny, Dr. R Hildebrandt, F Weichenmeier. Evaluation of Speed Estimation by Floating Car Data Within the Research Project DMOTION, 2011.
+
+[35] M Linauer, B Nowotny, P. Laborczi. FLEET - Fleet Logistic Service Enhancement with Egnos \& Galileo Satellite Technology, report for I2 programme of the Austrian Ministry of Transport, 2004.
+
+[36] C de Fabritiis, R Ragona, G Valenti. Traffic Estimation And Prediction Based On Real Time Floating Car Data. Conference on Intelligent Transportation Systems, Beijing, 2008.
+
+\end{document}
