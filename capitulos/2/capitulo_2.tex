@@ -1,0 +1,112 @@
+\chapter{Sistemas Geográficos de Información}
+
+Se conocen como Sistemas de Información Geográfica (SIG) a aquellos sistemas basados en computadoras diseñados para la recolección, mantenimiento, análisis y distribución de datos e información geográfica [1]. Un SIG es un sistema de hardware, software, personas, datos, organización y mecanismos institucionales para recoger, almacenar, analizar y difundir información sobre las áreas de la tierra [2].
+
+El objetivo principal de los SIG es almacenar información precisa sobre la localización de objetos de interés, así como sus propiedades y atributos. Los SIG ayudan en en el análisis y la toma de decisiones basadas en información geográfica y son aplicables en diversas áreas de la actividad humana como la planificación para el desarrollo de zonas urbanas y rurales, la delimitación de propiedades y el cobro de  impuestos, el análisis del flujo del tráfico en ciudades, entre otros. Estos sistemas proveen funcionalidades para manipular datos espaciales, calcular distancias, áreas y adyacencias entre objetos, modificar datos geográficos, realizar análisis cuantitativos y cualitativos, visualizar mapas, gráficos y tablas, etc.
+
+En este capítulo se explican los conceptos fundamentales que sirven de base para el desarrollo de los SIG como los sistemas de coordenadas y proyecciones, los modelos de datos utilizados para representar la información geográfica y las bases de datos en las que se guarda la información.
+
+\section{Datums, Proyecciones, y Sistemas de Coordenadas}
+
+La tarea fundamental de un SIG es conocer la ubicación de los objetos de interés e identificar dicha ubicación dentro de un map. En esta sección describimos los principios básicos que permiten definir esta ubicación y representarla en un mapa plano.
+
+\subsection{Sistemas de Coordenadas}
+
+Se denominan como coordenadas al conjunto de números que identifican de forma única a una posicion dentro de un sistema de coordenadas. Estos números son representados generalmente como pares x,y en un plano cartesiano, o como latitud y longitud en un sistema de coordenadas geográficas. Para definir el sistema de coordenadas geográficas se tienen en cuenta dos elementos principales: 1) el tamaño y la forma de la tierra y 2) un conjunto de elementos de referencia a partir de los cuales se puede determinar la ubicación de cualquier otro objeto en la superficie de la tierra.
+
+La forma de la tierra es modelada como un elipsoide achatado hacia los polos, su semieje mayor corresponde al radio en la direccion del ecuador, y su semieje menor corresponde al radio en la direccion de los polos. El factor principal para determinar la forma y el tamaño de la tierra son los  radios y el centro del elipsoide. Los polos están definidos por el eje de rotación del elipsoide y el ecuador se define como el círculo a mitad de camino entre los dos polos, en un ángulo recto con respecto al eje polar, y que cubre la dimensión más ancha de la elipsoide (Fig. 1.1). Las ubicaciones de estos elementos son estimadas utilizando mediciones  precisas. Una vez que estas localizaciones han sido estimadas se pueden especificar las coordenadas geográficas. Esto crea un sistema de referencia mediante el cual podemos especificar la posicion de objetos en la superficie del elipsoide.
+
+Figura 1.1. Elipsoide utilizado para modelar la superficie del planeta Tierra.
+
+La forma del elipsoide está dada por la siguiente ecuación.
+
+Los sistemas de coordenadas geográficas se componen de la latitud, que varía de norte a sur, y la longitud, que varía de este a oeste. Las líneas de longitud constante son denominadas meridianos, y las líneas de latitud constante son denominadas paralelos. Los paralelos son líneas paralelas entre sí en dirección este-oeste alrededor de la Tierra. Los meridianos son líneas que van de sur a norte y convergen en los polos. Por convención, el ecuador se toma como la latitud de cero grados y latitudes al sur y al norte varían en un rango de hasta 90 grados. Se toma como longitud cero al meridiano que atraviesa el Observatorio Real de Greenwich, en Inglaterra y las longitudes al este u oeste se especifican como ángulos de giro con respecto al Meridiano de Greenwich, variando de -180 grados (oeste) a 180 grados (este). Ver Figura 1.2.
+
+Figura 1.2. Sistema de coordenadas de latitud y longitud.
+
+\subsection{Datums geodésicos}
+
+Con el sistema de coordenadas definido se procede a estimar las longitudes y latitudes de todas las demás ubicaciones a través de mediciones. En décadas anteriores estas estimaciones se hacían utilizando técnicas astronómicas, midiendo distancias y direcciones entre puntos. Hoy en día se utilizan técnicas modernas de posicionamiento basado en satélites. Mediante estas estimaciones se establecen un conjunto de puntos de referencia para los cuales la latitud y la longitud han sido precisamente determinadas. Todas las demás coordenadas se miden con referencia a este conjunto de puntos.
+
+Este conjunto de puntos se conoce como datum geodésico.  Un datum geodésico consta de dos componentes principales. El primer componente es un elipsoide con un sistema de coordenadas esféricas o cartesianas de tres dimensiones y un origen. La segunda parte consiste en un conjunto de puntos y líneas cuyas coordenadas han sido medidas cuidadosamente utilizando los mejores métodos y equipos.
+
+A lo largo de la historia diferentes estudios han determinado diversos valores para los radios y el centro del elipsoide. Debido a errores de medición, diferencias en los métodos de cálculo y a que la tierra no es un elipsoide perfecto, diferentes estimaciones alrededor del mundo tienen ligeramente diferentes orígenes, ejes de orientación y radios. Estas diferencias aunque pequeñas, generalmente resultan en estimaciones bastante diferentes para las coordenadas de una misma localización,  dependiendo del elipsoide utilizado. En la actualidad las mediciones globales y la avanzada capacidad computacional permiten estimar elipsoides aplicables de forma global. Debido a esta diferencia en las estimaciones existen datums diferentes para diferentes partes de la tierra, desarrollados en distintas épocas.
+
+El primer datum utilizado ampliamente en Norteamérica fue el North American Datum de 1927 (NAD27), su sucesor fue el North American Datum de 1983 (NAD83), las mejores estimaciones de las localizaciones de los puntos cambiaron en hasta 200 metros entre estos dos datums (ver Fig. 1.3). El World Geodetic System de 1984 (WGS84) es un conjunto de datums globales desarrollado y utilizado principalmente por el Departamento de Defensa de los Estados Unidos y hoy en día es ampliamente aceptado y utilizado en todo el mundo.
+
+Figura 1.3a. Desplazamiento de la latitud de los datums en metros, NAD83 menos NAD27.
+
+Figura 1.3a. Desplazamiento de la longitud de los datums en metros, NAD83 menos NAD27.
+
+\subsection{Proyecciones}
+
+Una proyección es una representación sistemática de las posiciones de la superficie de la curva Tierra sobre una superficie plana de un mapa. El mapa resultante sufre una distorsión debido a la traducción de una superficie superficie curva a una superficie plana. Diferentes proyecciones pueden distorsionar el mapa de diferentes maneras. La proyección puede definirse por lo tanto como la transformación de una posicion en la superficie de la tierra, identificada por su latitud y longitud
+%(f, ?),
+a una posicion en coordenadas cartesianas (x, y). Cualquier proyección puede representarse como un par de funciones matemáticas:
+
+%x = f (f,?)
+%y = g(f, ?)
+
+Las proyecciones se pueden clasificar de acuerdo a su forma, en cónicas, cilíndricas o planas (Fig. 1.4) y de acuerdo a su orientación en ecuatoriales, cuando por ejemplo el eje de un cilindro coincide con los polos, o transversales, cuando por ejemplo el eje del cilindro coincide con el ecuador.
+
+Figura 1.4. Tipos de proyecciones: a) cilíndrica, b) cónica y c) plana.
+
+Algunas de las proyecciones más importantes son la Proyección Cilíndrica Equidistante, que produce una imagen fuertemente distorsionada de la Tierra con los polos extendidos a lo largo de la totalidad de los bordes superior e inferior del mapa (Fig. 1.5); la Proyección Conforme de Lambert, que se obtiene interceptando un cono con la superficie de la tierra en dos paralelos del elipsoide; la Proyección Transversa de Mercator, que se obtiene envolviendo la Tierra con un cilindro y proyectando las posiciones de la misma sobre el cilindro, el eje del cilindro se encuentra en el plano ecuatorial y el Sistema de Coordenadas Universal Transversal de Mercator (UTM por sus siglas en Inglés), que está basada en la Proyección Normal de Mercator pero en lugar de ser tangente al ecuador es tangente a un meridiano, es decir es un cilindro cuyo eje es el eje polar del elipsoide.
+
+Figura 1.5. Proyección Cilíndrica Equidistante (Plate Carrée)
+
+\section{Modelos de datos}
+
+Una vez que tenemos definidos el sistema de coordenadas y que podemos representar conceptualmente la localización de los objetos en un mapa, el siguiente paso es definir una estructura de datos que represente esta información de manera a que la misma pueda ser manipulada y analizada con un SIG. En esta sección describimos brevemente las estructuras de datos comúnmente utilizadas en los SIG actuales.
+
+\subsection{Modelo de Datos Vectorial}
+
+En un modelo vectorial cada objeto del mundo real es representado como uno de tres posibles tipos de datos geométricos: puntos, líneas o polígonos (Fig. 1.6). Un punto se representa de forma única por sus coordenadas (ciudades, puestos de salud, comisarías), las líneas se representan como una lista ordenada de coordenadas correspondientes a sus vértices (rutas, ríos y arroyos) y los polígonos se representan como uno o más segmentos de líneas que se cierran para formar un polígono (propiedades rurales, lagos, delimitación de distritos). Las coordenadas que definen la geometría de cada objeto pueden tener 2, 3, 4 o más dimensiones. En algunos modelos de datos las figuras geométricas pueden ser representadas por curvas definidas por una función matemática (ej. curvas de Biézer).
+
+Figura 1.6. Representación vectorial.
+
+Objetos del mismo tipo (ej. calles) normalmente son guardadas en una tabla de base de datos en la que cada objeto ocupa una fila de la tabla y cada atributo del objeto corresponde a una columna de la tabla. En un SIG también se puede almacenar información topológica sobre los objetos. La topología es la ciencia que estudia las relaciones geométricas entre las distintas figuras y objetos geométricos (puntos, líneas, polígonos), por ejemplo las relaciones de adyacencia y conectividad. Las relaciones topológicas son propiedades cualitativas de los objetos geográficos que permanecen constantes cuando se distorsiona el espacio geográfico de los objetos.  Por ejemplo para cada calle se puede definir su sentido de circulación y su límite de velocidad.
+
+\subsection{Modelo de Datos Raster}
+
+En una representación raster el espacio es dividido en una colección de celdas rectangulares, todas las variaciones geográficas son expresadas asignando propiedades o atributos a estas celdas. Este tipo de representación requiere que la superficie curva de la tierra sea proyectada en una superficie plana. Debido a que esto genera distorsiones, las celdas en una representación raster no son perfectamente iguales en forma o área a la superficie que representan. Cuando se usa este formato, toda la información acerca de las variaciones dentro de una celda es perdida y se asigna un único valor a toda la celda (Fig. 1.7).
+
+Figura 1.7. Representación raster.
+
+Las celdas pueden contener atributos basado en diversos esquemas de codificación. Por ejemplo, un esquema de codificación simple puede asignar un valor binario, cero o uno, a cada celda para representar la presencia o ausencia de forestación en dicha celda. En casos más avanzados se utilizan números de punto flotante para representar por ejemplo el nivel de elevación de cada celda con respecto al nivel del mar. Múltiples atributos pueden ser guardados para cada celda en una tabla en la que cada columna es un atributo de la celda y cada fila representa a una celda en particular. Los datos usualmente son guardados en archivos comprimidos o en bases de datos relacionales.
+
+\subsection{Modelos de Datos de Red}
+
+El modelo de red es un tipo especial de modelo topológico que puede ser utilizado para modelar el flujo de bienes y servicios. En un SIG las redes son modeladas como puntos o nodos (ej. intersecciones de calles, fusibles, interruptores, válvulas de agua) y líneas  (calles, líneas de transmisión y tuberías).  Las relaciones topológicas de la red definen  cómo las líneas se conectan entre sí en los nodos y también pueden definir reglas sobre cómo los flujos pueden moverse a través de una red.
+
+Por ejemplo, en una red de calles que está compuesta por un conjunto de nodos (intersecciones de las calles) y líneas (las calles), así como las relaciones topológicas entre las mismas (restricciones de giro en los nodos, sentido de las calles, límites de velocidad), la información topológica permite analizar el flujo de tráfico a través de la red y determinar los puntos más congestionados o calcular caminos más cortos de un punto de la red a otro.
+
+\subsection{Red Irregular de Triángulos (TIN)}
+
+Los modelos de datos geográficos descritos hasta ahora se utilizan para representar datos en una o dos dimensiones. Para representar superficies tridimensionales en un SIG se pueden utilizar modelos raster o redes irregulares de triángulos (TIN por sus siglas en Inglés). En los modelos raster cada celda almacena la altura de la superficie en una localización dada. En una estructura TIN se representa una superficie como una serie de elementos triangulares contiguos que no se superponen entre sí.
+
+Una estructura de datos TIN es una estructura topológica que almacena información acerca de los nodos que comprenden cada triángulo y los vecinos de cada triángulo. El triángulo está representado por una secuencia de tres nodos, cada nodo está definido por sus coordenadas x, y, z (Fig. 1.8). Los triángulos tienen como atributos su pendiente, orientación y área, los vértices tienen atributos de elevación y los bordes tienen como atributos su pendiente y dirección. Al igual que en los demás modelos de datos, cada triángulo puede tener otros datos o atributos asociados.
+
+Figura 1.8. Representación TIN.
+
+\section{Bases de Datos Espaciales}
+
+Una base de datos espacial es aquella en la que están definidos tipos de datos especiales para representar objetos geométricos y permite guardar estos objetos geométricos, que usualmente son de origen geográfico, en tablas regulares de una base de datos. Además provee funciones e índices para consultar y manipular estos datos [3]. Las bases de datos espaciales no necesitan ser relacionales pero muchas de las más populares lo son.
+
+En las bases de datos espaciales típicamente se definen tipos de datos que representan puntos, líneas y polígonos a partir de los cuáles se pueden construir otros tipos de datos más complejos y representar objetos del mundo real. Estas bases de datos están especialmente diseñadas para representar información en dos dimensiones en formato vectorial, pero también pueden almacenar datos raster y topologías tridimensionales.
+
+\subsection{Análisis espacial, procesamiento espacial, y consultas espaciales}
+
+Una consulta espacial es una consulta de base de datos que utiliza funciones geométricas para responder preguntas acerca del espacio y de los objetos en el espacio. Extensiones para bases de datos como PostGIS y Oracle Spatial agregan un conjunto de funciones a las ya existentes en el lenguaje SQL estándar que trabajan con objetos geométricos de forma similar a como las funciones estándar trabajan con las fechas.
+
+Por ejemplo, existen funciones que indican la cantidad de tiempo que hay entre dos fechas o si una fecha dada corresponde al pasado o al futuro. De forma similar las base de datos espaciales proveen funciones especiales que permiten obtener la distancia entre dos figuras geométricas, o el área total de un polígono. Las funciones espaciales también permiten crear y modificar objetos geométricos.
+
+Existen estándares que definen este conjunto de tipos de datos y funciones espaciales. Open Geospatial Consortium (OGC) es un consorcio internacional de la industria cuyo objetivo es tratar de estandarizar la forma en que los datos geométricos y espaciales son accedidos y distribuidos. OGC cuenta con numerosas especificaciones que definen el acceso a los datos geoespaciales, servicios web para consulta y manipulación de datos, formatos de datos geoespaciales y consulta de datos geoespaciales.
+
+\subsection{Productos comerciales y de código abierto}
+
+Existen varias bases de datos espaciales disponibles en el mercado que implementan los estándares OGC, tanto de código abierto como soluciones comerciales. Entre las bases de datos de código abierto más populares podemos citar a SpatialLite/SQLite, PostgreSQL/PostGIS y MySQL. Los productos comerciales más populares incluyen a Oracle Spatial y SQL Server de Microsoft.
+
+PostGIS es una extensión para PostgreSQL que agrega soporte para tipos de datos geométricos y funciones especiales convirtiendo a PostgreSQL en una base de datos espacial. PostGIS es un proyecto de código abierto que se publica bajo la Licencia Pública General de GNU. Además de los tipos de datos básicos provee otros tipos de datos más complejos como multi-polígonos, multi-puntos, multi-líneas y curvas geométricas. PostGIS 2 además agrega soporte para datos raster para  y datos tridimensionales en formato TIN así como también funciones para trabajar para comparación de objetos tridimensionales. De forma similar SpatialLite es una extensión para SQLite que agrega soporte para tipos de datos y funciones geométricas.
+
+Oracle Spatial es una extensión para la base de datos Oracle que proporciona tipos de datos y funciones para la gestión de datos espaciales. Los tipos estándar y funciones de Oracle (CHAR, DATE, INTEGER, etc) se extienden con equivalentes geográficos. Oracle Spatial provee tipos básicos de geométricas: puntos, líneas y polígonos (incluyendo polígonos complejos con agujeros), a partir de los cuáles se pueden construir estructuras de datos más complejas. Además, Oracle Spatial puede almacenar y administrar datos de tipo raster.
