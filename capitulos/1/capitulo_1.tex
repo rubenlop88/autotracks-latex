@@ -2,13 +2,28 @@
 
 \section{Motivación}
 
-La congestión de tránsito es uno de los problemas más serios que enfrentan las zonas urbanas del mundo hoy en día, tanto en países desarrollados como en países en vías de desarrollo, el constante aumento del parque de automóviles, el alto uso de vehículos de transporte privado y la falta de planificación de las ciudades son factores que deterioran la calidad de vida de los ciudadanos.
+La congestión del tránsito es uno de los problemas más serios que enfrentan las zonas urbanas del mundo hoy en día, el constante aumento del parque de automóviles, el alto uso de vehículos de transporte privado y la falta de planificación de las ciudades son algunos de los factores que deterioran la calidad de vida de los ciudadanos.
 
-El fuerte impacto negativo de la congestión exige un esfuerzo multidisciplinario que apunte a mejorar la situación actual mediante el diseño de políticas públicas de mejoramiento de la infraestructura, la implementación de sistemas de monitoreo y control de tránsito eficientes, la mejora del sistema de transporte público y la mejora en la educación vial de la población.
+Además, los países menos desarrollados no cuentan con sistemas integrados de control de tránsito debido al alto costo de inversión requerido, tampoco existen servicios proveídos por empresas privadas. Esta situación dificulta la utilización eficiente de las escasas y mal planificadas vías de tránsito existentes, es por eso que se hace evidente la necesidad de recolectar y analizar información sobre el tránsito de forma barata, sencilla y que requiera una mínima inversión.
 
-Los países menos desarrollados no cuentan con sistemas integrados de control de tránsito debido al alto costo de inversión requerido, tampoco existen servicios proveídos por empresas privadas. Esta situación dificulta la utilización eficiente de las escasas y mal planificadas vías de tránsito existentes, es por eso que se hace evidente la necesidad de recolectar y analizar información sobre el tránsito de forma barata, sencilla y que requiera una mínima inversión.
+En este trabajo se propone la implementación de un sistema que permitirá monitorear las condiciones del tránsito utilizando información proveída por dispositivos móviles en tiempo real. Para ello se estudiará el estado del arte de las técnicas de recolección, análisis y distribución de información de tráfico y se seleccionarán los mecanismos de monitoreo y análisis más adecuados a las necesidades y limitaciones de nuestro medio. Dicha información quedará disponible de forma pública y podrá ser utilizada en trabajos futuros para desarrollar soluciones que ayuden a mitigar la problemática de la congestión vehicular.
 
-En este trabajo se propone la implementación de un sistema que permitirá monitorear las condiciones del tránsito utilizando información proveída por dispositivo móviles en tiempo real. Para ello se estudiará el estado del arte de las técnicas de recolección, análisis y distribución de información de tráfico y se seleccionarán los mecanismos de monitoreo y análisis más adecuados a las necesidades y limitaciones de nuestro medio. Dicha información quedará disponible de forma pública y podrá ser utilizada en trabajos futuros para desarrollar soluciones que ayuden a mitigar la problemática de la congestión vehicular.
+\section{Justificación y Antecedentes}
+
+Debido a que los países en vías de desarrollo no cuentan con infraestructura vial bien planificada y tampoco con tecnología 
+instalada para monitorear el estado del tráfico, se hace necesario buscar una alternativa económica para obtener información de tráfico precisa y confiable. Los sistemas de información de tráfico basados en Floating Car Data han demostrado ser una alternativa viable para obtener esta información de forma económica y eficiente \cite{schafer2002traffic,reinthaler2007evaluation}.
+
+Los sistemas existentes se basan en la utilización de vehículos de prueba equipados con sensores GPS. Para este propósito se han utilizado flotas de taxis \cite{schafer2002traffic,reinthaler2007evaluation} y sistemas instalados por empresas de seguro en los vehículos de sus clientes \cite{giovannini2011novel}. Sin embargo en países menos desarrollados no existen programas de gobierno o iniciativas privadas que promuevan la utilización de este tipo de sistemas.
+
+Teniendo en cuenta que el mercado de teléfonos móviles inteligentes equipados con sensores GPS está creciendo a un ritmo considerable, y que los automovilistas generalmente llevan consigo este tipo de teléfonos, surge la posibilidad de utilizar esta tecnología como una forma barata y sencilla de recolectar información. Este tipo de tecnología ya se ha usado en aplicaciones para el rastreo de vehículos \cite{thiagarajan2010cooperative}, estimación del tiempo de llegada de buses \cite{zhou2012long} y estimación de tiempo de viaje \cite{thiagarajan2009vtrack}. Diversos estudios han demostrado la factibilidad de utilizar esta tecnología para estimar el estado del tráfico en tiempo real \cite{tao2012real,herrera2010evaluation}, sugiriendo que una penetración de entre un 2 y 3\% es suficiente para proporcionar mediciones precisas de la velocidad del flujo del tráfico \cite{herrera2010evaluation}.
+
+Para estimar el estado del tráfico primeramente se debe determinar la trayectoria de los vehículos por las calles de la ciudad, este proceso es conocido por el nombre de Map Matching. Existen una gran variedad algoritmos de Map Matching, desde lo más sencillos, basados solamente en información geográfica \cite{white2000some}, hasta los más complejos que se basan en modelos estadísticos y otras técnicas avanzadas \cite{quddus2006high,kim2001adaptive}. Debido a las limitaciones impuestas por las plataformas móviles (limitaciones en el uso de batería, baja conectividad, etc.) que se utilizan para obtener los datos, este trabajo se enfoca principalmente en la utilización de algoritmos especializados en procesar muestras relativamente dispersas y poco precisas \cite{lou2009map}.
+
+Muchos sistemas actualmente se basan en la formación de redes ad-hoc entre los dispositivos móviles para distribuir la información de tráfico recolectada \cite{zhong2008disseminating,leontiadis2011effectiveness}. Esto dificulta que los datos obtenidos sean procesados de forma adecuada y distribuidos a otros posibles usuarios que se encuentren fuera de estas redes ad-hoc. En este trabajo se propone una arquitectura centralizada de manera a que todo el procesamiento de la información y la distribución de la información sean manejados por un servidor dedicado.
+
+Existen implementaciones comerciales y/o libres similares a la solución propuesta, sin embargo estos productos generalmente no se encuentran disponibles en los países en vías de desarrollo y además en la literatura no existen trabajos que presenten todos los detalles de diseño, arquitectura y resolución de cuestiones implementativas a la problemática estudiada. Los trabajos anteriores se enfocan generalmente en una sola parte de la problemática, ya sea en la recolección de datos, el análisis o la distribución de la información de tránsito, dejando de lado la arquitectura completa de los sistemas.
+
+De esta forma se pretende llenar un vacío en el estado del arte al realizar un estudio completo de las técnicas utilizadas en la implementación de sistemas de información de tránsito, abarcando cada una de las partes involucradas, desde la recolección hasta la distribución de la información, y para cada parte, estudiando y aplicando las últimas técnicas publicadas en el estado del arte.
 
 \section{Objetivos}
 
@@ -34,12 +49,18 @@ Entre los objetivos específicos se puede citar:
 
 \section{Organización}
 
-Este trabajo está dividido en 5 capítulos. El capítulo 1 describe la motivación para realizar el trabajo, brinda una visión general de los desafíos existentes y define los objetivos que se desean alcanzar.
+Este trabajo está dividido en 8 capítulos. El capítulo 1 describe la justificación para realizar el trabajo, brinda una visión general de los desafíos existentes y define los objetivos que se desean alcanzar.
 
-%TODO corregir, cambio la numeración de capítulos.
+En el capítulo 2 se presentan conceptos básicos sobre Sistemas de Información Geográfica y las bases de datos espaciales.
 
-En el capítulo 2 se hace un extenso estudio del estado del arte de las técnicas de recolección, análisis y distribución de los datos necesarios para la implementación del sistema, con un especial énfasis en las técnicas de Floating Car Data para la recolección de datos y de Map Matching para el análisis de los mismos.
+En el capítulo 3 se describe el estado del arte de las técnicas de recolección de datos, con un especial enfoque en las técnicas de Floating Car Data basadas en la utilización de dispositivos móviles. 
 
-El capítulo 3  describe el problema y se explica detalladamente la arquitectura de la solución propuesta, las técnicas seleccionadas para la recolección y el análisis de datos y los algoritmos utilizados en casa paso del proceso.
+El capítulo 4 se realiza un extenso análisis del estado del arte de los algoritmos de Map Matching utilizados para el procesamiento de la información recolectada.
 
-En el capítulo 4 se presenta un análisis de las pruebas realizadas para verificar el funcionamiento del sistema y muestra los resultados obtenidos. Finalmente en el capítulo 5 se presentan las conclusiones y se proponen los posibles trabajos futuros.
+En el capítulo 5 se explican los parámetros, fórmulas y análisis realizados para derivar el estado del tráfico.
+
+El capítulo 6 explica detalladamente la arquitectura de la solución propuesta, las técnicas seleccionadas para la recolección y el análisis de datos y los algoritmos utilizados en casa paso del proceso.
+
+En el capítulo 7 se presenta un análisis de las pruebas realizadas para verificar el funcionamiento del sistema y se muestran los resultados obtenidos.
+
+Finalmente en el capítulo 8 se presentan las conclusiones y se proponen los posibles trabajos futuros.
