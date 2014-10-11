@@ -1,18 +1,16 @@
 \chapter{Sistemas de Información Geográfica}
 
-Se conocen como Sistemas de Información Geográfica (SIG) a aquellos sistemas basados en computadoras diseñados para la recolección, mantenimiento, análisis y distribución de datos e información geográfica \cite{bolstad2005gis}. Un SIG es un sistema de hardware, software, personas, datos, organización y mecanismos institucionales para recoger, almacenar, analizar y difundir información sobre las áreas de la tierra \cite{longley2005geographic}.
+Se conocen como Sistemas de Información Geográfica (SIG) a aquellos sistemas basados en computadoras diseñados para la recolección, mantenimiento, análisis y distribución de datos e información geográfica \cite{bolstad2005gis}. Un SIG es un sistema de hardware, software, personas, datos, organización y mecanismos institucionales para recoger, almacenar, analizar y difundir información geográfica \cite{longley2005geographic}.
 
-El objetivo principal de los SIG es almacenar información precisa sobre la localización de objetos de interés, así como sus propiedades y atributos. Los SIG ayudan en en el análisis y la toma de decisiones basadas en información geográfica y son aplicables en diversas áreas de la actividad humana como la planificación para el desarrollo de zonas urbanas y rurales, la delimitación de propiedades y el cobro de  impuestos, el análisis del flujo del tráfico en ciudades, entre.
+Los SIG ayudan en en el análisis y la toma de decisiones basadas en información geográfica y son aplicables en diversas áreas de la actividad humana como la planificación para el desarrollo de zonas urbanas y rurales, la delimitación de propiedades y el cobro de  impuestos, el análisis del flujo del tráfico en ciudades, etc. En este capítulo se explican los conceptos fundamentales que sirven de base para el desarrollo del SIG propuesto en este trabajo.
 
-En este capítulo se explican los conceptos fundamentales que sirven de base para el desarrollo del SIG propuesto en este trabajo.
-
-\section{Datums, Proyecciones, y Sistemas de Coordenadas}
+\section{Datums, Proyecciones y Coordenadas}
 
 La tarea fundamental de cualquier SIG es conocer e identificar de forma precisa la ubicación de los objetos de interés dentro de un mapa. En esta sección describimos los principios básicos que permiten definir esta ubicación y representarla en el mapa.
 
 \subsection{Sistemas de Coordenadas}
 
-El primer paso para definir la ubicación de los objetos es definir el sistema de coordenadas utilizado. Se denominan como \emph{coordenadas} al conjunto de números que identifican de forma única a una posición dentro de un sistema de coordenadas. Estos números son representados generalmente como pares $x$,$y$ en un plano cartesiano, o como valores de \emph{latitud} y \emph{longitud} en un sistema de coordenadas geográficas. Para definir el sistema de coordenadas geográficas se tienen en cuenta dos elementos principales: \begin{enumerate*}[1)] \item el tamaño y la forma de la Tierra y \item un conjunto de elementos de referencia a partir de los cuales se puede determinar la ubicación de cualquier otro objeto en la superficie de la tierra\end{enumerate*}.
+El primer paso para definir la ubicación de los objetos es definir el sistema de coordenadas utilizado. Se denominan como \emph{coordenadas} al conjunto de números que identifican de forma única a una posición dentro de un sistema de coordenadas. Estos números son representados generalmente como pares $x$,$y$ en un plano cartesiano, o como valores de \emph{latitud} y \emph{longitud} en un sistema de coordenadas geográficas. Para definir el sistema de coordenadas geográficas se tienen en cuenta dos elementos principales: \begin{enumerate*}[1)] \item el tamaño y la forma de la Tierra y \item un conjunto de elementos de referencia a partir de los cuales se puede determinar la ubicación de cualquier otro objeto en la superficie de la Tierra\end{enumerate*}.
 
 La forma de la Tierra es modelada como un elipsoide achatado hacia los polos cuyo semieje mayor corresponde al radio en la dirección del ecuador y cuyo semieje menor corresponde al radio en la dirección de los polos. Los polos están definidos por el eje de rotación del elipsoide y el ecuador se define como el círculo a mitad de camino entre los dos polos, en un ángulo recto con respecto al eje polar, y que cubre la dimensión más ancha de la elipsoide (Ver \Cref{fig:elipsoide}).
 
@@ -34,7 +32,7 @@ Los sistemas de coordenadas geográficas se componen de la \emph{latitud}, que v
 
 \subsection{Datums geodésicos}
 
-Con el sistema de coordenadas definido se procede a estimar las longitudes y latitudes de todas las demás ubicaciones a través de mediciones. Mediante estas estimaciones se establecen un conjunto de puntos de referencia para los cuales la latitud y la longitud han sido precisamente determinadas. Todas las demás coordenadas se miden con referencia a este conjunto de puntos. El conjunto de puntos resultante se conoce como \emph{datum geodésico}.  Un datum geodésico consta de dos componentes principales. El primer componente es un elipsoide con un sistema de coordenadas esféricas o cartesianas de tres dimensiones y un origen. La segunda parte consiste en un conjunto de puntos y líneas cuyas coordenadas han sido medidas cuidadosamente utilizando los mejores métodos y equipos \cite{bolstad2005gis}.
+Con el sistema de coordenadas definido se procede a estimar las longitudes y latitudes de todas las demás ubicaciones a través de mediciones. Mediante estas estimaciones se establecen un conjunto de puntos de referencia para los cuales la latitud y la longitud han sido precisamente determinadas. Todas las demás coordenadas se miden en referencia a este conjunto de puntos. El conjunto de puntos resultante se conoce como \emph{datum geodésico}.  Un datum geodésico consta de dos componentes principales. El primer componente es un elipsoide con un sistema de coordenadas esféricas o cartesianas de tres dimensiones y un origen. La segunda parte consiste en un conjunto de puntos y líneas cuyas coordenadas han sido medidas cuidadosamente utilizando los mejores métodos y equipos \cite{bolstad2005gis}.
 
 A lo largo de la historia diferentes estudios han determinado diversos valores para los radios y el centro del elipsoide. Debido a errores de medición, diferencias en los métodos de cálculo y a que la tierra no es un elipsoide perfecto, diferentes estimaciones alrededor del mundo tienen ligeramente diferentes orígenes, ejes de orientación y radios. Estas diferencias aunque pequeñas, generalmente resultan en estimaciones bastante diferentes para las coordenadas de una misma localización, dependiendo del elipsoide utilizado. En la actualidad las mediciones globales y la avanzada capacidad computacional permiten estimar elipsoides aplicables de forma global.
 
@@ -131,7 +129,7 @@ Una base de datos espacial es aquella en la que están definidos tipos de datos 
 
 En las bases de datos espaciales se definen tipos de datos que representan puntos, líneas y polígonos a partir de los cuáles se pueden construir otros tipos de datos más complejos y representar objetos del mundo real. Estas bases de datos están especialmente diseñadas para representar información en dos dimensiones en formato vectorial, pero también pueden almacenar datos raster y topologías tridimensionales.
 
-\subsection{Análisis espacial, procesamiento espacial, y consultas espaciales}
+\subsection{Análisis, procesamiento y consultas espaciales}
 
 Una consulta espacial es una consulta de base de datos que utiliza funciones geométricas para responder preguntas acerca del espacio y de los objetos en el espacio. Extensiones para bases de datos como PostGIS y Oracle Spatial agregan un conjunto de funciones a las ya existentes en el lenguaje SQL estándar que trabajan con objetos geométricos de forma similar a como las funciones estándar trabajan con las fechas.
 
