@@ -14,11 +14,11 @@ Los parámetros se pueden clasificar principalmente como: mediciones de cantidad
 
 \section{Velocidad}
 
-La velocidad es considerada una medida de calidad del viaje ya que los conductores y pasajeros estarán más preocupados por la velocidad del viaje que por los aspectos del diseño del tráfico. Está definida por el desplazamiento por unidad de tiempo. Matemáticamente la velocidad v está dada por,
-
-v=dt
-
-donde, v es la velocidad del vehículo en metros sobre segundos, d es la distancia recorrida en metros y t el tiempo en segundos. La velocidad de diferentes vehículos variará con respecto al tiempo y el espacio. Para representar esa variación, varios tipos de velocidad pueden ser definidos. Los más importantes entre ellos son la velocidad local o instantánea, la velocidad de circulación, la velocidad de viaje, la velocidad media local y la velocidad media en un tramo \cite{may1990fundamentals}
+La velocidad es considerada una medida de calidad del viaje ya que los conductores y pasajeros estarán más preocupados por la velocidad del viaje que por los aspectos del diseño del tráfico. Está definida por el desplazamiento por unidad de tiempo. Matemáticamente la velocidad $v$ está dada por,
+\begin{equation}
+v\quad =\quad \frac { d }{ t }
+\end{equation}
+donde, $v$ es la velocidad del vehículo en metros sobre segundos, d es la distancia recorrida en metros y t el tiempo en segundos. La velocidad de diferentes vehículos variará con respecto al tiempo y el espacio. Para representar esa variación, varios tipos de velocidad pueden ser definidos. Los más importantes entre ellos son la velocidad local o instantánea, la velocidad de circulación, la velocidad de viaje, la velocidad media local y la velocidad media en un tramo \cite{may1990fundamentals}
 
 \subsection{Velocidad Local}
 
@@ -35,37 +35,37 @@ La velocidad de viaje es la velocidad efectiva del vehículo en un viaje entre d
 \subsection{Velocidad media local}
 
 La velocidad media local está definida como el promedio de velocidad de todos los vehículos que pasan por un punto de la carretera en un periodo de tiempo determinado. La velocidad media local está dada por
-
-vt=1ni=1nvi
-
-donde vi es la velocidad local del i-ésimo vehículo, y n es el número de observaciones. En  muchos estudios, las velocidades son representadas en forma de tabla de frecuencia. Entonces la velocidad media local está dada por
-
-vt=i=1nqivii=1nqi
-
-donde qi es el número de vehículos que tienen la velocidad vi, y n es el número de tales categorías de velocidad.
+\begin{equation}
+{ v }_{ t }=\frac { 1 }{ n } \sum _{ i=1 }^{ n }{ { v }_{ i } }
+\end{equation}
+donde $v_{i}$ es la velocidad local del i-ésimo vehículo, y $n$ es el número de observaciones. En  muchos estudios, las velocidades son representadas en forma de tabla de frecuencia. Entonces la velocidad media local está dada por
+\begin{equation}
+{ v }_{ t }=\frac { \sum _{ i=1 }^{ n }{ { q }_{ i }{ v }_{ i } }  }{ \sum _{ i=1 }^{ n }{ { q }_{ i } }  } 
+\end{equation}
+donde $q_{i}$ es el número de vehículos que tienen la velocidad $v_{i}$, y $n$ es el número de tales categorías de velocidad.
 
 \subsection{Velocidad media en un tramo}
 
-La velocidad media en un tramo está definida como el promedio de velocidad de todos los vehículos que están en una sección de la carretera durante un periodo de tiempo específico. Considerando la unidad longitud de un camino, y vi como la velocidad local del i-ésimo vehículo . Siendo tiel tiempo que le toma al vehículo completar esa unidad de distancia y está dada por 1vii. Si hay n vehículos, entonces el tiempo promedio de viaje ts está dado por
-
-ts=i=1ntin=1n1vi
-
-Si tav es el promedio de tiempo de viaje, entonces la velocidad promedio vs= 1ts . Por lo tanto, a partir de la ecuación anterior
-
-vs=ni=1n1vi
-
+La velocidad media en un tramo está definida como el promedio de velocidad de todos los vehículos que están en una sección de la carretera durante un periodo de tiempo específico. Considerando la unidad longitud de un camino, y $v_{i}$ como la velocidad local del i-ésimo vehículo . Siendo $t_{i}$ el tiempo que le toma al vehículo completar esa unidad de distancia y está dada por $\frac { 1 }{ { v }_{ i } }$. Si hay n vehículos, entonces el tiempo promedio de viaje ts está dado por
+\begin{equation}
+{ t }_{ s }=\frac { \sum _{ i=1 }^{ n }{ { t }_{ i } }  }{ n } =\frac { 1 }{ n } \sum { \frac { 1 }{ { v }_{ i } }  }
+\end{equation}
+Si $t_{av}$ es el promedio de tiempo de viaje, entonces la velocidad promedio ${ v }_{ s }=\frac { 1 }{ { t }_{ s } }$. Por lo tanto, a partir de la ecuación anterior
+\begin{equation}
+{ v }_{ s }=\frac { n }{ \sum _{ i=1 }^{ n }{ \frac { 1 }{ { v }_{ i } }  }  }
+\end{equation}
 Esto es simplemente la media armónica de la velocidad local. Si la velocidad local está expresada como tabla de frecuencia, entonces
-
-vs=i=1nqii=1nqivi
-
-donde qi vehículos tendrán la velocidad vi y n es el número de tales observaciones.
+\begin{equation}
+{ v }_{ s }=\frac { \sum _{ i=1 }^{ n }{ { q }_{ i } }  }{ \sum _{ i=1 }^{ n }{ \frac { { q }_{ i } }{ { v }_{ i } }  }  } 
+\end{equation}
+donde $q_{i}$ vehículos tendrán la velocidad $v_{i}$ y $n$ es el número de tales observaciones.
 
 \section{Flujo}
 
-Existen dos formas prácticas de contar el número de vehículos en una carretera. Una es el flujo o volumen, que se define como el número de vehículos que pasan por una carretera, o por un carril o dirección del camino durante un intervalo de tiempo. La medida se lleva a cabo contando el número de vehículos, nt, que pasan por un punto en particular en un carril durante un tiempo definido t. Entonces el flujo q expresado en vehículos/hora está dado por
-
-q=ntt
-
+Existen dos formas prácticas de contar el número de vehículos en una carretera. Una es el flujo o volumen, que se define como el número de vehículos que pasan por una carretera, o por un carril o dirección del camino durante un intervalo de tiempo. La medida se lleva a cabo contando el número de vehículos, $n_{t}$, que pasan por un punto en particular en un carril durante un tiempo definido $t$. Entonces el flujo $q$ expresado en vehículos por hora está dado por
+\begin{equation}
+q=\frac { { n }_{ t } }{ t }
+\end{equation}
 El flujo se expresa en la planificación y el diseño de campo teniendo un día como medida de tiempo.
 
 \subsection{Variaciones de Volumen}
@@ -74,28 +74,28 @@ La variación de volumen en el tiempo, es decir, mes a mes, día a día, hora a 
 
 Los días entre semana, sábados y domingos también se encuentran ante diferencias de patrones. Pero comparando día con día, los patrones de rutas de una naturaleza similar a menudo muestran una marcada similitud, que es útil para realizar predicciones.
 
-La variación más significativa se puede observar en los periodos de horas. La hora pico observada durante las mañanas y tardes durante los días entre semana, que es usualmente el 8 a 10 por ciento del total del flujo diario o 2 o 3 veces el promedio de volumen por hora. Estos viajes son principalmente los viajes al trabajo, que se mantienen relativamente estables con el tiempo y má o menos constantes día a día.
+La variación más significativa se puede observar en los periodos de horas. La hora pico observada durante las mañanas y tardes durante los días entre semana, que es usualmente el 8 a 10 por ciento del total del flujo diario o 2 o 3 veces el promedio de volumen por hora. Estos viajes son principalmente los viajes al trabajo, que se mantienen relativamente estables con el tiempo y más o menos constantes día a día.
 
 \subsection{Tipos de Medidas de Volumen}
 
 Debido a que hay una considerable variación en el volumen de tráfico, existen gran cantidad de medidas de volumen que son comúnmente adoptadas que promedian estas variaciones en un solo conteo de volumen que se utiliza para varios fines de diseño:
+\begin{enumerate}
+\item \textbf{Promedio Anual de Tráfico Diario:} Es el promedio del volumen de tráfico de las 24 horas del día en un lugar determinado durante los 365 días del año, es decir, el número total de vehículos que pasan por un sitio dividido por 365.
 
-Promedio Anual de Tráfico Diario: Es el promedio del volumen de tráfico de las 24 horas del día en un lugar determinado durante los 365 días del año, es decir, el número total de vehículos que pasan por un sitio dividido por 365.
+\item \textbf{Promedio Anual de Tráfico Entre Semana:} Es el promedio del volumen de tráfico de las 24 horas del día dentro de los días entre semana en un año. Se calcula dividiendo el total del volumen de tráfico de días entre semana del año entre 260.
 
-Promedio Anual de Tráfico Entre Semana: Es el promedio del volumen de tráfico de las 24 horas del día dentro de los días entre semana en un año. Se calcula dividiendo el total del volumen de tráfico de días entre semana del año entre 260.
+\item \textbf{Promedio de Tráfico Diario:} Es el promedio del volumen de tráfico durante las 24 horas del día durante un periodo de tiempo menor a un año. Se puede medir durante seis meses, una temporada, un mes, una semana, a tan poco como dos días. Esta medida es válida sólo para el periodo de tiempo sobre el cual se realiza.
 
-Promedio de Tráfico Diario: Es el promedio del volumen de tráfico durante las 24 horas del día durante un periodo de tiempo menor a un año. Se puede medir durante seis meses, una temporada, un mes, una semana, a tan poco como dos días. Esta medida es válida sólo para el periodo de tiempo sobre el cual se realiza.
-
-Promedio de Tráfico Entre Semana: Es el promedio de volumen de tráfico durante las 24 horas del día dentro de los días entre semana durante un periodo de tiempo menor a un año, como por ejemplo un mes o una temporada.
-
+\item \textbf{Promedio de Tráfico Entre Semana:} Es el promedio de volumen de tráfico durante las 24 horas del día dentro de los días entre semana durante un periodo de tiempo menor a un año, como por ejemplo un mes o una temporada.
+\end{enumerate}
 La relación entre el Promedio Anual de Tráfico Entre Semana y el Promedio de Tráfico Entre Semana es análoga a la que existe entre el Promedio Anual de Tráfico Diario y el Promedio de Tráfico Diario. Principalmente el estudio del volumen establece la importancia de una ruta en particular con respecto a las otras, la distribución del tráfico en las carreteras, y la fluctuación del flujo. Todo lo que finalmente determina el diseño de una carretera y de las instalaciones relacionadas a la misma. Por lo tanto, el volumen es tratado como el más importante de todos los parámetros de la corriente de tráfico.
 
 \section{Densidad}
 
-La densidad se define como el número de vehículos ocupando una longitud dada de la carretera o carril y es generalmente expresada como vehículos por kilómetro. Uno puede fotografiar una longitud de camino x, contar el número de vehículos, nx, en un carril de la ruta en ese momento y derivar la densidad k como,
-
-k=nxx
-
+La densidad se define como el número de vehículos ocupando una longitud dada de la carretera o carril y es generalmente expresada como vehículos por kilómetro. Uno puede fotografiar una longitud de camino $x$, contar el número de vehículos, $n_{x}$, en un carril de la ruta en ese momento y derivar la densidad $k$ como,
+\begin{equation}
+k=\frac { { n }_{ x } }{ x }
+\end{equation}
 Esto se ilustra en la \Cref{fig:densidad}. En la figura, la densidad es el número de vehículos entre los puntos A y B dividida por la distancia entre A y B. La densidad es igualmente como el flujo, pero desde un punto de vista diferente, ya que esta medida está más directamente relacionada con la demanda de tráfico. También mide la proximidad de los vehículos entre sí dentro de la corriente lo cual afecta a la libertad de maniobra y conducción cómoda.
 
 \begin{figure}[h]
