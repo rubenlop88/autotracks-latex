@@ -1,8 +1,9 @@
 \chapter{Sistemas de Información Geográfica}
+\label{cap:2}
 
 Se conocen como Sistemas de Información Geográfica (SIG) a aquellos sistemas basados en computadoras diseñados para la recolección, mantenimiento, análisis y distribución de datos e información geográfica \cite{bolstad2005gis}. Un SIG es un sistema de hardware, software, personas, datos, organización y mecanismos institucionales para recoger, almacenar, analizar y difundir información geográfica \cite{longley2005geographic}.
 
-Los SIG ayudan en en el análisis y la toma de decisiones basadas en información geográfica y son aplicables en diversas áreas de la actividad humana como la planificación para el desarrollo de zonas urbanas y rurales, la delimitación de propiedades y el cobro de  impuestos, el análisis del flujo del tráfico en ciudades, etc. En este capítulo se explican los conceptos fundamentales que sirven de base para el desarrollo del SIG propuesto en este trabajo.
+Los SIG ayudan en el análisis y la toma de decisiones basadas en información geográfica y son aplicables en diversas áreas de la actividad humana como la planificación para el desarrollo de zonas urbanas y rurales, la delimitación de propiedades y el cobro de  impuestos, el análisis del flujo del tráfico en ciudades, etc. En este capítulo se explican los conceptos fundamentales que sirven de base para el desarrollo del SIG propuesto en este trabajo.
 
 \section{Datums, Proyecciones y Coordenadas}
 
@@ -54,7 +55,7 @@ El primer datum utilizado ampliamente en Norteamérica fue el North American Dat
 
 \subsection{Proyecciones}
 
-Una \emph{proyección} es una representación sistemática de las posiciones de la superficie curva Tierra sobre una superficie plana de un mapa. El mapa resultante sufre una distorsión debido a la traducción de una superficie curva a una plana. La proyección puede definirse por lo tanto como la transformación de una posición en la superficie de la Tierra, identificada por su latitud y longitud $(\varphi,\lambda)$ a una posición en coordenadas cartesianas $(x,y)$. Cualquier proyección puede representarse como un par de funciones matemáticas: \begin{displaymath} x=f(\varphi,\lambda );\quad y=g(\varphi,\lambda ) \end{displaymath}
+Una \emph{proyección} es una representación sistemática de las posiciones de la superficie curva de la Tierra sobre una superficie plana de un mapa. El mapa resultante sufre una distorsión debido a la traducción de una superficie curva a una plana. La proyección puede definirse por lo tanto como la transformación de una posición en la superficie de la Tierra, identificada por su latitud y longitud $(\varphi,\lambda)$ a una posición en coordenadas cartesianas $(x,y)$. Cualquier proyección puede representarse como un par de funciones matemáticas: \begin{displaymath} x=f(\varphi,\lambda );\quad y=g(\varphi,\lambda ) \end{displaymath}
 
 Las proyecciones se pueden clasificar de acuerdo a su forma, en \emph{cónicas}, \emph{cilíndricas} o \emph{planas} (ver \Cref{fig:tipos-proyecciones}) y de acuerdo a su orientación en \emph{ecuatoriales}, cuando el eje de la proyección coincide con los polos, o \emph{transversales}, cuando coincide con el ecuador.
 
@@ -65,18 +66,11 @@ Las proyecciones se pueden clasificar de acuerdo a su forma, en \emph{cónicas},
 	\label{fig:tipos-proyecciones} 
 \end{figure}
 
-Algunas de las proyecciones más importantes son la Proyección Cilíndrica Equidistante (ver \Cref{fig:proyeccion-equidistante}); la Proyección Conforme de Lambert (cónica), la Proyección Transversa de Mercator (cilíndrica) y el Sistema de Coordenadas Universal Transversal de Mercator (UTM por sus siglas en Inglés), que está basada en la Proyección Normal de Mercator pero en lugar de ser tangente al ecuador es tangente a un meridiano.
-
-\begin{figure}[h]
-	\centering
-	\input{capitulos/2/figuras/figura6.pdf_tex}
-	\caption[Proyección cilíndrica equidistante]{Proyección Cilíndrica Equidistante (Plate Carrée)}
-	\label{fig:proyeccion-equidistante} 
-\end{figure}
+Algunas de las proyecciones más importantes son la Proyección Cilíndrica Equidistante; la Proyección Conforme de Lambert (cónica), la Proyección Transversa de Mercator (cilíndrica) y el Sistema de Coordenadas Universal Transversal de Mercator (UTM por sus siglas en Inglés), que está basada en la Proyección Normal de Mercator pero en lugar de ser tangente al ecuador es tangente a un meridiano.
 
 \section{Modelos de datos}
 
-Los fenómenos geográficos requieren dos características para representar el mundo real; \emph{qué} se está representando, y \emph{dónde} está. Para lo primero comúnmente utilizamos conceptos como `ciudad', `calle', `río', etc,. Los modelos de datos geográficos son los equivalentes formales de estos modelos conceptuales y definen las estructuras de datos abstractas que serán almacenadas en las bases de datos espaciales y manipuladas por el SIG \cite{burrough1998principles}.
+Los fenómenos geográficos requieren de dos características para representar el mundo real; \emph{qué} se está representando, y \emph{dónde} está. Para lo primero comúnmente utilizamos conceptos como `ciudad', `calle', `río', etc,. Los modelos de datos geográficos son los equivalentes formales de estos modelos conceptuales y definen las estructuras de datos abstractas que serán almacenadas en las bases de datos espaciales y manipuladas por el SIG \cite{burrough1998principles}.
 
 \subsection{Modelo de Datos Vectorial}
 
@@ -89,7 +83,7 @@ En un modelo vectorial cada objeto del mundo real es representado como uno de tr
 	\label{fig:modelo-vectorial} 
 \end{figure}
 
-Objetos del mismo tipo (ej. calles) normalmente son guardadas en una tabla de base de datos en la que cada objeto ocupa una fila de la tabla y cada atributo del objeto corresponde a una columna de la tabla. En un SIG también se puede almacenar información topológica sobre los objetos, por ejemplo las relaciones de adyacencia y conectividad entre las calles o su sentido de circulación y su límite de velocidad.
+Objetos del mismo tipo (ej. calles) normalmente son guardados en una tabla de base de datos en la que cada objeto ocupa una fila de la tabla y cada atributo del objeto corresponde a una columna de la tabla. En un SIG también se puede almacenar información topológica sobre los objetos, por ejemplo las relaciones de adyacencia y conectividad entre las calles o su sentido de circulación y su límite de velocidad.
 
 \subsection{Modelo de Datos Raster}
 
@@ -102,7 +96,7 @@ En una representación raster el espacio es dividido en una colección de celdas
 	\label{fig:modelo-raster} 
 \end{figure}
 
-Las celdas pueden contener atributos basado en diversos esquemas de codificación. Por ejemplo, un esquema de codificación simple puede asignar un valor binario, cero o uno, a cada celda para representar la presencia o ausencia de forestación en dicha celda. Múltiples atributos pueden ser guardados para cada celda en una tabla en la que cada columna es un atributo de la celda y cada fila representa a una celda en particular. Los datos usualmente son guardados en archivos comprimidos o en bases de datos relacionales.
+Las celdas pueden contener atributos basados en diversos esquemas de codificación. Por ejemplo, un esquema de codificación simple puede asignar un valor binario, cero o uno, a cada celda para representar la presencia o ausencia de forestación en dicha celda. Múltiples atributos pueden ser guardados para cada celda en una tabla en la que cada columna es un atributo de la celda y cada fila representa a una celda en particular. Los datos usualmente son guardados en archivos comprimidos o en bases de datos relacionales.
 
 \subsection{Modelos de Datos de Red}
 
@@ -125,7 +119,7 @@ Un TIN es una estructura topológica que almacena información acerca de los nod
 
 \section{Bases de Datos Espaciales}
 
-Una base de datos espacial es aquella en la que están definidos tipos de datos especiales para representar objetos geométricos y permite guardar estos objetos geométricos, que usualmente son de origen geográfico, en tablas regulares de una base de datos. Además provee funciones e índices para consultar y manipular estos datos \cite{obe2011postgis}. Las bases de datos espaciales no necesitan ser relacionales pero muchas de las más populares lo son.
+Una base de datos espacial es aquella en la que están definidos tipos de datos especiales para representar objetos geométricos y permite guardar estos objetos, que usualmente son de origen geográfico, en tablas regulares de una base de datos. Además provee funciones e índices para consultar y manipular estos datos \cite{obe2011postgis}. Las bases de datos espaciales no necesitan ser relacionales pero muchas de las más populares lo son.
 
 En las bases de datos espaciales se definen tipos de datos que representan puntos, líneas y polígonos a partir de los cuáles se pueden construir otros tipos de datos más complejos y representar objetos del mundo real. Estas bases de datos están especialmente diseñadas para representar información en dos dimensiones en formato vectorial, pero también pueden almacenar datos raster y topologías tridimensionales.
 
@@ -133,7 +127,7 @@ En las bases de datos espaciales se definen tipos de datos que representan punto
 
 Una consulta espacial es una consulta de base de datos que utiliza funciones geométricas para responder preguntas acerca del espacio y de los objetos en el espacio. Extensiones para bases de datos como PostGIS y Oracle Spatial agregan un conjunto de funciones a las ya existentes en el lenguaje SQL estándar que trabajan con objetos geométricos de forma similar a como las funciones estándar trabajan con las fechas.
 
-Por ejemplo, existen funciones que indican la cantidad de tiempo que hay entre dos fechas o si una fecha dada corresponde al pasado o al futuro. De forma similar las base de datos espaciales proveen funciones especiales que permiten obtener la distancia entre dos figuras geométricas, o el área total de un polígono. Las funciones espaciales también permiten crear y modificar objetos geométricos.
+Por ejemplo, existen funciones que indican la cantidad de tiempo que hay entre dos fechas o si una fecha dada corresponde al pasado o al futuro. De forma similar las bases de datos espaciales proveen funciones especiales que permiten obtener la distancia entre dos figuras geométricas, o el área total de un polígono. Las funciones espaciales también permiten crear y modificar objetos geométricos.
 
 Existen estándares que definen este conjunto de tipos de datos y funciones espaciales. Open Geospatial Consortium (OGC) es un consorcio internacional de la industria cuyo objetivo es tratar de estandarizar la forma en que los datos geométricos y espaciales son accedidos y distribuidos. OGC cuenta con numerosas especificaciones que definen el acceso a los datos geoespaciales, servicios web para consulta y manipulación de datos, formatos de datos geoespaciales y consulta de datos geoespaciales.
 
@@ -143,4 +137,4 @@ Existen varias bases de datos espaciales disponibles en el mercado que implement
 
 PostGIS es una extensión para PostgreSQL que agrega soporte para tipos de datos geométricos y funciones especiales convirtiendo a PostgreSQL en una base de datos espacial. PostGIS es un proyecto de código abierto que se publica bajo la Licencia Pública General de GNU. Además de los tipos de datos básicos provee otros tipos de datos más complejos como multi-polígonos, multi-puntos, multi-líneas y curvas geométricas. PostGIS 2 además agrega soporte para datos raster para  y datos tridimensionales en formato TIN. De forma similar SpatialLite es una extensión para SQLite que agrega soporte para tipos de datos y funciones geométricas.
 
-Oracle Spatial es una extensión para la base de datos Oracle que proporciona tipos de datos y funciones para la gestión de datos espaciales. Los tipos estándar y funciones de Oracle (CHAR, DATE, INTEGER, etc) se extienden con equivalentes geográficos. Oracle Spatial provee tipos básicos de geométricas: puntos, líneas y polígonos (incluyendo polígonos complejos con agujeros), a partir de los cuáles se pueden construir estructuras de datos más complejas. Además, Oracle Spatial puede almacenar y administrar datos de tipo raster.
+Oracle Spatial es una extensión para la base de datos Oracle que proporciona tipos de datos y funciones para la gestión de datos espaciales. Los tipos estándar y funciones de Oracle (CHAR, DATE, INTEGER, etc) se extienden con equivalentes geográficos. Oracle Spatial provee tres tipos básicos de figuras geométricas: puntos, líneas y polígonos (incluyendo polígonos complejos con agujeros), a partir de los cuáles se pueden construir estructuras de datos más complejas. Además, Oracle Spatial puede almacenar y administrar datos de tipo raster.
