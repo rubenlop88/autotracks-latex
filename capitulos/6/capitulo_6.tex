@@ -2,7 +2,7 @@
 
 \section{Arquitectura}
 
-En este trabajo se propone desarrollar un sistema centralizado capaz de recibir datos de los dispositivos móviles de los conductores y procesarlos para obtener el estado del tráfico en la ciudad de Asunción. La información resultante será enviada en tiempo real a los usuarios para que los mismos  puedan elegir trayectos menos congestionados.
+En este trabajo se propone desarrollar un sistema centralizado capaz de recibir datos de los dispositivos móviles de los conductores y procesarlos para obtener el estado del tráfico en la ciudad de Asunción. La información resultante será enviada en tiempo real a los usuarios para que los mismos puedan elegir trayectos menos congestionados.
 
 La aplicación móvil está pensada inicialmente para dispositivos con sistema operativo Android. La misma, al ser utilizada por el conductor durante su viaje, registrará los datos del trayecto recorrido que servirán para definir el estado de las rutas. Esta aplicación también contará con un mapa de la ciudad de Asunción, que permitirá ver el estado de las carreteras que tengan información suficiente sobre el tráfico en las mismas. 
 
@@ -101,4 +101,22 @@ Para disminuir la batería utilizada al conectarse a la redes de datos móviles,
 
 \subsection{Estimación del estado actual del tráfico}
 
-Una vez realizado el map matching, el último paso es la estimación del tráfico en un momento dado. Para ello, lo que se hace es calcular 
+Una vez realizado el map matching, se tiene cada punto junto con su velocidad asociado a una calle y se puede hacer la agregación de estas velocidades para obtener la velocidad media en una calle determinada durante un intervalo de tiempo dado. Para ello se puede definir a la velocidad media en la calle $j$ durante el intervalo de interés como:
+\begin{equation}
+{ V }_{ ave }^{ j }({ t }_{ k },{ t }_{ k+\Delta T })=\frac { 1 }{ { n }_{ { t }_{ k },{ t }_{ k+\Delta T } }^{ j } } \sum_{ k={ t }_{ k } }^{ { t }_{ k+\Delta T } }{ \hat { { v } } _{ j }(k) }
+\end{equation}
+donde ${ \hat { { v } } _{ j }(k) }$ es la velocidad estimada disponible en la calle $j$ durante el intervalo $\left[ { t }_{ k },{ t }_{ k+\Delta T } \right] $, y ${ { n }_{ { t }_{ k },{ t }_{ k+\Delta T }}}$ es el número total de estimaciones disponibles.
+
+Se definen cuatro niveles para representar la velocidad media en una calle:
+\begin{enumerate}
+\item \textbf{Rojo:}  para velocidades entre 0 y 14 kilómetros por hora.
+\item \textbf{Naranja:}  para velocidades entre 15 y 29 kilómetros por hora.
+\item \textbf{Amarillo:}  para velocidades entre 30 y 39 kilómetros por hora.
+\item \textbf{Verde:}  para velocidades de 40 o más kilómetros por hora.
+\end{enumerate}
+Las calles son pintadas en el mapa de acuerdo a su nivel de velocidad como se puede apreciar en \Cref{fig:calles}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{capitulos/6/figuras/figura3.jpg}
+	\caption{\label{fig:calles} Estado de calles en Autotracks}	
+\end{figure}
