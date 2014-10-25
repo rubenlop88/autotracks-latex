@@ -21,6 +21,7 @@ Como se puede apreciar en la \Cref{fig:arquitectura}, se tiene un módulo web qu
 En esta sección se presentan de manera detallada las herramientas, los datos, los algoritmos y procedimientos utilizados para el sistema de monitoreo de tráfico vehícular Autotracks. Se describen los pasos seguidos para el desarrollo de la aplicación móvil y web.
 
 \subsection{Preparando la Base de Datos}
+\label{base-de-datos}
 
 Para trabajar correctamente con coordenadas se necesita una base de datos Espacial, que a diferencia de las bases de datos relacionales, pueden almacenar y operar sobre datos geométricos. Teniendo como motor de base de datos PostgreSQL, que es relacional, necesitamos añadirle la extensión PostGIS para convertirla en espacial.
 
@@ -44,6 +45,7 @@ Para almacenar la información de los usuarios de la aplicación se definieron d
 en la tabla de localizaciones se guardan los datos de ubicación que son recibidos periódicamente de los usuarios de la aplicación móvil. Se almacena la fecha, la latitud, la longitud, la velocidad, la dirección, la precisión, altitud y la ruta a la que pertenece. Una ruta es un conjunto lógico de localizaciones que es utilizado para el map matching incremental, la ruta representa el recorrido que hace una persona en un viaje.
 
 \subsection{Obteniendo el Floating Car Data}
+\label{floating-car-data}
 
 Para obtener el FCD de los vehículos se desarrolló una aplicación móvil para teléfonos y tabletas con sistema operativo android denominada autotracks (ver \Cref{fig:autotracks}). La misma se encarga de detectar, almacenar y enviar periódicamente las ubicaciones de los usuarios que se estén moviendo de automóviles de manera completamente anónima a un servidor centralizado.
 
@@ -98,6 +100,32 @@ Como se utiliza un servidor centralizado para almacenar y procesar la informaci�
 Para disminuir la batería utilizada al conectarse a la redes de datos móviles, los teléfonos almacenan la información de las ubicaciones que van recolectando durante sus viajes dentro de vehículos. Cada un periodo de tiempo determinado, toda la información almacenada es enviada al servidor y borrada de la memoria del teléfono.
 
 \subsection{Map Matching}
+
+Una vez que las trayectorias de los vehículos son enviadas al servidor se ejecuta el proceso de MM para determinar el camino real recorrido por cada vehículo. Para realizar este proceso elejimos el algoritmo propuesto por \cite{lou2009map}, conocido como ST-Matching, con algunas mejoras propuestas por \cite{budigm2012algorithm} y \cite{sakic2012map}. 
+
+ST-Matching es un algoritmo topológico específicamente diseñado para funcionar de forma off-line y con intervalos de tiempo relativamente largos entre las puntos. Su implementación es sencilla comparada con otras técnicas avanzadas como \cite{quddus2006high, newson2009hidden} y no requiere de procesamientos y cálculos matemáticos complejos. Estas características hacen que sea el candidato perfecto para la arquitectura de la solución propuesta en este trabajo, teniendo en cuenta que el intervalo de tiempo definido para la toma de localizaciones es de un minuto y que el procesamiento se realiza de forma off-line en un servidor centralizado. 
+
+\subsubsection{Descripción General}
+
+El algoritmo ST-Matching consta de tres partes principales: \begin{enumerate*}[a)]
+\item la \emph{Preparación de Candidatos},
+\item el \emph{Análisis Espacial y Temporal} y
+\item la \emph{Obtención del Resultado}.
+\end{enumerate*}
+La \Cref{fig:st-matching} muestra una descripción general del proceso. Los datos de entrada del algoritmo son la red de calles de Asunción y el área metropolitana, que se describió en el \cref{base-de-datos}, y la trayectoria de un vehículo, obtenida mediante el uso de la aplicación móvil, como se explica en el \cref{floating-car-data}. El resultado de este procesamiento es almacenado en la base de datos para ser utilizado más adelante en el análisis de tráfico.
+
+\begin{figure}[h]
+	\centering
+	\input{capitulos/6/figuras/figura61.pdf_tex}
+	\caption[Descripción General de ST-Matching]{Descripción general del algoritmo ST-Matching.}
+	\label{fig:st-matching} 
+\end{figure}
+
+\subsubsection{Selección de Candidatos}
+
+\subsubsection{Análisis Espacial y Temporal}
+
+\subsubsection{Búsqueda del Resultado}
 
 \subsection{Estimación del estado actual del tráfico}
 
