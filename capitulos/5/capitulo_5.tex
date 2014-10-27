@@ -1,11 +1,11 @@
-\chapter{Estimación de Tráfico}
+\chapter{Estimación de tráfico}
 \label{cap:5}
 
 El tráfico vehicular, o simplemente tráfico, es el fenómeno causado por el flujo de vehículos en una vía, calle o autopista. Cuando el flujo de tráfico es elevado en una zona particular, se produce la congestión del tráfico que deriva en pérdida de tiempo y consumo excesivo de combustible para los conductores \cite{litman2011smart}.
 
 La ingeniería de tráfico se refiere al análisis del comportamiento del tráfico para diseñar la infraestructura para un funcionamiento fluido, seguro y económico del tráfico \cite{kadiyali1987traffic}. El flujo del tráfico, al igual que el flujo del agua, tiene una gran cantidad de parámetros asociados a él. Los parámetros del flujo de tráfico proporcionan información acerca de su naturaleza, que ayuda al análisis en la detección de cualquier variación en las características del flujo. Entender el comportamiento del tráfico requiere un conocimiento profundo de los parámetros del flujo de tráfico y sus relaciones entre sí.
 
-\section{Parámetros del Flujo de Tráfico}
+\section{Parámetros del flujo de tráfico}
 
 El flujo de tráfico incluye la combinación del comportamiento de los conductores y vehículos. Debido a que el comportamiento de los conductores no es uniforme, la naturaleza del flujo de tráfico tampoco lo es. Es influenciada no sólo por las características individuales de los vehículos y conductores, sino que también por la forma en que interactúan entre sí en grupos. Así, el flujo de tráfico a través de una calle con características definidas variará tanto por la localización y el tiempo correspondiente a los cambios en el comportamiento humano.
 
@@ -21,15 +21,15 @@ v\quad =\quad \frac { d }{ t }
 \end{equation}
 donde, $v$ es la velocidad del vehículo en metros sobre segundos, $d$ es la distancia recorrida en metros y $t$ el tiempo en segundos. La velocidad de diferentes vehículos variará con respecto al tiempo y el espacio. Para representar esa variación, varios tipos de velocidad pueden ser definidos. Los más importantes entre ellos son la velocidad local o instantánea, la velocidad de circulación, la velocidad de viaje, la velocidad media local y la velocidad media en un tramo \cite{may1990fundamentals}.
 
-\subsection{Velocidad Local}
+\subsection{Velocidad local}
 
 La velocidad local es la velocidad instantánea de un vehículo en una ubicación específica. La velocidad local puede ser utilizada para diseñar la geometría del camino como curvas horizontales y verticales, elevación, etc. La ubicación y el tamaño de las señales, el diseño de las señales, la velocidad segura, y la determinación de la velocidad de la zona requieren la velocidad local. El análisis de accidentes, mantenimiento de caminos, y la congestión son campos modernos de la ingeniería de tráfico que utilizan los datos de la velocidad local como entrada básica. 
 
-\subsection{Velocidad de Circulación}
+\subsection{Velocidad de circulación}
 
 La velocidad de circulación es la velocidad promedio mantenida en un curso en particular mientras el vehículo se está moviendo y se calcula dividiendo la distancia del recorrido sobre el tiempo en el que el vehículo estuvo en movimiento, es decir, esta velocidad no considera el tiempo en el cual el vehículo se encuentra en una parada, o tiene que esperar a tener un camino claro enfrente. La velocidad circulación siempre será mayor o igual a la velocidad de viaje, debido a que los retrasos no se tienen en cuenta para su cálculo.
 
-\subsection{Velocidad de Viaje}
+\subsection{Velocidad de viaje}
 
 La velocidad de viaje es la velocidad efectiva del vehículo en un viaje entre dos puntos y es la distancia recorrida entre dos puntos dividida por el total del tiempo utilizado por el vehículo para completar el viaje incluyendo cualquier parada. Si la velocidad de viaje es inferior a la velocidad de carrera, indica que el viaje sigue una condición de parada-marcha con aceleración forzada y desaceleración. Una uniformidad entre las velocidades de viaje y circulación denota condiciones de viaje confortables.
 
@@ -47,11 +47,11 @@ donde $q_{i}$ es el número de vehículos que tienen la velocidad $v_{i}$, y $n$
 
 \subsection{Velocidad media en un tramo}
 
-La velocidad media en un tramo está definida como el promedio de velocidad de todos los vehículos que están en una sección de la carretera durante un periodo de tiempo específico. Considerando la unidad longitud de un camino, y $v_{i}$ como la velocidad local del i-ésimo vehículo . Siendo $t_{i}$ el tiempo que le toma al vehículo completar esa unidad de distancia y está dada por $\frac { 1 }{ { v }_{ i } }$. Si hay n vehículos, entonces el tiempo promedio de viaje ts está dado por
+La velocidad media en un tramo está definida como el promedio de velocidad de todos los vehículos que están en una sección de la carretera durante un periodo de tiempo específico. Considerando la unidad \emph{longitud del camino}, y $v_{i}$ como la velocidad local del i-ésimo vehículo. Siendo $t_{i}$ el tiempo que le toma al vehículo completar esa unidad de distancia que está dado por $\frac { 1 }{ { v }_{ i } }$. Si hay $n$ vehículos, entonces el tiempo promedio de viaje $t_s$ está dado por
 \begin{equation}
 { t }_{ s }=\frac { \sum _{ i=1 }^{ n }{ { t }_{ i } }  }{ n } =\frac { 1 }{ n } \sum { \frac { 1 }{ { v }_{ i } }  }
 \end{equation}
-Si $t_{av}$ es el promedio de tiempo de viaje, entonces la velocidad promedio ${ v }_{ s }=\frac { 1 }{ { t }_{ s } }$. Por lo tanto, a partir de la ecuación anterior
+Si $t_{s}$ es el promedio de tiempo de viaje, entonces la velocidad promedio ${ v }_{ s }=\frac { 1 }{ { t }_{ s } }$. Por lo tanto, a partir de la ecuación anterior
 \begin{equation}
 { v }_{ s }=\frac { n }{ \sum _{ i=1 }^{ n }{ \frac { 1 }{ { v }_{ i } }  }  }
 \end{equation}
@@ -63,23 +63,23 @@ donde $q_{i}$ vehículos tendrán la velocidad $v_{i}$ y $n$ es el número de ta
 
 \section{Flujo}
 
-Existen dos formas prácticas de contar el número de vehículos en una carretera. Una es el flujo o volumen, que se define como el número de vehículos que pasan por una carretera, o por un carril o dirección del camino durante un intervalo de tiempo. La medida se lleva a cabo contando el número de vehículos, $n_{t}$, que pasan por un punto en particular en un carril durante un tiempo definido $t$. Entonces el flujo $q$ expresado en vehículos por hora está dado por
+El flujo o volumen, se define como el número de vehículos que pasan por una carretera, o por un carril o dirección del camino durante un intervalo de tiempo. La medida se lleva a cabo contando el número de vehículos $n_{t}$ que pasan por un punto en particular en un carril durante un tiempo definido $t$. Entonces el flujo $q$ expresado en vehículos por hora está dado por
 \begin{equation}
 q=\frac { { n }_{ t } }{ t }
 \end{equation}
 El flujo se expresa en la planificación y el diseño de campo teniendo un día como medida de tiempo.
 
-\subsection{Variaciones de Volumen}
+\subsection{Variaciones de volumen}
 
-La variación de volumen en el tiempo, es decir, mes a mes, día a día, hora a hora. Las variaciones de volumen también pueden ser observadas de una temporada a otra. El volumen será superior a la media durante un mes de vacaciones de verano, pero será más pronunciado en zonas rurales que en las urbanas. Esta es la más consistente de todas las variaciones y es la que menos afecta a las características de la corriente de tráfico.
+La variación de volumen se mide en el tiempo, típicamente mes a mes, día a día, hora a hora. Las variaciones de volumen también pueden ser observadas de una temporada a otra. El volumen será superior a la media durante un mes de vacaciones de verano, pero será más pronunciado en zonas rurales que en las urbanas. Esta es la más consistente de todas las variaciones y es la que menos afecta a las características de la corriente de tráfico.
 
 Los días entre semana, sábados y domingos también se encuentran ante diferencias de patrones. Pero comparando día con día, los patrones de rutas de una naturaleza similar a menudo muestran una marcada similitud, que es útil para realizar predicciones.
 
-La variación más significativa se puede observar en los periodos de horas. La hora pico observada durante las mañanas y tardes durante los días entre semana, que es usualmente el 8 a 10 por ciento del total del flujo diario o 2 o 3 veces el promedio de volumen por hora. Estos viajes son principalmente los viajes al trabajo, que se mantienen relativamente estables con el tiempo y más o menos constantes día a día.
+La variación más significativa se puede observar en los periodos de horas. La hora pico observada durante las mañanas y tardes durante los días entre semana, que es usualmente el 8 a 10 por ciento del total del flujo diario o 2 a 3 veces el promedio de volumen por hora. Estos viajes son principalmente los viajes al trabajo, que se mantienen relativamente estables con el tiempo y más o menos constantes día a día.
 
-\subsection{Tipos de Medidas de Volumen}
+\subsection{Tipos de medidas de volumen}
 
-Debido a que hay una considerable variación en el volumen de tráfico, existen gran cantidad de medidas de volumen que son comúnmente adoptadas que promedian estas variaciones en un solo conteo de volumen que se utiliza para varios fines de diseño:
+Debido a que hay una considerable variación en el volumen de tráfico, existe una gran cantidad de medidas de volumen que son comúnmente adoptadas que promedian estas variaciones en un solo conteo de volumen que se utiliza para varios fines de diseño:
 \begin{enumerate}
 \item \textbf{Promedio Anual de Tráfico Diario:} Es el promedio del volumen de tráfico de las 24 horas del día en un lugar determinado durante los 365 días del año, es decir, el número total de vehículos que pasan por un sitio dividido por 365.
 
@@ -97,7 +97,7 @@ La densidad se define como el número de vehículos ocupando una longitud dada d
 \begin{equation}
 k=\frac { { n }_{ x } }{ x }
 \end{equation}
-Esto se ilustra en la \Cref{fig:densidad}. En la figura, la densidad es el número de vehículos entre los puntos A y B dividida por la distancia entre A y B. La densidad es igualmente como el flujo, pero desde un punto de vista diferente, ya que esta medida está más directamente relacionada con la demanda de tráfico. También mide la proximidad de los vehículos entre sí dentro de la corriente lo cual afecta a la libertad de maniobra y conducción cómoda.
+Esto se ilustra en la \Cref{fig:densidad}. En la figura, la densidad es el número de vehículos entre los puntos A y B dividida por la distancia entre A y B. La densidad es igualmente importante que el flujo, pero desde un punto de vista diferente, ya que esta medida está más directamente relacionada con la demanda de tráfico. También mide la proximidad de los vehículos entre sí dentro de la corriente lo cual afecta a la libertad de maniobra y conducción cómoda.
 
 \begin{figure}[h]
 	\centering
@@ -105,9 +105,11 @@ Esto se ilustra en la \Cref{fig:densidad}. En la figura, la densidad es el núme
 	\caption{\label{fig:densidad} Ilustración de Densidad}	
 \end{figure}
 
-\section{Estimación de Tráfico en tiempo real}
+\section{Estimación de tráfico en tiempo real}
 
-Para la estimación de tráfico en tiempo real, los países desarrollados utilizan redes de sensores detectores \cite{leduc2008road} como fuente de datos. Desde el verano de 2007, la Dirección General de Tráfico (DGT) del Ministerio del Interior de España ha estado proveyendo una gran cantidad de datos de tráfico en tiempo real integrados con los mapas de Google. Utilizando unos 4000 sensores de tráfico localizados a lo largo de la red de caminos españoles. Esta herramienta permite, por ejemplo, recolectar el flujo de tráfico por hora y la velocidad promedio en los alrededores de Madrid (\Cref{fig:mapaTrafico}) a través de sensores ubicados en los cruces de las carreteras.
+La información de tráfico en tiempo real es esencial para dar soporte al desarrollo de muchas aplicaciones de sistemas inteligentes de transporte: detección de incidencias, control de semáforos inteligentes, monitoreo del tráfico, navegación en vehículos, etc. Esta información es utilizada para reducir la congestión en los caminos ayudando a los conductores a tomar decisiones basadas en el estado de los mismos.
+
+Para la estimación de tráfico en tiempo real, los países desarrollados utilizan redes de sensores detectores como fuente de datos \cite{leduc2008road}. Desde el verano de 2007, la Dirección General de Tráfico (DGT) del Ministerio del Interior de España ha estado proveyendo una gran cantidad de datos de tráfico en tiempo real integrados con los mapas de Google. Utilizando unos 4000 sensores de tráfico localizados a lo largo de la red de caminos españoles. Esta herramienta permite, por ejemplo, recolectar el flujo de tráfico por hora y la velocidad promedio en los alrededores de Madrid (\Cref{fig:mapaTrafico}) a través de sensores ubicados en los cruces de las carreteras. Otros países como Francia, Reino Unido y Portugal cuentan con sistemas similares a los de España.
 
 \begin{figure}[h]
 	\centering
@@ -115,6 +117,6 @@ Para la estimación de tráfico en tiempo real, los países desarrollados utiliz
 	\caption{\label{fig:mapaTrafico} Típica información proveída por el mapa de tráfico de la DGT}	
 \end{figure}
 
-Otros países como Francia, Reino Unido y Portugal cuentan con sistemas similares a los de España. También existen varios estudios basados en FCD para la estimación de tráfico en tiempo real, en \cite{herrera2010evaluation} presentan uno de los primeros experimentos de campo utilizando teléfonos celulares equipados con GPS para obtener datos de tráfico en tiempo real, en el mismo se utilizaron 100 vehículos que llevaban un nokia N95 a bordo. La prueba consistió en conducir en círculos en un tramo de aproximadamente 15 kilómetros de la carretera I-880, cerca de Union City. Los resultados obtenidos del experimento sugerían que una penetración de 2-3\% de teléfonos móviles entre los conductores era suficiente para proveer medidas precisas de la velocidad del flujo de tráfico. En otros trabajos como \cite{reinthaler2007evaluation} se utiliza a taxis como vehículos de prueba para la obtención de FCD, debido a que las medidas de velocidad provenientes de taxis son representativas de la velocidad promedio de toda la población de vehículos \cite{linauer2004fleet}. 
+ Para los países en vías de desarrollo, ante la ausencia de sensores detectores y el elevado costo de los mismos, soluciones basadas en FCD son más apropiadas. Existen varios estudios basados en FCD para la estimación de tráfico en tiempo real, en \cite{herrera2010evaluation} presentan uno de los primeros experimentos de campo utilizando teléfonos celulares equipados con GPS para obtener datos de tráfico en tiempo real, en el mismo se utilizaron 100 vehículos que llevaban un nokia N95 a bordo. La prueba consistió en conducir en círculos en un tramo de aproximadamente 15 kilómetros. Los resultados obtenidos del experimento sugieren que una penetración de 2 a 3\% de teléfonos móviles entre los conductores es suficiente para proveer medidas precisas de la velocidad del flujo de tráfico. En otros trabajos como \cite{reinthaler2007evaluation} se utiliza a taxis como vehículos de prueba para la obtención de FCD, debido a que las medidas de velocidad provenientes de taxis son representativas de la velocidad promedio de toda la población de vehículos \cite{linauer2004fleet}. 
 
-Aparte de la estimación de tráfico, también es posible realizar predicciones del estado del tráfico basándose en la información actual e histórica del tráfico. En \cite{de2008traffic} trabajaron con 600.000 vehículos que enviaban su ubicación cada tres minutos, y a través de dos algoritmos basados en redes neuronales y emparejamiento de patrones realizaban predicciones a corto plazo (15 a 30 minutos) del estado de tráfico futuro. Logrando un error situado entre 2\% a 8\% en predicciones de 15 minutos y 3\% a 16\% para predicciones de 30 minutos.
+Aparte de la estimación de tráfico, también es posible realizar predicciones del estado del tráfico basándose en la información actual e histórica del tráfico. En \cite{de2008traffic} se trabajó con 600.000 vehículos que enviaban su ubicación cada tres minutos, y a través de dos algoritmos basados en redes neuronales y emparejamiento de patrones realizaban predicciones a corto plazo (15 a 30 minutos) del estado de tráfico futuro. Logrando un error situado entre 2\% a 8\% en predicciones de 15 minutos y 3\% a 16\% para predicciones de 30 minutos.
