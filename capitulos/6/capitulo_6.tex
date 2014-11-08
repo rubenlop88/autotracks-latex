@@ -14,18 +14,18 @@ La aplicación web, se encargará de generar el estado actual de las rutas proce
 	\caption{\label{fig:arquitectura} Arquitectura del Sistema}	
 \end{figure}
 
-Como se puede apreciar en la \Cref{fig:arquitectura}, se tiene un módulo web que consiste en una aplicación web desarrollada en java que corre sobre un servidor de aplicaciones jboss 7. Como motor de base de datos utilizamos postgres en su versión 9.1, el mismo cuenta con la extensión postgis para añadir capacidades GIS y con la extensión pgRouting para las funciones de ruteo geoespacial. Todo esto se encuentra alojado en un servidor privado virtual. Los dispositivos móviles deben contar con el sistema operativo Android en su versión 2.3 (Gingerbread) o superior.
+Como se puede apreciar en la \Cref{fig:arquitectura}, se tiene un módulo web que consiste en una aplicación web desarrollada en java que corre sobre un servidor de aplicaciones jboss 7. Como motor de base de datos se utiliza postgres en su versión 9.1, el mismo cuenta con la extensión postgis para añadir capacidades GIS y con la extensión pgRouting para las funciones de ruteo geoespacial. Todo esto se encuentra alojado en un servidor privado virtual. Los dispositivos móviles deben contar con el sistema operativo Android en su versión 2.3 (Gingerbread) o superior.
 
 \section{Implementación de la Solución Propuesta}
 
-En esta sección se presentan de manera detallada las herramientas, los datos, los algoritmos y procedimientos utilizados para el sistema de monitoreo de tráfico vehícular Autotracks. Se describen los pasos seguidos para el desarrollo de la aplicación móvil y web.
+En esta sección se presenta de manera detallada las herramientas, los datos, los algoritmos y procedimientos utilizados para el sistema de monitoreo de tráfico vehícular Autotracks. Se describen los pasos seguidos para el desarrollo de la aplicación móvil y web.
 
 \subsection{Preparando la Base de Datos}
 \label{base-de-datos}
 
 Para trabajar correctamente con coordenadas se necesita una base de datos Espacial, que a diferencia de las bases de datos relacionales, pueden almacenar y operar sobre datos geométricos. Teniendo como motor de base de datos PostgreSQL, que es relacional, necesitamos añadirle la extensión PostGIS para convertirla en espacial.
 
-Una vez se posea un motor adecuado es necesario obtener la información de los mapas y rutas. A nivel mundial es Google Maps el referente en cuanto a mapas digitales se refiere, pero no permite descargar la información geográfica de los mismos. Por ello optamos por Open Street Maps, un proyecto colaborativo para crear mapas libres y editables, que permite distribuir sus datos bajo licencia abierta Open Database License (ODbL).
+Una vez se posea un motor adecuado es necesario obtener la información de los mapas y rutas. A nivel mundial es Google Maps el referente en cuanto a mapas digitales se refiere, pero no permite descargar la información geográfica de los mismos. Por ello se opta por la utilización de Open Street Maps, un proyecto colaborativo para crear mapas libres y editables, que permite distribuir sus datos bajo licencia abierta Open Database License (ODbL).
 
 Los datos descargados desde Open Street Maps están en el formato OSM XML, que básicamente consiste en una lista de instancias de nodos, caminos y relaciones dentro de su modelo. Para transformar estos datos al formato de Postgis, existe una herramienta llamada osm2pgsql, que es un programa basado en líneas de comando. Como resultado de esta importación se obtienen cuatro tablas:
 \begin{enumerate}
@@ -47,7 +47,7 @@ en la tabla de localizaciones se guardan los datos de ubicación que son recibid
 \subsection{Obteniendo el Floating Car Data}
 \label{floating-car-data}
 
-Para obtener el FCD de los vehículos se desarrolló una aplicación móvil para teléfonos y tabletas con sistema operativo android denominada autotracks (ver \Cref{fig:autotracks}). La misma se encarga de detectar, almacenar y enviar periódicamente las ubicaciones de los usuarios que se estén moviendo de automóviles de manera completamente anónima a un servidor centralizado.
+Para obtener el FCD de los vehículos se desarrolló una aplicación móvil para teléfonos y tabletas con sistema operativo android denominada autotracks (ver \Cref{fig:autotracks}). La misma se encarga de detectar, almacenar y enviar periódicamente las ubicaciones de los usuarios que se estén moviendo en automóviles de manera completamente anónima a un servidor centralizado.
 
 Autotracks tiene tres partes principales en lo que concierne a FCD: 
 \begin{itemize}
@@ -64,13 +64,13 @@ Autotracks tiene tres partes principales en lo que concierne a FCD:
 
 \subsubsection{Detección de Movimiento}
 
-Tomar las localizaciones de los usuarios todo el tiempo implicaría un gasto excesivo e innecesario de batería, tomar las localizaciones cuando se tiene abierta la aplicación significaría que el usuario debe iniciar la aplicación manualmente y mantenerla abierta para poder ir registrando su ubicación. Otra alternativa más efectiva es dejar que el usuario inicie y finalice las toma de posiciones, pero nuevamente requiere de la intervención humana.
+Tomar las localizaciones de los usuarios todo el tiempo implica un gasto excesivo e innecesario de batería, tomar las localizaciones cuando se tiene abierta la aplicación significa que el usuario debe iniciar la aplicación manualmente y mantenerla abierta para poder ir registrando su ubicación. Una alternativa más eficiente es dejar que el usuario inicie y finalice las toma de posiciones, pero nuevamente requiere de la intervención humana.
 
 La forma óptima de registrar las ubicaciones es aquella que no requiera la intervención del usuario y que sea lo suficientemente inteligente para evitar tomar localizaciones no deseadas. Para ello, se necesita una forma de detectar cuando el teléfono se encuentra en movimiento, esto se puede lograr gracias a los sensores con los que cuentan los dispositivos móviles actualmente, especialmente el acelerómetro, que permite medir la aceleración en los ejes coordenados x, y y z de donde se puede estimar la velocidad y el desplazamiento. Una aceleración igual a cero significa que el dispositivo se encuentra quieto, una aceleración mayor a cero implica movimiento.
 
-Incluso la detección no es suficiente para evitar la toma de localizaciones no deseadas como por ejemplo cuando una persona está caminando o andando en bicicleta. Para evitar estos casos es necesario, aparte de detectar el movimiento, reconocer la actividad que se está realizando durante ese movimiento. Existen trabajos como \cite{liao2006location,bao2004activity,ravi2005activity} que permiten detectar la actividad que se está realizando utilizando las posiciones GPS o el acelerómetro del dispositivo.
+Incluso la detección del movimiento no es suficiente para evitar la toma de localizaciones no deseadas como por ejemplo cuando una persona está caminando o desplazándose en bicicleta. Para evitar estos casos es necesario, aparte de detectar el movimiento, reconocer la actividad que se está realizando durante ese movimiento. Existen trabajos como \cite{liao2006location,bao2004activity,ravi2005activity} que permiten detectar la actividad que se está realizando utilizando las posiciones GPS o el acelerómetro del dispositivo.
 
-Específicamente para dispositivos Android existe una solución para el Reconocimiento de Actividad que  viene incluida dentro del Marco de Servicios de Google Play. Este reconocimiento de actividad reconoce cuatro actividades diferentes: quieto, a pie, en bicicleta y en vehículo. Retorna la probabilidad de cada actividad en un momento determinado. Como este framework ya incluye todo lo necesario para la detección de movimiento y actividad, se decidió utilizarlo en Autotracks.
+Específicamente para dispositivos Android existe una solución para el Reconocimiento de Actividad que viene incluida dentro del Marco de Servicios de Google Play. Este reconocimiento de actividad reconoce cuatro actividades diferentes: quieto, a pie, en bicicleta y en vehículo. Retorna la probabilidad de cada actividad en un momento determinado. Como este framework ya incluye todo lo necesario para la detección de movimiento y actividad, se decidió utilizarlo en Autotracks.
 
 La actividad del usuario es consultada periódicamente con el fin de saber si el mismo se encuentra en un vehículo, en el caso de que así sea se inicia el servicio de toma de ubicaciones y el mismo no se detiene hasta pasados 10 minutos desde la última actividad en vehículo conocida por el usuario, para evitar así que se detenga cuando por ejemplo el vehículo se encuentre quieto a causa de un semáforo. 
 
@@ -82,16 +82,16 @@ Para obtener la ubicación de los teléfonos inteligentes de hoy en día existen
 \item \textbf{Redes WiFi:} uso bajo de batería, precisión media, es necesario estar en la cercanías de un punto de acceso WiFi, funciona bien en interiores.
 \item \textbf{GPS:} uso elevado de batería, alta precisión, no funciona correctamente en interiores.
 \end{itemize}
-Buscando la mayor flexibilidad posible, se decidió que la aplicación fuera capaz de trabajar con cualquiera de estas opciones para obtener la ubicación de los dispositivos, buscando siempre utilizar la mejor opción disponible. Para ello se utilizó la localización fusionada que se incluye dentro del Marco de Servicios de Google Play.
+A fin de tener la mayor flexibilidad posible, la aplicación debe ser capaz de trabajar con cualquiera de estas opciones para obtener la ubicación de los dispositivos, buscando siempre utilizar la mejor opción disponible. Para ello se utilizó la localización fusionada que se incluye dentro del Marco de Servicios de Google Play.
 
-En los casos en que la localización es obtenida a través de las redes GSM o WiFi no se dispone de la información de velocidad, para paliar esta falta de información, cuando no se puede obtener la velocidad en un punto, la misma es estimada utilizando la ubicación anterior de la siguiente manera
+En los casos en los que la localización es obtenida a través de las redes GSM o WiFi no se dispone de la información de velocidad, para paliar esta falta de información, cuando no se puede obtener la velocidad en un punto, la misma es estimada utilizando la ubicación anterior de la siguiente manera
 \begin{equation}
 v=\frac { d }{ t }
 \end{equation}
 
 donde $d$ es la distancia entre el punto actual y el punto anterior, y $t$ es el tiempo que transcurrió entre la toma de las velocidades.
 
-Además de la forma de obtener las ubicaciones, otro aspecto importante a tener en cuenta es el tiempo entre las tomas de ubicación. \cite{tao2012real} sugiere que intervalos de entre 10 y 20 segundos son los recomendados en la práctica. En \cite{fontaine2005part} se reivindica que intervalos de muestras más largos permiten obtener información sobre mayores distancias y reduce la probabilidad de capturar velocidades no representativas. Buscando balance entre frecuencia y consumo de batería por la toma de localizaciones, se establece un intervalo de 60 segundos para el muestreo utilizado en la aplicación.
+Además de la forma de obtener las ubicaciones, otro aspecto importante a tener en cuenta es el tiempo entre las tomas de ubicación. En \cite{tao2012real} se sugiere que intervalos de entre 10 y 20 segundos son los recomendados en aplicaciones prácticas. En \cite{fontaine2005part} se reivindica que intervalos de muestras más largos permiten obtener información sobre mayores distancias y reduce la probabilidad de capturar velocidades no representativas. Buscando balance entre frecuencia y consumo de batería por la toma de localizaciones, se establece un intervalo de 60 segundos para el muestreo utilizado en la aplicación.
 
 \subsubsection{Envío de datos al servidor}
 
