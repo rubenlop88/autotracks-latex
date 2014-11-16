@@ -1,7 +1,7 @@
 \chapter{Map Matching}
 \label{cap:4}
 
-\emph{Map Matching} (MM) consiste en identificar sobre un mapa la trayectoria seguida por un vehículo u objeto en una red de calles a partir de muestras recolectadas acerca de su ubicación y es utilizado en una gran variedad de servicios y aplicaciones GIS, como la predicción de trayectorias de usuarios \cite{eisner2011algorithms}, sistemas de navegación en vehículos \cite{kim2001adaptive}, control del estado del tránsito \cite{thiagarajan2009vtrack}, estimación de llegada de buses \cite{thiagarajan2010cooperative}, entre otros. A continuación se define formalmente el proceso de MM y se presenta un análisis de los algoritmos de MM existentes en la actualidad.
+Se conoce como \emph{Map Matching} (MM) al proceso de identificar la trayectoria seguida por un vehículo en una red de calles a partir de muestras recolectadas acerca de su ubicación. Este proceso es utilizado en una gran variedad de servicios y aplicaciones GIS, como la predicción de trayectorias de usuarios \cite{eisner2011algorithms}, sistemas de navegación en vehículos \cite{kim2001adaptive}, control del estado del tránsito \cite{thiagarajan2009vtrack}, estimación de llegada de buses \cite{thiagarajan2010cooperative}, entre otros. A continuación se define formalmente el proceso de MM y se presenta un análisis de los algoritmos de MM existentes en la actualidad.
 
 \section{Definición del problema}
 
@@ -15,7 +15,7 @@ Para dar una definición formal del problema de MM deben tenerse en cuenta los s
 
 \textbf{Camino reconstruido}: Un camino reconstruido es una secuencia ordenada de calles conectadas entre sí a través de las cuáles se infiere que el vehículo pudo haber transitado.
 
-Así, en función a lo anterior, el problema de MM puede definirse de la siguiente forma: \emph{Dada una trayectoria T y una red de calles R, encontrar el camino C que hace coincidir a T con su reconstrucción más realista sobre R.}
+En función a lo anterior, el problema de MM puede definirse de la siguiente forma: \emph{Dada una trayectoria T y una red de calles R, encontrar el camino C que hace coincidir a T con su reconstrucción más realista sobre R.}
 
 En la \Cref{fig:map-matching} se puede apreciar en rojo la trayectoria de un vehículo sobre una red de calles y en verde el posible camino reconstruido que se infiere el vehículo ha transitado.
 

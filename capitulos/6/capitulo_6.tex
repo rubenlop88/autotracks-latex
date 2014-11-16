@@ -101,7 +101,7 @@ Para disminuir la batería utilizada al conectarse a la redes de datos móviles,
 
 \subsection{Map Matching}
 
-Una vez que las trayectorias de los vehículos son enviadas al servidor se ejecuta el proceso de MM para determinar el camino real recorrido por cada vehículo. Para realizar este proceso elejimos el algoritmo propuesto por \cite{lou2009map}, conocido como ST-Matching, con algunas mejoras propuestas por \cite{budigm2012algorithm} y \cite{sakic2012map}. 
+Una vez que las trayectorias de los vehículos son enviadas al servidor se ejecuta el proceso de MM para determinar el camino real recorrido por cada vehículo. Para realizar este proceso se utiliza el algoritmo propuesto por \cite{lou2009map}, conocido como ST-Matching, con algunas mejoras propuestas por \cite{budigm2012algorithm} y \cite{sakic2012map}. 
 
 ST-Matching es un algoritmo topológico específicamente diseñado para funcionar de forma off-line y con intervalos de tiempo relativamente largos entre las puntos. Su implementación es sencilla comparada con otras técnicas avanzadas como \cite{quddus2006high, newson2009hidden} y no requiere de procesamientos y cálculos matemáticos complejos. Estas características hacen que sea el candidato perfecto para la arquitectura de la solución propuesta en este trabajo, teniendo en cuenta que el intervalo de tiempo definido para la toma de localizaciones es de un minuto y que el procesamiento se realiza de forma off-line en un servidor centralizado. 
 

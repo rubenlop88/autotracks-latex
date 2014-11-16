@@ -50,14 +50,17 @@
   \makeatother%
   \begin{picture}(1,1)%
     \put(0,0){\includegraphics[width=\unitlength]{figura45.pdf}}%
-    \put(0.07036785,0.07450634){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$c_0$}}}%
-    \put(0.28036784,0.31950604){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$a_0$}}}%
-    \put(0.82036786,0.31950604){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$a_2$}}}%
-    \put(0.12036785,0.50450604){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$p_0$}}}%
-    \put(0.46536782,0.62950604){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$p_1$}}}%
-    \put(0.08036785,0.70450604){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$b_0$}}}%
-    \put(0.15536784,0.93450604){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$b_1$}}}%
-    \put(0.54536782,0.31950604){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$a_1$}}}%
-    \put(0.06515279,0.3149284){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$o$}}}%
+    \put(0.16036785,0.07450631){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$c_0$}}}%
+    \put(0.37036781,0.31950601){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$a_0$}}}%
+    \put(0.91036789,0.31950601){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$a_2$}}}%
+    \put(0.21036785,0.50450601){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$p_0$}}}%
+    \put(0.55536781,0.62950601){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$p_1$}}}%
+    \put(0.17036785,0.70450601){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$b_0$}}}%
+    \put(0.24536785,0.93450601){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$b_1$}}}%
+    \put(0.63536781,0.31950601){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$a_1$}}}%
+    \put(0.15515278,0.31492837){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$o$}}}%
+    \put(0.02515278,0.17992837){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$C$}}}%
+    \put(0.54015282,0.19992837){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$A$}}}%
+    \put(0.05015278,0.69492837){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$B$}}}%
   \end{picture}%
 \endgroup%
