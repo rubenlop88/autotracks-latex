@@ -1,118 +1,98 @@
-\chapter{Arquitectura e Implementación de la Solución}
+\chapter{Implementación de la Solución}
+
+En este capítulo se presentan los detalles de implementación de un sistema centralizado cuyo objetivo es aproximar el estado del tráfico en tiempo real. La solución propuesta está basada en FCD obtenido mediante dispositivos móviles. La información resultante es almacenada en una base de datos GIS y se encuentra disponible para consultas a través de una aplicación móvil y una página web desarrolladas para el efecto.
 
 \section{Arquitectura}
 
-En este trabajo se propone desarrollar un sistema centralizado capaz de recibir datos de los dispositivos móviles de los conductores y procesarlos para obtener el estado del tráfico en la ciudad de Asunción. La información resultante será enviada en tiempo real a los usuarios para que los mismos puedan elegir trayectos menos congestionados.
+En la \Cref{fig:arquitectura} se ilustra la arquitectura modular del sistema desarrollado. La plataforma cuenta con tres componentes principales:
+\begin{enumerate*}[1)] \item una base de datos GIS que almacena el mapa de calles y las trayectorias de los vehículos, \item una aplicación móvil que captura los datos del trayecto recorrido por los vehículos y \item una aplicación web que procesa los datos obtenidos y genera información sobre el estado del tránsito.
+\end{enumerate*}
 
-La aplicación móvil está pensada inicialmente para dispositivos con sistema operativo Android. La misma, al ser utilizada por el conductor durante su viaje, registrará los datos del trayecto recorrido que servirán para definir el estado de las rutas. Esta aplicación también contará con un mapa de la ciudad de Asunción, que permitirá ver el estado de las carreteras que tengan información suficiente sobre el tráfico en las mismas. 
-
-La aplicación web, se encargará de generar el estado actual de las rutas procesando la información que reciba de los teléfonos de los conductores. Esta información quedará almacenada de forma persistente en el tiempo  y podrá ser utilizada posteriormente con otros fines, ya sean estadísticos o de predicción de tráfico.
-
-\begin{figure}[h]
+\begin{figure}[h*]
 	\centering
 	\includegraphics[width=0.7\textwidth]{capitulos/6/figuras/figura1.jpg}
 	\caption{\label{fig:arquitectura} Arquitectura del Sistema}	
 \end{figure}
 
-Como se puede apreciar en la \Cref{fig:arquitectura}, se tiene un módulo web que consiste en una aplicación web desarrollada en java que corre sobre un servidor de aplicaciones jboss 7. Como motor de base de datos se utiliza postgres en su versión 9.1, el mismo cuenta con la extensión postgis para añadir capacidades GIS y con la extensión pgRouting para las funciones de ruteo geoespacial. Todo esto se encuentra alojado en un servidor privado virtual. Los dispositivos móviles deben contar con el sistema operativo Android en su versión 2.3 (Gingerbread) o superior.
+Para el almacenamiento de la información se utiliza el motor de base de datos PostgreSQL\footnote{http://www.postgresql.org/} al que además se agregan las extensiones PostGIS\footnote{http://postgis.net/}, que añade capacidades GIS, y pgRouting\footnote{http://pgrouting.org/}, que añade funciones de ruteo geoespacial. Por otro lado, con el propósito de recolectar la información de FCD se cuenta con una aplicación móvil desarrollada para sistemas operativos Android\footnote{http://developer.android.com/index.html} 2.3 o superior, que se ejecuta en los dispositivos de los usuarios. Por último, para el procesamiento y recuperación de la información se cuenta con una aplicación web desarrollada con tecnología Java EE\footnote{http://docs.oracle.com/javaee/} que implementa servicios REST a través de los cuáles la aplicación móvil envía y obtiene datos del servidor.
 
-\section{Implementación de la Solución Propuesta}
-
-En esta sección se presenta de manera detallada las herramientas, los datos, los algoritmos y procedimientos utilizados para el sistema de monitoreo de tráfico vehícular Autotracks. Se describen los pasos seguidos para el desarrollo de la aplicación móvil y web.
-
-\subsection{Preparando la Base de Datos}
+\section{Almacenamiento de datos}
 \label{base-de-datos}
 
-Para trabajar correctamente con coordenadas se necesita una base de datos Espacial, que a diferencia de las bases de datos relacionales, pueden almacenar y operar sobre datos geométricos. Teniendo como motor de base de datos PostgreSQL, que es relacional, necesitamos añadirle la extensión PostGIS para convertirla en espacial.
+A modo de generar información sobre el estado del tráfico de un área geográfica en particular, se debe contar con un mapa de calles y con un conjunto de trayectorias obtenidas mediante FCD durante un período de tiempo determinado. El mapa y las trayectorias deben estar almacenados en la base de datos GIS para posteriormente ser utilizados durante el procesamiento de la información.
 
-Una vez se posea un motor adecuado es necesario obtener la información de los mapas y rutas. A nivel mundial es Google Maps el referente en cuanto a mapas digitales se refiere, pero no permite descargar la información geográfica de los mismos. Por ello se opta por la utilización de Open Street Maps, un proyecto colaborativo para crear mapas libres y editables, que permite distribuir sus datos bajo licencia abierta Open Database License (ODbL).
+Primeramente, para el mapa de calles se utilizan los datos geográficos disponibles en Open Street Maps\footnote{http://www.openstreetmap.org/} (OSM). Los datos descargados desde OSM están en el formato OSM XML, el cual consiste en una lista de instancias de nodos, caminos y relaciones dentro de su modelo. Antes de almacenar estos datos es necesario transformarlos a un formato soportado por PostGIS y pgRouting. pgRouting representa toda la información de las rutas como un grafo dirigido, donde los vértices corresponden a las intersecciones de las calles y las aristas corresponden a los segmentos de calles, la longitud de la calle determina su peso, que es utilizado para el cálculo del camino más corto. Para convertir e importar los datos de OSM a la base de datos se utiliza la herramienta osm2po\footnote{http://osm2po.de/} y como resultado de esta importación se crea una tabla en la que cada fila corresponde a un segmento de calle. 
 
-Los datos descargados desde Open Street Maps están en el formato OSM XML, que básicamente consiste en una lista de instancias de nodos, caminos y relaciones dentro de su modelo. Para transformar estos datos al formato de Postgis, existe una herramienta llamada osm2pgsql, que es un programa basado en líneas de comando. Como resultado de esta importación se obtienen cuatro tablas:
+Por otro lado, para almacenar la información de las trayectorias de los usuarios se definen las siguientes tablas:
 \begin{enumerate}
-\item planet\_osm\_point 
-\item planet\_osm\_polygon
-\item planet\_osm\_line
-\item planet\_osm\_roads
+\item \textbf{Localizaciones}: En esta tabla se guardan los datos de ubicación que son recibidos periódicamente de los usuarios de la aplicación móvil. Se almacena la fecha, la latitud, la longitud, la velocidad, la dirección, la precisión, altitud y la ruta a la que pertenece. Las localizaciones representan los puntos de una trayectoria.
+\item \textbf{Rutas}: Una ruta es un conjunto de localizaciones que sirven como dato de entrada para el proceso de MM. La ruta representa a la trayectoria recorrida por el usuario durante un viaje.
 \end{enumerate}
-planet\_osm\_point almacena todos los nodos importados, planet\_osm\_polygon almacena todos los polígonos, planet\_osm\_line almacena todas las rutas, y planet\_osm\_roads almacena un subconjunto de las rutas a efectos de renderización a bajos niveles de zoom debido a que planet\_osm\_line contiene demasiados datos para renderizar en estos casos. Estas tablas almacena los datos geométricos con el SRID 900913.
 
-Como también se desean capacidades de enrutamiento, es necesario añadir la extensión pgRouting a PostgreSQL. pgRouting representa toda la información de las rutas como un grafo, siendo los vértices las intersecciones de las calles y las aristas las calles en sí. La longitud de la calle determina su peso, que es utilizado para el cálculo del camino más corto. Para convertir los datos de Open Street Maps se utiliza la herramienta osm2po. Como resultado de esta importación se obtiene una tabla con los datos geométricos almacenados con el SRID 4326.
-Para almacenar la información de los usuarios de la aplicación se definieron dos tablas:
-\begin{enumerate}
-\item localizaciones
-\item rutas
-\end{enumerate}
-en la tabla de localizaciones se guardan los datos de ubicación que son recibidos periódicamente de los usuarios de la aplicación móvil. Se almacena la fecha, la latitud, la longitud, la velocidad, la dirección, la precisión, altitud y la ruta a la que pertenece. Una ruta es un conjunto lógico de localizaciones que es utilizado para el map matching incremental, la ruta representa el recorrido que hace una persona en un viaje.
+Todos los datos geométricos, tanto del mapa de calles como de las trayectorias, son almacenados utilizando un sistema de coordenadas WGS84.
 
-\subsection{Obteniendo el Floating Car Data}
+\section{Floating Car Data}
 \label{floating-car-data}
 
-Para obtener el FCD de los vehículos se desarrolló una aplicación móvil para teléfonos y tabletas con sistema operativo android denominada autotracks (ver \Cref{fig:autotracks}). La misma se encarga de detectar, almacenar y enviar periódicamente las ubicaciones de los usuarios que se estén moviendo en automóviles de manera completamente anónima a un servidor centralizado.
-
-Autotracks tiene tres partes principales en lo que concierne a FCD: 
+La información de FCD es obtenida por medio de una aplicación móvil denominada Autotracks\footnote{https://play.google.com/store/apps/details?id=py.com.fpuna.autotracks}. La misma se encarga de capturar, almacenar y enviar periódicamente a un servidor central las ubicaciones de los usuarios, además la aplicación sólo captura las localizaciones mientras los usuarios están en un vehículo en movimiento. Para este propósito, Autotracks cuenta con tres componentes principales: 
 \begin{itemize}
-	\item Detección de Movimiento.
+	\item Reconocimiento de actividad.
 	\item Toma de localizaciones.
-	\item Envío de datos al servidor.
+	\item Envío de datos.
 \end{itemize}
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=0.5\textwidth]{capitulos/6/figuras/figura2.jpg}
-	\caption{\label{fig:autotracks} Vista de Autotracks en un teléfono}	
-\end{figure}
+\subsection{Reconocimiento de actividad}
 
-\subsubsection{Detección de Movimiento}
+El reconocimiento de actividad consiste en determinar la acción que está realizando una persona en base a un patrón de movimientos observados para dicha persona, estas actividades pueden ser por ejemplo una caminata, un paseo en bicicleta, etc. Para realizar el reconocimiento de actividad se pueden utilizar los sensores con los que cuentan los dispositivos móviles, como el acelerómetro, el giroscopio y los dispositivos GPS integrados. En Autotracks se utiliza el reconocimiento de actividad para determinar cuando un usuario se encuentra en un vehículo en movimiento.
 
-Tomar las localizaciones de los usuarios todo el tiempo implica un gasto excesivo e innecesario de batería, tomar las localizaciones cuando se tiene abierta la aplicación significa que el usuario debe iniciar la aplicación manualmente y mantenerla abierta para poder ir registrando su ubicación. Una alternativa más eficiente es dejar que el usuario inicie y finalice las toma de posiciones, pero nuevamente requiere de la intervención humana.
+En \cite{liao2006location,bao2004activity,ravi2005activity} se describen técnicas que permiten detectar la actividad mediante los sensores GPS y el acelerómetro de los dispositivos móviles. En \cite{thiagarajan2010cooperative} se utilizan estas técnicas de reconocimiento de actividad para determinar si el usuario está en un vehículo en movimiento. En Autotracks, en lugar de implementar un algoritmo de reconocimiento de actividad propio, se utiliza una implementación proveída como parte de Google Play Services\footnote{http://developer.android.com/google/play-services/index.html}, denominada Activity Recognition\footnote{http://developer.android.com/training/location/activity-recognition.html}.
 
-La forma óptima de registrar las ubicaciones es aquella que no requiera la intervención del usuario y que sea lo suficientemente inteligente para evitar tomar localizaciones no deseadas. Para ello, se necesita una forma de detectar cuando el teléfono se encuentra en movimiento, esto se puede lograr gracias a los sensores con los que cuentan los dispositivos móviles actualmente, especialmente el acelerómetro, que permite medir la aceleración en los ejes coordenados x, y y z de donde se puede estimar la velocidad y el desplazamiento. Una aceleración igual a cero significa que el dispositivo se encuentra quieto, una aceleración mayor a cero implica movimiento.
+Autotracks consulta periódicamente la actividad del usuario, cuando se ha detectado que el usuario se encuentra en un vehículo en movimiento se inicia el servicio de toma de localizaciones, este servicio permanece activo mientras el usuario se encuentra en movimiento. Una vez que se ha detectado que el usuario ya no está en movimiento durante más de 10 minutos, el servicio de toma de localizaciones es detenido. Se utiliza la tolerancia de 10 minutos para evitar que el servicio se detenga cuando el vehículo se encuentra momentáneamente detenido en un semáforo o en un embotellamiento.
 
-Incluso la detección del movimiento no es suficiente para evitar la toma de localizaciones no deseadas como por ejemplo cuando una persona está caminando o desplazándose en bicicleta. Para evitar estos casos es necesario, aparte de detectar el movimiento, reconocer la actividad que se está realizando durante ese movimiento. Existen trabajos como \cite{liao2006location,bao2004activity,ravi2005activity} que permiten detectar la actividad que se está realizando utilizando las posiciones GPS o el acelerómetro del dispositivo.
+\subsection{Toma de localizaciones}
 
-Específicamente para dispositivos Android existe una solución para el Reconocimiento de Actividad que viene incluida dentro del Marco de Servicios de Google Play. Este reconocimiento de actividad reconoce cuatro actividades diferentes: quieto, a pie, en bicicleta y en vehículo. Retorna la probabilidad de cada actividad en un momento determinado. Como este framework ya incluye todo lo necesario para la detección de movimiento y actividad, se decidió utilizarlo en Autotracks.
-
-La actividad del usuario es consultada periódicamente con el fin de saber si el mismo se encuentra en un vehículo, en el caso de que así sea se inicia el servicio de toma de ubicaciones y el mismo no se detiene hasta pasados 10 minutos desde la última actividad en vehículo conocida por el usuario, para evitar así que se detenga cuando por ejemplo el vehículo se encuentre quieto a causa de un semáforo. 
-
-\subsubsection{Toma de Localizaciones}
-
-Para obtener la ubicación de los teléfonos inteligentes de hoy en día existen varias opciones posibles, cada una con sus ventajas y desventajas: 
+Para obtener la ubicación de los teléfonos móviles existen varias opciones posibles, cada una con sus ventajas y desventajas, estas son: 
 \begin{itemize}
-\item \textbf{Triangulación de antenas:} uso mínimo de batería, baja precisión, requiere estar dentro de una red GSM.
-\item \textbf{Redes WiFi:} uso bajo de batería, precisión media, es necesario estar en la cercanías de un punto de acceso WiFi, funciona bien en interiores.
-\item \textbf{GPS:} uso elevado de batería, alta precisión, no funciona correctamente en interiores.
+\item \textbf{Triangulación de antenas}: Utiliza las antenas de telefonía para determinar la posición. Requiere un uso mínimo de batería pero produce resultados de baja precisión, dependiendo de la técnica utilizada la precisión varía de 50 a 200 metros en áreas urbanas, y hasta más de 2 kilómetros en zonas suburbanas.
+\item \textbf{WiFi}: Utiliza las posiciones conocidas de los puntos de acceso Wifi para estimar la ubicación. El uso de la batería es moderado y produce resultados con una precisión de menos de 50 metros. No es apropiado para zonas rurales donde existen una escasa cantidad de puntos de acceso Wifi.
+\item \textbf{GPS}: Utiliza la red de satélites GPS para obtener la posición del dispositivo. Este mecanismo requiere un alto consumo de batería y su precisión es de menos de 10 metros en el mejor caso. La precisión disminuye considerablemente cuando se pierde la visibilidad de los satélites.
 \end{itemize}
-A fin de tener la mayor flexibilidad posible, la aplicación debe ser capaz de trabajar con cualquiera de estas opciones para obtener la ubicación de los dispositivos, buscando siempre utilizar la mejor opción disponible. Para ello se utilizó la localización fusionada que se incluye dentro del Marco de Servicios de Google Play.
+A fin de tener la mayor flexibilidad posible, Autotracks es capaz de trabajar con cualquiera de estas opciones para obtener la ubicación de los dispositivos. Para ello se utiliza una implementación denominada Fused Location Provider\footnote{http://developer.android.com/training/location/receive-location-updates.html} que está disponible como parte Google Play Services.
 
-En los casos en los que la localización es obtenida a través de las redes GSM o WiFi no se dispone de la información de velocidad, para paliar esta falta de información, cuando no se puede obtener la velocidad en un punto, la misma es estimada utilizando la ubicación anterior de la siguiente manera
+En los casos en los que la localización es obtenida a través de las redes GSM o WiFi no se dispone de la información de velocidad, la cual es necesaria para el procesamiento posterior. Para paliar esta falta de información, la velocidad es estimada utilizando la localización anterior de la siguiente manera
 \begin{equation}
+\label{velocidad_calculada}
 v=\frac { d }{ t }
 \end{equation}
 
-donde $d$ es la distancia entre el punto actual y el punto anterior, y $t$ es el tiempo que transcurrió entre la toma de las velocidades.
+donde $d$ es la distancia entre la localización actual y la anterior, y $t$ es el tiempo que transcurrió entre la toma de las localizaciones.
 
-Además de la forma de obtener las ubicaciones, otro aspecto importante a tener en cuenta es el tiempo entre las tomas de ubicación. En \cite{tao2012real} se sugiere que intervalos de entre 10 y 20 segundos son los recomendados en aplicaciones prácticas. En \cite{fontaine2005part} se reivindica que intervalos de muestras más largos permiten obtener información sobre mayores distancias y reduce la probabilidad de capturar velocidades no representativas. Buscando balance entre frecuencia y consumo de batería por la toma de localizaciones, se establece un intervalo de 60 segundos para el muestreo utilizado en la aplicación.
+Algunas de las localizaciones capturadas pueden llegar a ser demasiado imprecisas como para ser utilizadas en el procesamiento posterior. Para evitar este tipo de localizaciones erróneas se utilizan dos técnicas de filtrado. El primer método consiste simplemente en descartar las localizaciones que reportan una precisión mayor a 200 metros. El segundo método consiste en determinar la velocidad a la que tuvo que haber viajado el vehículo para pasar de la posición anterior a la posición actual utilizando la ecuación \ref{velocidad_calculada}, si dicha velocidad es mayor un valor preestablecido, en este caso de 140 kilómetros por hora, la localización es descartada. Los valores de referencia fueron determinados empíricamente.
 
-\subsubsection{Envío de datos al servidor}
+Otro aspecto importante a tener en cuenta es la frecuencia de la toma de localizaciones. En \cite{tao2012real} se sugiere que intervalos de entre 10 y 20 segundos son los recomendados en aplicaciones prácticas. En \cite{fontaine2005part} se reivindica que intervalos de muestras más largos permiten obtener información sobre mayores distancias y reduce la probabilidad de capturar velocidades no representativas. En \cite{lou2009map,giovannini2011novel} se utilizan localizaciones con intervalos de más de 3 minutos en aplicaciones \emph{off-line}. Para lograr un balance entre la frecuencia y el consumo de batería, se establece un intervalo de 60 segundos para el muestreo utilizado en Autotracks.
 
-Como se utiliza un servidor centralizado para almacenar y procesar la información de las ubicaciones, el mismo necesita recibir estos datos desde los teléfonos móviles que cuentan con la aplicación instalada. El escenario ideal para este servidor sería recibir las ubicaciones al momento que son tomadas para así tener la información más actual posible, pero este funcionamiento afectaría de manera excesiva a los teléfonos en lo que respecta a consumo de batería y de datos.
+\subsection{Envío de datos}
 
-Para disminuir la batería utilizada al conectarse a la redes de datos móviles, los teléfonos almacenan la información de las ubicaciones que van recolectando durante sus viajes dentro de vehículos. Cada un periodo de tiempo determinado, toda la información almacenada es enviada al servidor y borrada de la memoria del teléfono.
+La aplicación envía los datos de las localizaciones a través de Internet a un servidor central que se encarga de almacenar y procesar la información. Para disminuir el consumo de batería ocasionado por la utilización de la red de datos móviles, los teléfonos almacenan temporalmente las localizaciones capturadas y las envían periódicamente al servidor. Luego de que un grupo de localizaciones ha sido enviado es borrado de la memoria del teléfono.
 
-\subsection{Map Matching}
+El intervalo de tiempo de tiempo definido para el envío de los datos es de 15 minutos. Para disminuir el consumo de batería se utiliza el mecanismo de alarmas inexactas proveído por Android. Al utilizar este tipo de alarmas, el sistema operativo sincroniza las alarmas de múltiples aplicaciones y las dispara al mismo tiempo. Esto reduce el número total de veces que el sistema debe despertar el dispositivo, reduciendo así el uso de la batería.
 
-Una vez que las trayectorias de los vehículos son enviadas al servidor se ejecuta el proceso de MM para determinar el camino real recorrido por cada vehículo. Para realizar este proceso se utiliza el algoritmo propuesto por \cite{lou2009map}, conocido como ST-Matching, con algunas mejoras propuestas por \cite{budigm2012algorithm} y \cite{sakic2012map}. 
+Para enviar las localizaciones no es necesarios que el usuario haya finalizado completamente su recorrido, al momento de dispararse una alarma todas las localizaciones capturadas hasta el momento son enviadas al servidor. El resto de las localizaciones del mismo recorrido son enviadas al dispararse las siguientes alarmas. De esta forma los recorridos parciales pueden ser utilizados para estimar el estado del tráfico casi en tiempo real.
 
-ST-Matching es un algoritmo topológico específicamente diseñado para funcionar de forma off-line y con intervalos de tiempo relativamente largos entre las puntos. Su implementación es sencilla comparada con otras técnicas avanzadas como \cite{quddus2006high, newson2009hidden} y no requiere de procesamientos y cálculos matemáticos complejos. Estas características hacen que sea el candidato perfecto para la arquitectura de la solución propuesta en este trabajo, teniendo en cuenta que el intervalo de tiempo definido para la toma de localizaciones es de un minuto y que el procesamiento se realiza de forma off-line en un servidor centralizado. 
+\section{Map Matching}
 
-\subsubsection{Descripción General}
+Un proceso de Map Matching (MM) es ejecutado una vez que las trayectorias de los vehículos son enviadas desde los teléfonos móviles al servidor central para determinar el camino real recorrido por cada vehículo. Para realizar este proceso se utiliza el algoritmo propuesto por \cite{lou2009map}, conocido como ST-Matching, con algunas mejoras propuestas por \cite{budigm2012algorithm} y \cite{sakic2012map}. 
+
+ST-Matching es un algoritmo topológico específicamente diseñado para funcionar de forma \emph{off-line} y con intervalos de tiempo relativamente largos entre las puntos. Su implementación es sencilla comparada con otras técnicas avanzadas como \cite{quddus2006high, newson2009hidden} y no requiere de procesamientos y cálculos matemáticos complejos. Estas características se adecuan a los requerimientos impuestos por la arquitectura de la solución propuesta. 
+
+\subsection{Descripción General}
 
 El algoritmo ST-Matching consta de tres partes principales: \begin{enumerate*}[a)]
-\item la \emph{Preparación de Candidatos},
+\item la \emph{Selección de Candidatos},
 \item el \emph{Análisis Espacial y Temporal} y
 \item la \emph{Obtención del Resultado}.
 \end{enumerate*}
-La \Cref{fig:st-matching} muestra una descripción general del proceso. Los datos de entrada del algoritmo son la red de calles de Asunción y el área metropolitana, que se describió en el \cref{base-de-datos}, y la trayectoria de un vehículo, obtenida mediante el uso de la aplicación móvil, como se explica en el \cref{floating-car-data}. El resultado de este procesamiento es almacenado en la base de datos para ser utilizado más adelante en el análisis de tráfico.
+La \Cref{fig:st-matching} muestra una descripción general del proceso. Los datos de entrada del algoritmo son la red de calles, que se describió en el \cref{base-de-datos}, y la trayectoria de un vehículo, obtenida mediante el uso de la aplicación móvil, como se explica en el \cref{floating-car-data}. El resultado de este procesamiento es almacenado en la base de datos para ser utilizado más adelante en el análisis de tráfico.
 
 \begin{figure}[h]
 	\centering
@@ -121,30 +101,38 @@ La \Cref{fig:st-matching} muestra una descripción general del proceso. Los dato
 	\label{fig:st-matching} 
 \end{figure}
 
-\subsubsection{Selección de Candidatos}
+La red de calles es modelada como un grafo dirigido $G(V,E)$, donde $V$ es el conjunto de todos los vértices correspondientes a las intersecciones y extremos de los segmentos de calles, y $E$ es el conjunto de todas las aristas que representan segmentos de calles. La trayectoria $T$ de un vehículo es representada como una secuencia ordenada de puntos $p_1, p_2, \dots, p_n$.
 
+\subsection{Selección de Candidatos}
 
+Dada una trayectoria $T = \{p_1, p_2, \dots, p_n\}$, el proceso de selección consiste en encontrar para cada $p_i$, $1\le i\le n$, un conjunto de puntos candidatos $C_i = \{c_{i}^{1}, c_{i}^{2}, \dots, c_{i}^{m}\}$.
 
-\subsubsection{Análisis Espacial y Temporal}
+Para ello, primeramente se deben obtener todos los segmentos de calles $e\in E$ tales que la distancia entre un punto $p_i$ y un segmento $e$ sea menor a un radio $r$. Luego, para cada segmento $e_{i}^{j}$, perteneciente al subconjunto $E_i$ resultante, se obtiene un punto candidato $c_{i}^{j}$ realizando una proyección del punto $p_i$ sobre el segmento $e_{i}^{j}$.
 
-\subsubsection{Búsqueda del Resultado}
+La figura ... ilustra ...
 
-\subsection{Estimación del estado actual del tráfico}
+\subsection{Análisis Espacial y Temporal}
 
-Una vez realizado el map matching, se tiene cada punto junto con su velocidad asociado a una calle y se puede hacer la agregación de estas velocidades para obtener la velocidad media en una calle determinada durante un intervalo de tiempo dado. Para ello se puede definir a la velocidad media en la calle $j$ durante el intervalo de interés como:
+\subsection{Búsqueda del Resultado}
+
+\section{Estimación del tráfico}
+
+Una vez finalizado el proceso MM, a cada punto de la trayectoria se le asocia una arista del mapa de calles por la cual se ha determinado que el vehículo transitó en ese momento. Además cada punto de la trayectoria tiene como dato la velocidad a la cual el vehículo se desplazó. Para realizar la estimación del estado del tráfico se utilizan todas las velocidades de los puntos asociados a cada segmento de calle del mapa durante un período de tiempo determinado.
+
+La estimación se realiza calculando la \emph{velocidad media local} de cada segmento de calle. Para ello se define la velocidad media en la calle $j$ durante el intervalo de interés como:
 \begin{equation}
 { V }_{ ave }^{ j }({ t }_{ k },{ t }_{ k+\Delta T })=\frac { 1 }{ { n }_{ { t }_{ k },{ t }_{ k+\Delta T } }^{ j } } \sum_{ k={ t }_{ k } }^{ { t }_{ k+\Delta T } }{ \hat { { v } } _{ j }(k) }
 \end{equation}
-donde ${ \hat { { v } } _{ j }(k) }$ es la velocidad estimada disponible en la calle $j$ durante el intervalo $\left[ { t }_{ k },{ t }_{ k+\Delta T } \right] $, y ${ { n }_{ { t }_{ k },{ t }_{ k+\Delta T }}}$ es el número total de estimaciones disponibles.
+donde ${ \hat { { v } } _{ j }(k) }$ es la velocidad estimada en la calle $j$ durante el intervalo $\left[ { t }_{ k },{ t }_{ k+\Delta T } \right] $, y ${ { n }_{ { t }_{ k },{ t }_{ k+\Delta T }}}$ es el número total de muestras disponibles para la calle $j$ durante dicho intervalo.
 
-Se definen cuatro niveles para representar la velocidad media en una calle:
+Finalmente, para representar la información obtenida se definen cuatro niveles de velocidad en una calle:
 \begin{enumerate}
 \item \textbf{Rojo:}  para velocidades entre 0 y 14 kilómetros por hora.
 \item \textbf{Naranja:}  para velocidades entre 15 y 29 kilómetros por hora.
 \item \textbf{Amarillo:}  para velocidades entre 30 y 39 kilómetros por hora.
 \item \textbf{Verde:}  para velocidades de 40 o más kilómetros por hora.
 \end{enumerate}
-Las calles son pintadas en el mapa de acuerdo a su nivel de velocidad como se puede apreciar en \Cref{fig:calles}
+Las calles son pintadas en el mapa de acuerdo a su nivel de velocidad como se puede apreciar en la \Cref{fig:calles}
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\textwidth]{capitulos/6/figuras/figura3.jpg}
