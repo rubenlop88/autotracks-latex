@@ -6,6 +6,21 @@ En este capítulo se presentan las pruebas realizadas y los resultados obtenidos
 
 Para probar el funcionamiento de la aplicación como 
 
-\section{Map Matchin}
+\section{Map Matching}
 
+Para probar la efectividad del Map Matching, se observa la cantidad de aciertos del mismo al estimar la ruta recorrida por un vehículo. En las pruebas realizadas, se definieron  tres frecuencias para la toma de localizaciones: 30, 60 y 120 segundos. Para la toma de las muestras en cada frecuencia, se realizaron viajes con la aplicación Autotracks. En la tabla \ref{table:map_matching} se muestran los resultados obtenidos.
 
+\begin{table}[ht]
+	\caption{Efectividad del MM para diferentes frecuencias} 
+	\centering
+	\begin{tabular}{c c c c}
+		\hline\hline
+		Frecuencia & Total de Puntos & Puntos Correctos & Porcentaje de Acierto\\ [0.5ex]
+		\hline
+		30 & 50 & 46 & 92 \\
+		60 & 100 & 91 & 91 \\
+		120 & 83 & 73 & 88\\ [1ex]
+		\hline
+	\end{tabular}
+	\label{table:map_matching}
+\end{table}
