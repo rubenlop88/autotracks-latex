@@ -7,7 +7,7 @@ Para las pruebas se utilizaron dispositivos móviles de diversa gama y se realiz
 
 \section{Floating Car Data}
 
-Para la obtención de FCD se utiliza un esquema de detección de actividad que permite a la aplicación registrar las localizaciones del usuario únicamente cuando se encuentra en un vehículo en movimiento. Para ello, la aplicación móvil verifica periódicamente cuál es la actividad que está realizando el usuario en base a las lecturas de los censores del dispositivo. El intervalo de tiempo en el que se realiza esta verificación se denomina \emph{intervalo de reconocimiento} y determina qué tan rápido se detecta el movimiento y se inicia el rastreo. La \Cref{tab:prom_intervalo_reconocimiento} muestra el tiempo promedio que la aplicación tarda en detectar el movimiento e iniciar la toma de localizaciones para varios valores del intervalo de reconocimiento. Como se puede apreciar, un intervalo de reconocimiento corto ayuda a iniciar más rápidamente la toma de localizaciones. Es importante tener en cuenta que mientras más corto es el intervalo, mayor es el consumo de batería debido a que el dispositivo móvil debe procesar más frecuentemente las muestras de los sensores.
+Para la obtención de FCD se utiliza un esquema de detección de actividad que permite a la aplicación registrar las localizaciones del usuario únicamente cuando se encuentra en un vehículo en movimiento. Para ello, la aplicación móvil verifica periódicamente cuál es la actividad que está realizando el usuario en base a las lecturas de los sensores del dispositivo. El intervalo de tiempo en el que se realiza esta verificación se denomina \emph{intervalo de reconocimiento} y determina qué tan rápido se detecta el movimiento y se inicia el rastreo. La \Cref{tab:prom_intervalo_reconocimiento} muestra el tiempo promedio que la aplicación tarda en detectar el movimiento e iniciar la toma de localizaciones para varios valores del intervalo de reconocimiento. Como se puede apreciar, un intervalo de reconocimiento corto ayuda a iniciar más rápidamente la toma de localizaciones. Es importante tener en cuenta que mientras más corto es el intervalo, mayor es el consumo de batería debido a que el dispositivo móvil debe procesar más frecuentemente las muestras de los sensores.
 
 \begin{table}[h]
   \centering
@@ -50,14 +50,16 @@ La \Cref{tab:prom_tiempo_efectivo_rastreo} muestra los valores para el porcentaj
 
 \section{Map Matching}
 
-Para probar la efectividad del Map Matching, se observa la cantidad de aciertos del mismo al estimar la ruta recorrida por un vehículo. En las pruebas realizadas, se definieron  tres frecuencias para la toma de localizaciones: 30, 60 y 120 segundos. Para la toma de las muestras en cada frecuencia, se realizaron viajes con la aplicación Autotracks. En la tabla \ref{table:map_matching} se muestran los resultados obtenidos.
+Para el Map Matching se utiliza el algoritmo ST-Matching como se describe en \cref{implementacion_mm}. Este algoritmo recibe como entrada un conjunto de localizaciones correspondientes a una ruta seguida por un usuario, el intervalo de tiempo con el que se obtienen estos puntos se denomina \emph{frecuencia de muestreo}. Si esta frecuencia es baja, se tiene un menor número de muestras para un periodo de tiempo dado y un menor consumo de batería por parte del teléfono móvil. En cambio par frecuencias altas, se tiene un mayor número de muestras así como un elevado consumo de batería. Para medir la efectividad del MM, se observa la cantidad de aciertos del mismo al estimar una ruta.
+
+Las pruebas sobre el MM consistieron en la observación de su efectividad con diferentes \emph{frecuencias de muestreo}. Las frecuencias observadas fueron de 2, 1 y 0.5 localizaciones por minuto, que corresponden a intervalos de tiempo de 30, 60 y 120 segundos respectivamente entre una ubicación y otra. las pruebas realizadas, se definieron  tres frecuencias para la toma de localizaciones: 30, 60 y 120 segundos. 
 
 \begin{table}[ht]
-	\caption{Efectividad del MM para diferentes frecuencias} 
+	\caption{Efectividad del MM} 
 	\centering
 	\begin{tabular}{c c c c}
 		\hline\hline
-		Frecuencia & Total de Puntos & Puntos Correctos & Porcentaje de Acierto\\ [0.5ex]
+		Intervalo (s) & Total de Puntos & Puntos Correctos & Porcentaje de Acierto\\ [0.5ex]
 		\hline
 		30 & 50 & 46 & 92 \\
 		60 & 100 & 91 & 91 \\
@@ -66,3 +68,9 @@ Para probar la efectividad del Map Matching, se observa la cantidad de aciertos 
 	\end{tabular}
 	\label{table:map_matching}
 \end{table}
+
+En la tabla \ref{table:map_matching} se pueden apreciar los resultados obtenidos. Para intervalos pequeños de toma localizaciones  se tienen mejores resultados.
+
+A continuación se presenta el desempeño del MM para un mismo recorrido utilizando las tres frecuencias analizadas. 
+
+
