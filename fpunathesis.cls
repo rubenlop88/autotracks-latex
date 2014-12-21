@@ -11,7 +11,9 @@
 \usepackage[utf8]{inputenc}
 \usepackage[pdftex]{graphicx}
 \usepackage{algorithm}
-\usepackage{algorithmic}
+%\usepackage{algorithmic}
+\usepackage{algpseudocode}
+\input{spanish_algorithmic}
 
 \bibliographystyle{unsrt} % Numeros ordenados por entrada
 

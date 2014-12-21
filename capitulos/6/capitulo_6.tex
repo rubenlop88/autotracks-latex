@@ -48,7 +48,46 @@ El reconocimiento de actividad consiste en determinar la acción que está reali
 
 En \cite{liao2006location,bao2004activity,ravi2005activity} se describen técnicas que permiten detectar la actividad mediante los sensores GPS y el acelerómetro de los dispositivos móviles. En \cite{thiagarajan2010cooperative} se utilizan estas técnicas de reconocimiento de actividad para determinar si el usuario está en un vehículo en movimiento. En Autotracks, en lugar de implementar un algoritmo de reconocimiento de actividad propio, se reutiliza una implementación proveída como parte de Google Play Services\footnote{http://developer.android.com/google/play-services/index.html}, denominada Activity Recognition\footnote{http://developer.android.com/training/location/activity-recognition.html}.
 
-Autotracks consulta periódicamente la actividad del usuario, cuando se ha detectado que el usuario se encuentra en un vehículo en movimiento se inicia el servicio de toma de localizaciones, este servicio permanece activo mientras el usuario se encuentra en movimiento. El intervalo de tiempo utilizado en la detección de actividad del usuario es de 15 segundos. Una vez que se ha detectado que el usuario ya no está en movimiento durante más de 10 minutos, el servicio de toma de localizaciones es detenido. Se utiliza la tolerancia de 10 minutos para evitar que el servicio se detenga cuando el vehículo se encuentra momentáneamente detenido en espera de algún evento, como en un semáforo, esperando por alguna persona o en un embotellamiento. Los valores utilizados en la detección de actividad fueron determinados empíricamente.
+Autotracks consulta periódicamente la actividad del usuario, cuando se ha detectado que el usuario se encuentra en un vehículo en movimiento se inicia el servicio de toma de localizaciones, este servicio permanece activo mientras el usuario se encuentra en movimiento. El intervalo de tiempo utilizado en la detección de actividad del usuario es de 15 segundos. Una vez que se ha detectado que el usuario ya no está en movimiento durante más de 10 minutos, el servicio de toma de localizaciones es detenido. Se utiliza la tolerancia de 10 minutos para evitar que el servicio se detenga cuando el vehículo se encuentra momentáneamente detenido en espera de algún evento, como en un semáforo en rojo, esperando por alguna persona o en un embotellamiento. Los valores utilizados en la detección de actividad fueron determinados empíricamente.
+
+El \Cref{alg:deteccion_actividad} muestra el procedimiento ejecutado periódicamente cada vez que se obtiene un resultado del reconocimiento de actividad. Este procedimiento verifica si la toma de localizaciones está o no iniciado y se encarga de iniciarla o finalizarla de acuerdo a la actividad detectada, utilizando los procedimientos $RastreoIniciado()$, $IniciarRastreo()$ y $FinalizarRastreo()$. El resultado de la detección de movimiento es almacenado para ser utilizado en la siguiente invocación del procedimiento, utilizando los procedimientos $GuardarEstabaEnMovimiento()$ y $ObtenerEstabaEnMovimiento()$. Si se ha detectado movimiento, el tiempo en el que ocurrió la detección también es almacenado para utilizarlo en la siguiente invocación, utilizando los procedimientos $GuardarUltimaDeteccion()$ y $ObtenerUltimaDeteccion()$.
+ 
+\begin{algorithm}
+\caption{Reconocimiento de Actividad}
+\label{alg:deteccion_actividad}
+\begin{algorithmic}[1]
+\Procedure {ActividadDetectada}{$actividad$}
+	\State $enMovimiento \leftarrow EstaEnMovimiento(actividad)$
+	\State $GuardarEstabaEnMovimiento(enMovimiento)$
+	\If {$enMovimiento$}
+		\If {$\neg RastreoIniciado()$}
+			\State $IniciarRastreo()$
+		\EndIf
+	\Else
+		\If {$RastreoIniciado()$}
+			\State $FinalizarRastreo()$
+		\EndIf
+	\EndIf
+\EndProcedure
+\Statex
+\Procedure {EstaEnMovimiento}{$actividad$}
+	\State $tiempo \leftarrow ObtenerTiempoActual()$
+	\If {$actividad = A_PIE$}
+		\State \Return $FALSO$
+	\EndIf
+	\If {$actividad = EN_VEHICULO$}
+		\State $GuardarUltimaDeteccion(tiempo)$
+		\State \Return $VERDADERO$
+	\EndIf
+	\If {$ObtenerEstabaEnMovimiento()$}
+		\State $ultimaDeteccion \leftarrow ObtenerUltimaDeteccion()$
+		\State $tiempoTranscurrido \leftarrow tiempo - ultimaDeteccion$
+		\State \Return {$tiempoTranscurrido <= TOLERANCIA$}
+	\EndIf
+	\State \Return $VERDADERO$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
 
 \subsection{Toma de localizaciones}
 \label{toma_localizaciones}
@@ -65,7 +104,7 @@ En los casos en los que la localización es obtenida a través de las redes GSM 
 
 Algunas de las localizaciones capturadas pueden llegar a ser demasiado imprecisas como para ser utilizadas en el procesamiento posterior. Para evitar este tipo de localizaciones erróneas se utilizan dos técnicas de filtrado. El primer método consiste simplemente en descartar las localizaciones que reportan una precisión mayor a 200 metros. El segundo método consiste en determinar la velocidad a la que tuvo que haber viajado el vehículo para pasar de la posición anterior a la posición actual utilizando la \cref{eq:velocidad}, si dicha velocidad es mayor a un valor preestablecido, en este caso de 140 km/h, la localización es descartada. Los valores de referencia fueron determinados empíricamente en sucesivas pruebas de campo.
 
-Otro aspecto importante a tener en cuenta es la frecuencia con la que se toman las localizaciones. En \cite{tao2012real} se sugiere que intervalos de entre 10 y 20 segundos son los recomendados en aplicaciones prácticas. En \cite{fontaine2005part} se reivindica que intervalos de muestras más largos permiten obtener información sobre mayores distancias y reduce la probabilidad de capturar velocidades no representativas. En \cite{lou2009map,giovannini2011novel} se utilizan localizaciones con intervalos de más de 3 minutos en aplicaciones \emph{off-line}. Para lograr un balance entre la frecuencia y el consumo de batería, se establece un intervalo de 60 segundos para el muestreo utilizado en Autotracks, dicho valor también fue determinado empíricamente realizando pruebas en dispositivos de diversa gama, cuyo detalle se especifica en el \cref{cap:7}.
+Otro aspecto importante a tener en cuenta es la frecuencia con la que se toman las localizaciones. En \cite{tao2012real} se sugiere que intervalos de entre 10 y 20 segundos son los recomendados en aplicaciones prácticas. En \cite{fontaine2005part} se reivindica que intervalos de muestras más largos permiten obtener información sobre mayores distancias y reduce la probabilidad de capturar velocidades no representativas. En \cite{lou2009map,giovannini2011novel} se utilizan localizaciones con intervalos de más de 3 minutos en aplicaciones \emph{off-line}. Para lograr un balance entre la frecuencia y el consumo de batería, se establece un intervalo de 60 segundos para el muestreo utilizado en Autotracks, dicho valor también fue determinado empíricamente realizando pruebas en dispositivos de diversa gama.
 
 \subsection{Envío de datos}
 
