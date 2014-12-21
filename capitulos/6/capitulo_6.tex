@@ -136,7 +136,7 @@ Una vez que se han obtenidos todos los conjuntos $C_i = \{c_{i}^{1}, c_{i}^{2}, 
 
 \subsection{Análisis Espacial y Temporal}
 
-La segunda etapa del proceso tiene por objetivo seleccionar el punto candidato $c_i$ de cada conjunto $C_i$ que sea el más apropiado para cada punto $p_i$ de la trayectoria. Para ello cada punto candidato y cada posible conexión entre dos puntos candidatos consecutivos, son analizados de acuerdo a dos criterios de calidad, el \emph{análisis espacial} y el \emph{análisis temporal}.
+La segunda etapa del proceso tiene por objetivo seleccionar el punto candidato $c_i$ de cada conjunto $C_i$ que sea el más apropiado para cada punto $p_i$ de la trayectoria. Para ello cada punto candidato y cada posible conexión entre dos puntos candidatos consecutivos son analizados de acuerdo a dos criterios de calidad, el \emph{análisis espacial} y el \emph{análisis temporal}.
 
 \subsubsection{Análisis Espacial}
 
@@ -146,7 +146,7 @@ La \emph{probabilidad de observación} es la probabilidad de que un punto candid
 \begin{equation} \label{probabilidad_de_observacion}
 N(c_{i}^{j}) = \frac {1}{\sqrt { 2 \pi \sigma }} {e}^{\frac {{(x_{i}^{j} - \mu)}^{2}}{{ 2 \sigma}^{2}}}
 \end{equation}
-donde $x_{i}^{j} = dist(c_{i}^{j},p_i)$ es la distancia entre $p_i$ y el punto candidato $c_{i}^{j}$. En este trabajo se utiliza una media $\pi = 50\text{m}$ y una desviación estándar $\sigma = 100\text{m}$. Estos valores fueron determinados empíricamente y son distintos a los valores utilizados en \cite{lou2009map} y \cite{budigm2012algorithm} debido a que, a diferencia de estos trabajos anteriores, no todas las muestras son obtenidas mediante el uso de GPS.
+donde $x_{i}^{j} = dist(c_{i}^{j},p_i)$ es la distancia entre $p_i$ y el punto candidato $c_{i}^{j}$. En este trabajo se utiliza una media $\mu = 50\text{m}$ y una desviación estándar $\sigma = 100\text{m}$. Estos valores fueron determinados empíricamente y son distintos a los valores utilizados en \cite{lou2009map} y \cite{budigm2012algorithm} debido a que, a diferencia de estos trabajos anteriores, no todas las muestras son obtenidas mediante el uso de GPS.
 
 El cálculo de la probabilidad de observación tiene en cuenta únicamente la posición de los puntos $p_i$ y $c_{i}^{j}$, ignorando la topología y la posición relativa de los puntos con respecto a los demás puntos de la trayectoria. Debido a esto pueden darse casos en los que un punto candidato es seleccionado erróneamente por ser el más cercano aún cuando existen otros puntos candidatos más adecuados. Esta situación se puede presentar en las intersecciones de calles o en calles paralelas muy cercanas como se muestra en la \Cref{fig:probabilidad_transmision}.
 
@@ -156,14 +156,15 @@ El cálculo de la probabilidad de observación tiene en cuenta únicamente la po
 	\caption{\label{fig:probabilidad_transmision} Errores en la probabilidad de observación}	
 \end{figure}
 
-Para minimizar la ocurrencia de estos problemas se introduce un segundo criterio denominado \emph{probabilidad de transmisión}, que se define como la probabilidad de que el camino más corto entre un punto candidato $c_{i-1}^{j}$ y el siguiente punto candidato $c_{i}^{k}$ es el camino correcto de $p_{i-1}$ a $p_i$. La probabilidad de transmisión se calcula de la siguiente forma: \begin{equation} \label{probabilidad_de_transmision}
+Para minimizar la ocurrencia de estos problemas se introduce un segundo criterio denominado \emph{probabilidad de transmisión}, que se define como la probabilidad de que el camino más corto entre un punto candidato $c_{i-1}^{j}$ y el siguiente punto candidato $c_{i}^{k}$ es el camino correcto de $p_{i-1}$ a $p_i$. La probabilidad de transmisión se calcula de la siguiente forma: 
+\begin{equation} \label{probabilidad_de_transmision}
 V(c_{i-1}^{j}, c_{i}^{k}) = \frac { min( dist(p_{i-1}, p_i), long(c_{i-1}^{j}, c_{i}^{k})) }{ max (dist(p_{i-1}, p_i), long(c_{i-1}^{j}, c_{i}^{k})) }
 \end{equation}
 donde $long(c_{i-1}^{j}, c_{i}^{k})$ es la longitud del camino más corto entre $c_{i-1}^{j}$ y $c_{i}^{k}$. El cálculo del camino más corto se realiza utilizando el algoritmo de Dijkstra\footnote{http://es.wikipedia.org/wiki/Algoritmo\_de\_Dijkstra} para grafos dirigidos. La dirección de las aristas del grafo representan el sentido de circulación de la calle, de esta forma se incorpora información topológica en el análisis espacial. 
 
 Combinando la \Cref{probabilidad_de_observacion} y la \Cref{probabilidad_de_transmision} se define la función de análisis espacial $F_s(c_{i-1}^{j},c_{i}^{k})$ como el producto de la probabilidad de observación y la probabilidad de transmisión de la siguiente forma:
 \begin{equation} \label{funcion_espacial}
-F_s(c_{i-1}^{j},c_{i}^{k}) = N(c_{i}^{k}) * V(c_{i-1}^{j}, c_{i}^{k}), \quad 2 \le i \le n 
+F_s(c_{i-1}^{j},c_{i}^{k}) = N(c_{i}^{k}) \times V(c_{i-1}^{j}, c_{i}^{k}), \quad 2 \le i \le n 
 \end{equation}
 
 Como resultado del análisis espacial se asigna un valor numérico a todos los posibles caminos que van de $p_{i-1}$ a $p_i$ obtenido mediante la \Cref{funcion_espacial}.
