@@ -46,11 +46,11 @@ La información de FCD es obtenida por medio de una aplicación móvil desarroll
 
 El reconocimiento de actividad consiste en determinar la acción que está realizando una persona en base a un patrón de movimientos observados para dicha persona, estas actividades pueden ser por ejemplo una caminata, un paseo en bicicleta, etc. Para realizar el reconocimiento de actividad se pueden utilizar los sensores con los que cuentan los dispositivos móviles, como el acelerómetro, el giroscopio y los dispositivos GPS integrados. En Autotracks se utiliza el reconocimiento de actividad para determinar cuando un usuario se encuentra en un vehículo en movimiento.
 
-En \cite{liao2006location,bao2004activity,ravi2005activity} se describen técnicas que permiten detectar la actividad mediante los sensores GPS y el acelerómetro de los dispositivos móviles. En \cite{thiagarajan2010cooperative} se utilizan estas técnicas de reconocimiento de actividad para determinar si el usuario está en un vehículo en movimiento. En Autotracks, en lugar de implementar un algoritmo de reconocimiento de actividad propio, se reutiliza una implementación proveída como parte de Google Play Services\footnote{http://developer.android.com/google/play-services/index.html}, denominada Activity Recognition\footnote{http://developer.android.com/training/location/activity-recognition.html}.
+En \cite{liao2006location,bao2004activity,ravi2005activity} se describen técnicas que permiten detectar la actividad mediante los sensores GPS y el acelerómetro de los dispositivos móviles. En \cite{thiagarajan2010cooperative} se utilizan estas técnicas de reconocimiento de actividad para determinar si el usuario está en un vehículo en movimiento. En Autotracks, en lugar de implementar un algoritmo de reconocimiento de actividad propio, se reutiliza una implementación proveída como parte de Google Play Services\footnote{http://developer.android.com/google/play-services/index.html}, denominada Activity Recognition\footnote{http://developer.android.com/training/location/activity-recognition.html}, que permite detectar distintos tipos de actividad del usuario, por ejemplo si está en un vehículo, en bicicleta, caminando, corriendo, o si está totalmente quieto.
 
 Autotracks consulta periódicamente la actividad del usuario, cuando se ha detectado que el usuario se encuentra en un vehículo en movimiento se inicia el servicio de toma de localizaciones, este servicio permanece activo mientras el usuario se encuentra en movimiento. El intervalo de tiempo utilizado en la detección de actividad del usuario es de 15 segundos. Una vez que se ha detectado que el usuario ya no está en movimiento durante más de 10 minutos, el servicio de toma de localizaciones es detenido. Se utiliza la tolerancia de 10 minutos para evitar que el servicio se detenga cuando el vehículo se encuentra momentáneamente detenido en espera de algún evento, como en un semáforo en rojo, esperando por alguna persona o en un embotellamiento. Los valores utilizados en la detección de actividad fueron determinados empíricamente.
 
-El \Cref{alg:deteccion_actividad} muestra el procedimiento ejecutado periódicamente cada vez que se obtiene un resultado del reconocimiento de actividad. Este procedimiento verifica si la toma de localizaciones está o no iniciado y se encarga de iniciarla o finalizarla de acuerdo a la actividad detectada, utilizando los procedimientos $RastreoIniciado()$, $IniciarRastreo()$ y $FinalizarRastreo()$. El resultado de la detección de movimiento es almacenado para ser utilizado en la siguiente invocación del procedimiento, utilizando los procedimientos $GuardarEstabaEnMovimiento()$ y $ObtenerEstabaEnMovimiento()$. Si se ha detectado movimiento, el tiempo en el que ocurrió la detección también es almacenado para utilizarlo en la siguiente invocación, utilizando los procedimientos $GuardarUltimaDeteccion()$ y $ObtenerUltimaDeteccion()$.
+El \Cref{alg:deteccion_actividad} muestra el procedimiento ejecutado periódicamente cada vez que se obtiene un resultado del reconocimiento de actividad. Este procedimiento verifica si la toma de localizaciones está o no iniciado y se encarga de iniciarla o finalizarla de acuerdo a la actividad detectada, utilizando los procedimientos $RastreoIniciado()$, $IniciarRastreo()$ y $FinalizarRastreo()$. El resultado de la detección de movimiento es almacenado para ser utilizado en la siguiente invocación del procedimiento, utilizando los procedimientos $GuardarEstabaEnMovimiento()$ y $ObtenerEstabaEnMovimiento()$. Si se ha detectado movimiento, el tiempo en el que ocurrió la detección también es almacenado para utilizarlo en la siguiente invocación, utilizando los procedimientos $GuardarUltimaDeteccion()$ y $ObtenerUltimaDeteccion()$. En el sub-procedimiento $EstaEnMovimiento()$ si el usuario está a pie (caminando o corriendo) se detiene inmediatamente el rastreo, si está en un vehículo se continua con el rastreo, y en cualquier otro caso (está en bicicleta, o quieto, o no se pudo determinar la actividad) se verifica el estado anterior de movimiento y el tiempo de la última detección de movimiento antes de tomar una decisión.
  
 \begin{algorithm}
 \caption{Reconocimiento de Actividad}
@@ -72,19 +72,18 @@ El \Cref{alg:deteccion_actividad} muestra el procedimiento ejecutado periódicam
 \Statex
 \Procedure {EstaEnMovimiento}{$actividad$}
 	\State $tiempo \leftarrow ObtenerTiempoActual()$
-	\If {$actividad = A_PIE$}
-		\State \Return $FALSO$
-	\EndIf
-	\If {$actividad = EN_VEHICULO$}
+	\If {$actividad = aPie$}
+		\State \Return $falso$
+	\ElsIf {$actividad = enVehiculo$}
 		\State $GuardarUltimaDeteccion(tiempo)$
-		\State \Return $VERDADERO$
-	\EndIf
-	\If {$ObtenerEstabaEnMovimiento()$}
+		\State \Return $verdadero$
+	\ElsIf {$ObtenerEstabaEnMovimiento()$}
 		\State $ultimaDeteccion \leftarrow ObtenerUltimaDeteccion()$
 		\State $tiempoTranscurrido \leftarrow tiempo - ultimaDeteccion$
 		\State \Return {$tiempoTranscurrido <= TOLERANCIA$}
+	\Else
+		\State \Return $falso$
 	\EndIf
-	\State \Return $VERDADERO$
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
