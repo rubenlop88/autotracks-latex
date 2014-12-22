@@ -80,7 +80,7 @@ El \Cref{alg:deteccion_actividad} muestra el procedimiento ejecutado periódicam
 	\ElsIf {$ObtenerEstabaEnMovimiento()$}
 		\State $ultimaDeteccion \leftarrow ObtenerUltimaDeteccion()$
 		\State $tiempoTranscurrido \leftarrow tiempo - ultimaDeteccion$
-		\State \Return {$tiempoTranscurrido <= TOLERANCIA$}
+		\State \Return {$tiempoTranscurrido \leq tolerancia$}
 	\Else
 		\State \Return $falso$
 	\EndIf
@@ -101,7 +101,29 @@ A fin de tener la mayor flexibilidad posible, Autotracks es capaz de trabajar co
 
 En los casos en los que la localización es obtenida a través de las redes GSM o WiFi no se dispone de la información de velocidad, la cual es necesaria para el procesamiento posterior. Para paliar esta falta de información, la velocidad es estimada utilizando la localización anterior de la siguiente manera: \begin{equation} \label{eq:velocidad} v=\frac { d }{ t } \end{equation} donde $d$ es la distancia entre la localización actual y la anterior, y $t$ es el tiempo que transcurrió entre la toma de las localizaciones.
 
-Algunas de las localizaciones capturadas pueden llegar a ser demasiado imprecisas como para ser utilizadas en el procesamiento posterior. Para evitar este tipo de localizaciones erróneas se utilizan dos técnicas de filtrado. El primer método consiste simplemente en descartar las localizaciones que reportan una precisión mayor a 200 metros. El segundo método consiste en determinar la velocidad a la que tuvo que haber viajado el vehículo para pasar de la posición anterior a la posición actual utilizando la \cref{eq:velocidad}, si dicha velocidad es mayor a un valor preestablecido, en este caso de 140 km/h, la localización es descartada. Los valores de referencia fueron determinados empíricamente en sucesivas pruebas de campo.
+Algunas de las localizaciones capturadas pueden llegar a ser demasiado imprecisas como para ser utilizadas en el procesamiento posterior. Para evitar este tipo de localizaciones erróneas se utilizan dos técnicas de filtrado. El primer método consiste simplemente en descartar las localizaciones que reportan una precisión mayor a 200 metros. El segundo método consiste en determinar la velocidad a la que tuvo que haber viajado el vehículo para pasar de la posición anterior a la posición actual utilizando la \cref{eq:velocidad}, si dicha velocidad es mayor a un valor preestablecido, en este caso de 140 km/h, la localización es descartada. Además, también se descartan las localizaciones que son muy próximas entre sí debido a que el algoritmo de MM utilizado en una siguiente etapa requiere que las localizaciones sean relativamente distantes entre sí. Los valores de referencia fueron determinados empíricamente en sucesivas pruebas de campo. En el \Cref{alg:toma_de_localizaciones} se describe el procedimiento utilizado para registrar una localización.
+
+\begin{algorithm}
+\caption{Toma de Localizaciones}
+\label{alg:toma_de_localizaciones}
+\begin{algorithmic}[1]
+\Procedure {RegistrarLocalizacion}{$localizacion$}
+	\State $enValida \leftarrow EsValida(localizacion)$
+	\If {$esValida$}
+		\State $GuardarUltimaLocalizacion(localizacion)$
+	\EndIf
+\EndProcedure
+\Statex
+\Procedure {EsValida}{$localizacion$}
+	\State $ultimaLocalizacion \leftarrow ObtenerUltimaLocalizacion()$
+	\State $d \leftarrow CalcularDistancia(localizacion, ultimaLocalizacion)$
+	\State $t \leftarrow CalcularTiempo(localizacion, ultimaLocalizacion)$
+	\State $v \leftarrow distancia / tiempo$
+	\State $p \leftarrow localizacion.precision$
+	\State \Return $d > dMinima \land v < vMaxima \land p < pMaxima$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
 
 Otro aspecto importante a tener en cuenta es la frecuencia con la que se toman las localizaciones. En \cite{tao2012real} se sugiere que intervalos de entre 10 y 20 segundos son los recomendados en aplicaciones prácticas. En \cite{fontaine2005part} se reivindica que intervalos de muestras más largos permiten obtener información sobre mayores distancias y reduce la probabilidad de capturar velocidades no representativas. En \cite{lou2009map,giovannini2011novel} se utilizan localizaciones con intervalos de más de 3 minutos en aplicaciones \emph{off-line}. Para lograr un balance entre la frecuencia y el consumo de batería, se establece un intervalo de 60 segundos para el muestreo utilizado en Autotracks, dicho valor también fue determinado empíricamente realizando pruebas en dispositivos de diversa gama.
 
