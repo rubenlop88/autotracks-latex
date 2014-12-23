@@ -1,4 +1,5 @@
 \chapter{Implementación de la Solución}
+\label{cap:6}
 
 En este capítulo se presentan los detalles de implementación de un sistema centralizado cuyo objetivo es aproximar el estado del tráfico en tiempo real. La solución propuesta está basada en FCD obtenido mediante dispositivos móviles. La información resultante es almacenada en una base de datos GIS y se encuentra disponible para consultas a través de una aplicación móvil y una página web desarrolladas para el efecto.
 
@@ -181,6 +182,7 @@ El camino real $R$ es definido como una secuencia de segmentos de calles $e_i$ c
 En base a estas definiciones, el problema de MM se puede expresar de la siguiente forma: \emph{Dada una trayectoria T y una red de calles G(V,E), encontrar el camino real R que hace coincidir a T con su reconstrucción más realista sobre G(V,E).}
 
 \subsection{Selección de Candidatos}
+\label{seleccion_de_candidatos}
 
 La primera etapa del proceso es la selección de puntos candidatos. Un punto candidato $c$ es un punto perteneciente a un segmento de calle $e$, que puede formar parte del camino real recorrido por un vehículo, y que es obtenido a partir de un punto $p$ de una trayectoria. Dada una trayectoria $T = \{p_1, p_2, \dots, p_n\}$, el proceso de selección de candidatos consiste en encontrar para cada punto $p_i$, $1\le i\le n$, el conjunto de puntos candidatos $C_i = \{c_{i}^{1}, c_{i}^{2}, \dots, c_{i}^{m}\}$ correspondiente.
 
@@ -250,7 +252,73 @@ F_{ t }(c_{ i-1 }^{ j },c_{ i }^{ k })=\frac { \sum _{ m=1 }^{ n }{ (e_{ m }.v\t
 
 \subsection{Búsqueda del Resultado}
 \label{busqueda_de_resultado}
+El resultado de los procesos descritos anteriormente es un grafo acíclico dirigido de puntos candidatos, que representa todos los posibles caminos entre el punto inicial $p_1$ y el punto final $p_n$ de la trayectoria $T$. Como se muestra en la \Cref{fig:grafo_de_candidatos}, los nodos del grafo corresponden a los candidatos de cada punto $p_i$ y las aristas representan los caminos más cortos entre cada par de candidatos $c_{i-1}^j$ y $c_i^k$ consecutivos. A cada arista se le asigna un peso de acuerdo a la probabilidad de transmisión entre su vértice inicial y final, y a la probabilidad de observación del vértice inicial.
 
+\begin{figure}[h*]
+	\centering
+	\includegraphics[width=0.9\textwidth]{capitulos/6/figuras/figura9.jpg}
+	\caption{\label{fig:grafo_de_candidatos} Grafo de puntos candidatos}	
+\end{figure}
+
+Para asignar el peso a cada arista se combinan la \cref{funcion_espacial} y la \cref{funcion_temporal} para definir la función espacio-temporal de la siguiente forma:
+\begin{equation} \label{funcion_espacio_temporal}
+F(c_{i-1}^{j},c_{i}^{k}) = F_s(c_{i-1}^{j},c_{i}^{k}) \times F_{ t }(c_{ i-1 }^{ j },c_{ i }^{ k }), 2 \leq i \leq n
+\end{equation}
+
+Dada una secuencia de puntos candidatos $C_T = \{c_1, c_2, \dots, c_n\}$, el peso global se define como $F(C_T) = \sum _{ i=2 }^{ n }{F(c_{i-1}^{j},c_{i}^{k})}$, es decir, es la sumatoria de los pesos de todas las aristas que componen la secuencia. El objetivo del algoritmo es obtener la secuencia que tenga el mayor peso.
+
+El \Cref{alg:st_matching} muestra los pasos realizados para obtener la secuencia. El primer paso es construir el grafo $G_T$ de puntos candidatos. Para ello se obtienen todos los conjuntos de puntos candidatos $C_i$ correspondientes a cada punto $p_i$ de la trayectoria $T$. El siguiente paso, es la obtención del resultado final. Primeramente se asigna a todos los candidatos del primer conjunto $C_1$ el valor de su probabilidad de observación $N(c_i^k)$. Luego, para los demás conjuntos $C_i$, se obtienen los valores de la función espacio-temporal para cada par de candidatos consecutivos $c_{i-1}^j$ y $c_i^k$ y para cada $c_i^k$ se guarda el punto candidato previo $c_{i-1}^j$ cuyo valor acumulado sea el mayor. Finalmente se selecciona un punto candidato $c_n^k$ del último conjunto $C_n$, que tenga el valor acumulado más alto y se obtienen todos los puntos candidatos que conforman el camino.
+
+\begin{algorithm}
+\caption{ST-Matching}
+\label{alg:st_matching}
+\begin{algorithmic}[1]
+\Procedure {STMatching}{$G:$ grafo de calles, $T:$ trayectoria}
+	\State $G_T = ObtenerCandidatos(G,T)$
+	\State $R = ObtenerResultado(G_T)$
+	\State \Return $R$
+\EndProcedure
+\Statex
+\Procedure {ObtenerCandidatos}{$G:$ grafo de calles, $T:$ trayectoria}
+	\State Inicializar $G_T$ a un conjunto vacío
+	\For {$p_i \in T, 1 \leq i \leq n$} 
+		\State $C_i = SeleccionarCandidatos(p_i, G)$
+		\State Agregar $C_i$ a $G_T$
+	\EndFor
+	\State \Return $G_T$
+\EndProcedure
+\Statex
+\Procedure {ObtenerResultado}{$G_T:$ grafo de candidatos}
+	\State Definir $f[]$ como el máximo peso computado hasta ahora
+	\State Definir $pre[]$ como el padre del punto candidato actual
+	\ForAll {$c_1^k$}
+		\State $f[c_1^k] = N(c_1^k)$
+	\EndFor
+	\For {$2 \leq i \leq n$}
+		\ForAll {$c_i^k$}
+			\State $max = -\infty$
+			\ForAll {$c_{i-1}^j$}
+				\State $tmp = f[c_{i-1}^j] + F(c_{i-1}^j,c_i^k)$
+				\If {$tmp > max$}
+					\State $max = tmp$
+					\State $pre[c_i^k] = c_{i-1}^j$
+				\EndIf
+				\State $f[c_i^k] = max$
+			\EndFor
+		\EndFor
+	\EndFor
+	\State Inicializar $C$ a una lista vacia de candidados
+	\State $c = arg \text{ } max(f[c_n^j])$
+	\For {$2 \leq i \leq n$}
+		\State Agregar $c$ a $C$
+		\State $c = pre[c]$
+	\EndFor
+	\State Agregar $c$ a $C$
+	\State Invertir $C$
+	\State \Return $C$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
 
 \section{Estimación del tráfico}
 \label{estimacion_trafico}
