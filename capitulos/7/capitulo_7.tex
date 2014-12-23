@@ -61,7 +61,7 @@ Las pruebas sobre el MM consistieron en la observación de su efectividad con di
 		\hline\hline
 		Intervalo (s) & Total de Puntos & Puntos Correctos & Porcentaje de Acierto\\ [0.5ex]
 		\hline
-		30 & 50 & 46 & 92 \\
+		30 & 80 & 74 & 92 \\
 		60 & 100 & 91 & 91 \\
 		120 & 83 & 73 & 88\\ [1ex]
 		\hline
@@ -69,8 +69,30 @@ Las pruebas sobre el MM consistieron en la observación de su efectividad con di
 	\label{table:map_matching}
 \end{table}
 
-En la tabla \ref{table:map_matching} se pueden apreciar los resultados obtenidos. Para intervalos pequeños de toma localizaciones  se tienen mejores resultados.
+En la tabla \ref{table:map_matching} se pueden apreciar los resultados obtenidos. Para intervalos pequeños de toma localizaciones  se tienen mejores resultados, con una diferencia a favor del intervalo de 30 segundos de 1\% en comparación a 60 segundos y de 4\% en comparación a 120 segundos.  
 
-A continuación se presenta el desempeño del MM para un mismo recorrido utilizando las tres frecuencias analizadas. 
+A continuación se presenta el desempeño del MM para un mismo recorrido utilizando las tres frecuencias analizadas. Se muestra con una línea roja el recorrido observado por el vehículo, y con una línea verde el recorrido aproximado después de realizar el MM. La \cref{fig:mm_30s} corresponde a las muestras obtenidas utilizando un intervalo de muestreo de 20 segundos, las figuras \ref{fig:mm_1m} y \ref{fig:mm_2m} corresponden a intervalos de 1 y 2 minutos respectivamente.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{capitulos/7/figuras/figura1.jpg}
+	\caption{\label{fig:mm_30s} MM con intervalo de 30 segundos}	
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{capitulos/7/figuras/figura2.jpg}
+	\caption{\label{fig:mm_1m} MM con intervalo de 1 minuto}	
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{capitulos/7/figuras/figura3.jpg}
+	\caption{\label{fig:mm_2m} MM con intervalo de 2 minutos}	
+\end{figure}
+
+\section{Análisis de Tráfico}
+
+
 
 
