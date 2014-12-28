@@ -51,41 +51,44 @@ En \cite{liao2006location,bao2004activity,ravi2005activity} se describen técnic
 
 Autotracks consulta periódicamente la actividad del usuario, cuando se ha detectado que el usuario se encuentra en un vehículo en movimiento se inicia el servicio de toma de localizaciones, este servicio permanece activo mientras el usuario se encuentra en movimiento. El intervalo de tiempo utilizado en la detección de actividad del usuario es de 15 segundos. Una vez que se ha detectado que el usuario ya no está en movimiento durante más de 10 minutos, el servicio de toma de localizaciones es detenido. Se utiliza la tolerancia de 10 minutos para evitar que el servicio se detenga cuando el vehículo se encuentra momentáneamente detenido en espera de algún evento, como en un semáforo en rojo, esperando por alguna persona o en un embotellamiento. Los valores utilizados en la detección de actividad fueron determinados empíricamente.
 
-El \Cref{alg:deteccion_actividad} muestra el procedimiento ejecutado periódicamente cada vez que se obtiene un resultado del reconocimiento de actividad. Este procedimiento verifica si la toma de localizaciones está o no iniciado y se encarga de iniciarla o finalizarla de acuerdo a la actividad detectada, utilizando los procedimientos $RastreoIniciado()$, $IniciarRastreo()$ y $FinalizarRastreo()$. El resultado de la detección de movimiento es almacenado para ser utilizado en la siguiente invocación del procedimiento, utilizando los procedimientos $GuardarEstabaEnMovimiento()$ y $ObtenerEstabaEnMovimiento()$. Si se ha detectado movimiento, el tiempo en el que ocurrió la detección también es almacenado para utilizarlo en la siguiente invocación, utilizando los procedimientos $GuardarUltimaDeteccion()$ y $ObtenerUltimaDeteccion()$. En el sub-procedimiento $EstaEnMovimiento()$ si el usuario está a pie (caminando o corriendo) se detiene inmediatamente el rastreo, si está en un vehículo se continua con el rastreo, y en cualquier otro caso (está en bicicleta, o quieto, o no se pudo determinar la actividad) se verifica el estado anterior de movimiento y el tiempo de la última detección de movimiento antes de tomar una decisión.
+El \Cref{alg:deteccion_actividad} muestra el procedimiento ejecutado periódicamente cada vez que se obtiene un resultado del reconocimiento de actividad. Este procedimiento verifica si la toma de localizaciones está o no iniciada y se encarga de iniciarla o finalizarla de acuerdo a la actividad detectada. El resultado de la detección es almacenado para ser utilizado en la siguiente invocación del procedimiento. Si se ha detectado que el usuario está en un vehículo, el tiempo en el que ocurrió la detección también es almacenado para utilizarlo en la siguiente invocación. En el sub-procedimiento $\Call {EstaEnVehiculo}{}$, si el usuario está a pie se detiene inmediatamente el rastreo, si está en un vehículo se continúa con el rastreo, y en cualquier otro caso (está en bicicleta, o quieto, o no se pudo determinar la actividad) se verifica el estado anterior de movimiento y el tiempo de la última detección de movimiento antes de tomar una decisión.
  
 \begin{algorithm}
 \caption{Reconocimiento de Actividad}
 \label{alg:deteccion_actividad}
 \begin{algorithmic}[1]
-\Procedure {ActividadDetectada}{$actividad$}
-	\State $enMovimiento \leftarrow EstaEnMovimiento(actividad)$
-	\State $GuardarEstabaEnMovimiento(enMovimiento)$
-	\If {$enMovimiento$}
-		\If {$\neg RastreoIniciado()$}
-			\State $IniciarRastreo()$
+\Procedure{ActividadDetectada}{$actividad$}
+	\State $enVehiculo =$ \Call {EstaEnVehiculo}{$actividad$}
+	\State Guardar $enVehiculo$ como el último estado detectado  
+	\If {$enVehiculo$}
+		\If {El rastreo no está iniciado}
+			\State Iniciar el rastreo
 		\EndIf
 	\Else
-		\If {$RastreoIniciado()$}
-			\State $FinalizarRastreo()$
+		\If {El rastreo está iniciado}
+			\State Finalizar el rastreo
 		\EndIf
 	\EndIf
 \EndProcedure
 \Statex
-\Procedure {EstaEnMovimiento}{$actividad$}
-	\State $tiempo \leftarrow ObtenerTiempoActual()$
-	\If {$actividad = aPie$}
+\Function {EstaEnVehiculo}{$actividad$}
+	\If {$actividad == \text{A\_PIE}$}
 		\State \Return $falso$
-	\ElsIf {$actividad = enVehiculo$}
-		\State $GuardarUltimaDeteccion(tiempo)$
+	\EndIf
+	\State Inicializar $t$ al tiempo actual
+	\If {$actividad == \text{EN\_VEHICULO}$}
+		\State Guardar $t$ como el tiempo de la última detección
 		\State \Return $verdadero$
-	\ElsIf {$ObtenerEstabaEnMovimiento()$}
-		\State $ultimaDeteccion \leftarrow ObtenerUltimaDeteccion()$
-		\State $tiempoTranscurrido \leftarrow tiempo - ultimaDeteccion$
-		\State \Return {$tiempoTranscurrido \leq tolerancia$}
+	\EndIf
+	\State Inicializar $estabaEnVehiculo$ al último estado detectado
+	\If {$estabaEnVehiculo$}
+		\State Inicializar $t_0$  al tiempo de la última detección
+		\State $\Delta t = t - t_0$
+		\State \Return {$\Delta t \leq$ TOLERANCIA}
 	\Else
 		\State \Return $falso$
 	\EndIf
-\EndProcedure
+\EndFunction
 \end{algorithmic}
 \end{algorithm}
 
@@ -109,20 +112,20 @@ Algunas de las localizaciones capturadas pueden llegar a ser demasiado imprecisa
 \label{alg:toma_de_localizaciones}
 \begin{algorithmic}[1]
 \Procedure {RegistrarLocalizacion}{$localizacion$}
-	\State $enValida \leftarrow EsValida(localizacion)$
+	\State $enValida = \Call{EsValida}{localizacion}$
 	\If {$esValida$}
-		\State $GuardarUltimaLocalizacion(localizacion)$
+		\State Guardar $localizacion$ como la última localización obtenida
 	\EndIf
 \EndProcedure
 \Statex
-\Procedure {EsValida}{$localizacion$}
-	\State $ultimaLocalizacion \leftarrow ObtenerUltimaLocalizacion()$
-	\State $d \leftarrow CalcularDistancia(localizacion, ultimaLocalizacion)$
-	\State $t \leftarrow CalcularTiempo(localizacion, ultimaLocalizacion)$
-	\State $v \leftarrow distancia / tiempo$
-	\State $p \leftarrow localizacion.precision$
-	\State \Return $d > dMinima \land v < vMaxima \land p < pMaxima$
-\EndProcedure
+\Function {EsValida}{$localizacion$}
+	\State Inicializar $p$ a la precisión de la $localizacion$
+	\State Inicializar $ultimaLocalizacion$ a la última localizacón guardada
+	\State $\Delta d = \Call{CalcularDistancia}{localizacion, ultimaLocalizacion}$
+	\State $\Delta t = \Call{CalcularTiempo}{localizacion, ultimaLocalizacion}$
+	\State $v = \Delta d / \Delta t$
+	\State \Return $\Delta d > \text{D\_MINIMA} \land v < \text{V\_MAXIMA} \land p < \text{P\_MAXIMA}$
+\EndFunction
 \end{algorithmic}
 \end{algorithm}
 
@@ -186,7 +189,7 @@ En base a estas definiciones, el problema de MM se puede expresar de la siguient
 
 La primera etapa del proceso es la selección de puntos candidatos. Un punto candidato $c$ es un punto perteneciente a un segmento de calle $e$, que puede formar parte del camino real recorrido por un vehículo, y que es obtenido a partir de un punto $p$ de una trayectoria. Dada una trayectoria $T = \{p_1, p_2, \dots, p_n\}$, el proceso de selección de candidatos consiste en encontrar para cada punto $p_i$, $1\le i\le n$, el conjunto de puntos candidatos $C_i = \{c_{i}^{1}, c_{i}^{2}, \dots, c_{i}^{m}\}$ correspondiente.
 
-El primer paso es seleccionar todos los segmentos de calles $e \in E$ tales que la distancia entre un punto $p_i$ y un segmento $e$ sea menor a un radio $r$, de esta forma se obtiene un conjunto de segmentos $E_i = \{ e : \text{ } e \in E \text{ } \wedge \text{ } dist(p_i, e) < r \}$. Luego, para cada segmento $e_{i}^{j}$ perteneciente al conjunto $E_i = \{e_{i}^{1}, e_{i}^{2}, \dots, e_{i}^{m}\}$ resultante, se obtiene un punto candidato $c_{i}^{j}$ realizando una proyección del punto $p_i$ sobre el segmento $e_{i}^{j}$. La proyección $proy(p, e)$ de un punto $p$ sobre un segmento $e$ se define como el punto $c$ perteneciente a $e$ más cercano a $p$, es decir, $c = \text{arg } min(dist(c_i, p)) \text{ } \forall c_i \in e$. Así, se obtiene el conjunto de puntos candidatos $C_i = \{ proy(p_i, e_j) \text{ } \forall e_j \in E_i \}$. Como se puede apreciar en la \Cref{fig:puntos_candidatos} los puntos candidatos pueden ser cualquier punto del segmento, como en el caso de $c_{i}^{1}$ y $c_{i}^{2}$, o uno de sus vértices como en el caso de $c_{i}^{3}$.
+El primer paso es seleccionar todos los segmentos de calles $e \in E$ tales que la distancia entre un punto $p_i$ y un segmento $e$ sea menor a un radio $r$, de esta forma se obtiene un conjunto de segmentos $E_i = \{ e : \text{ } e \in E \text{ } \wedge \text{ } dist(p_i, e) < r \}$. Luego, para cada segmento $e_{i}^{j}$ perteneciente al conjunto $E_i = \{e_{i}^{1}, e_{i}^{2}, \dots, e_{i}^{m}\}$ resultante, se obtiene un punto candidato $c_{i}^{j}$ realizando una proyección del punto $p_i$ sobre el segmento $e_{i}^{j}$. La proyección $proy(p, e)$ de un punto $p$ sobre un segmento $e$ se define como el punto $c$ perteneciente a $e$ más cercano a $p$, es decir, $c = \text{arg } min(dist(c_i, p)) \text{ } \forall c_i \in e$. Así, se obtiene el conjunto de puntos candidatos $C_i = \{ proy(p_i, e_j) \text{ } \forall e_j \in E_i \}$. Como se puede apreciar en la \Cref{fig:puntos_candidatos} un punto candidato puede ser cualquier punto del segmento, como en el caso de $c_{i}^{1}$ y $c_{i}^{2}$, o uno de sus vértices como en el caso de $c_{i}^{3}$.
 
 \begin{figure}[h*]
 	\centering
@@ -194,7 +197,36 @@ El primer paso es seleccionar todos los segmentos de calles $e \in E$ tales que 
 	\caption{\label{fig:puntos_candidatos} Puntos candidatos para un punto de la trayectoria}	
 \end{figure}
 
+Para la obtención de cada conjunto $C_i$ se ejecuta la \Cref{lst:candidatos}, donde los comandos precedidos por el prefijo \emph{ST\_} son funciones espaciales implementadas por PostGIS. Utilizando \emph{ST\_DWithin} se obtienen todos los segmentos de calle que se encuentren a una distancia menor o igual a un radio $r$ del punto observado $p$. Luego, el punto observado es proyectado sobre cada segmento de calle utilizando \emph{ST\_LineLocatePoint} y \emph{ST\_LineInterpolatePoint} para obtener el punto candidato correspondiente.
+
 Una vez que se han obtenidos todos los conjuntos $C_i = \{c_{i}^{1}, c_{i}^{2}, \dots, c_{i}^{m}\}$ correspondientes a cada punto $p_i$ de la trayectoria $T$, el problema de MM se reduce a cómo seleccionar un punto candidato $c_i$ de cada conjunto $C_i$, a partir del cual se obtiene el segmento de calle $e_i$, de manera tal que el camino real resultante $R = \{ e_1, e_2, \dots, e_n \}$ sea lo más aproximado posible a $T = \{ p_1, p_2, \dots, p_n\}$, conforme se describe en los siguientes apartados.
+
+\begin{lstlisting}[caption={Obtención de datos de tráfico}, label={lst:candidatos}]
+SELECT  id,     -- identificador del segmento de calle 
+        source, -- identificador del nodo inicial
+        target, -- identificador del nodo final
+        km,     -- longitud del segmento de calle
+        kmh,    -- limite de velocidad del segmento de calle
+        x1,     -- longitud del nodo inicial
+        y1,     -- latitud del noto inicial
+        x2,     -- longitud del nodo final
+        y2,     -- latitud del nodo final
+        ST_X(point) AS lon, -- longitud del punto proyectado
+        ST_Y(point) AS lat  -- latitud del punto proyectado
+FROM (
+    SELECT 
+        pgr.*,  -- datos del segmento de calle 
+        ST_LineInterpolatePoint(
+            geom_way, 
+            ST_LineLocatePoint(
+                geom_way, 
+                :geom
+            )
+        ) AS point -- punto proyectado
+    FROM asu_2po_4pgr AS pgr
+    WHERE ST_DWithin(:geom, geom_way, :dist)
+) a
+\end{lstlisting}
 
 \subsection{Análisis Espacial y Temporal}
 
@@ -332,13 +364,12 @@ La estimación se realiza calculando la \emph{velocidad media local} de cada seg
 \end{equation}
 donde ${ \hat { { v } } _{ j }(k) }$ es la velocidad estimada en la calle $j$ durante el intervalo $\left[ { t }_{ k },{ t }_{ k+\Delta T } \right] $, y ${ { n }_{ { t }_{ k },{ t }_{ k+\Delta T }}}$ es el número total de muestras disponibles para la calle $j$ durante dicho intervalo.
 
-Para obtener el estado estimado del tráfico en un momento dado, se utiliza la consulta \ref{lst:trafico} que da como resultado todos los segmentos de calle $A_iB_i$ formados por los puntos $A_i$ (r.x1,r.y1) y $B_i$ (r.x2,r.y2) junto con la cantidad de muestras disponibles y la sumatoria de las velocidades observadas en dichas muestras durante un periodo de tiempo determinado. Con ello se aplica la \cref{eq:velocidad_media} para estimar la \emph{velocidad media local} de cada segmento de calle.
+Para obtener el estado estimado del tráfico en un momento dado, se utiliza la \Cref{lst:trafico} que da como resultado todos los segmentos de calle $A_iB_i$ formados por los puntos $A_i(r.x1, r.y1)$ y $B_i(r.x2, r.y2)$ junto con la cantidad de muestras disponibles y la sumatoria de las velocidades observadas en dichas muestras durante un periodo de tiempo determinado. Con ello se aplica la \Cref{eq:velocidad_media} para estimar la \emph{velocidad media local} de cada segmento de calle.
 
-\renewcommand\lstlistingname{Consulta}
-\begin{lstlisting}[caption={Obtención de datos de tráfico},label={lst:trafico},language=SQL]
+\begin{lstlisting}[caption={Obtención de datos de tráfico}, label={lst:trafico}]
 SELECT r.x1, r.y1, r.x2, r.y2, COUNT(l.id), SUM(l.velocidad)
 FROM Localizacion l, Asu2po4pgr r
-WHERE l.wayId = r.id AND l.fecha BETWEEN ? AND ?
+WHERE l.wayId = r.id AND l.fecha BETWEEN :inicio AND :fin
 GROUP BY r.id
 \end{lstlisting}
 

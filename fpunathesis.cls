@@ -10,9 +10,11 @@
 \newcommand{\@logosource}{logocolor.eps}
 \usepackage[utf8]{inputenc}
 \usepackage[pdftex]{graphicx}
+\usepackage{listings}
 \usepackage{algorithm}
 %\usepackage{algorithmic}
 \usepackage{algpseudocode}
+\usepackage{caption}
 \input{spanish_algorithmic}
 
 \bibliographystyle{unsrt} % Numeros ordenados por entrada
@@ -422,10 +424,12 @@
 \let\@oldlistoffigures=\listoffigures
 \let\@oldlistoftables=\listoftables
 \let\@oldlistofalgorithms=\listofalgorithms
+\let\@oldlstlistoflistings=\lstlistoflistings
 
 \renewcommand{\listoffigures}{\@oldlistoffigures\addcontentsline{toc}{chapter}{\'Indice de Figuras}}
 \renewcommand{\listoftables}{\@oldlistoftables\addcontentsline{toc}{chapter}{\'Indice de Tablas}}
 \renewcommand{\listofalgorithms}{\@oldlistofalgorithms\addcontentsline{toc}{chapter}{\'Indice de Algoritmos}}
+\renewcommand{\lstlistoflistings}{\@oldlstlistoflistings\addcontentsline{toc}{chapter}{\'Indice de Consultas}}
 
 \renewenvironment{thebibliography}[1]{%
   \begin{@oldthebibliography}{#1}%
@@ -434,14 +438,36 @@
 
 % some corrections of spanish leyends given by babel %
 \AtBeginDocument{
-  \renewcommand{\contentsname}{\'Indice General}
-  \renewcommand\listtablename{\'Indice de Tablas}
-  \renewcommand\listfigurename{\'Indice de Figuras}
-  \renewcommand{\listalgorithmname}{\'Indice de Algoritmos}
+  \renewcommand{\contentsname}{Índice General}
+  \renewcommand\listtablename{Índice de Tablas}
+  \renewcommand\listfigurename{Índice de Figuras}
+  \renewcommand{\listalgorithmname}{Índice de Algoritmos}
+  \renewcommand{\lstlistlistingname}{Índice de Consultas}
+  \renewcommand{\lstlistingname}{\textbf{Consulta}}
   \renewcommand\tablename{Tabla}
   \floatname{algorithm}{Algoritmo}
   \if@isdraft\setlength\overfullrule{5pt}\fi
 }
+
+
+
+\DeclareCaptionFormat{mylst}{\hrule#1#2#3}
+
+\lstset{
+language=SQL,
+basicstyle=\small,
+numbers=left,
+numbersep=5pt,
+xleftmargin=20pt,
+frame=tb,
+framexleftmargin=20pt
+}
+
+\lstset{
+ morekeywords={ST_LineInterpolatePoint,ST_LineLocatePoint,ST_DWithin,ST_X,ST_Y}
+}
+
+\renewcommand*\thelstnumber{\arabic{lstnumber}:}
 
 \endinput
 %%
