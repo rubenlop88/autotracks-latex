@@ -11,14 +11,31 @@
 \usepackage{booktabs}
 \usepackage{cleveref}
 \usepackage[section]{placeins}
+\usepackage{tikz}
 
-\DeclareCaptionFormat{mylst}{\hrule\hrule#1#2#3}
-\captionsetup[lstlisting]{format=mylst,labelfont=bf,singlelinecheck=off,labelsep=space}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+
+% Definimos los componentes que usaremos para dibujar los diagramas
+\tikzstyle{start}  = [rectangle, minimum width=2cm, minimum height=1cm, text badly centered, text width=2cm, draw=black, fill=white, inner sep=10pt, font=\footnotesize, rounded corners]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text badly centered, text width=5cm, draw=black, fill=white, inner sep=10pt, font=\footnotesize]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text badly centered, text width=3cm, draw=black, fill=white, font=\footnotesize, aspect=2]
+\tikzstyle{arrow} = [thick, ->, >=stealth, font=\footnotesize]
+
+% Define block styles
+%\tikzstyle{decision} = [diamond, draw, fill=blue!20, text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
+%\tikzstyle{block} = [rectangle, draw, fill=blue!20, text width=5em, text centered, rounded corners, minimum height=4em]
+%\tikzstyle{line} = [draw, -latex']
+%\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=3cm, minimum height=2em]
+
+% Definimos el caption para los listings, similar al de los algoritmos
+\DeclareCaptionFormat{lstcaption}{\hrule\hrule#1#2#3}
+\captionsetup[lstlisting]{format=lstcaption,labelfont=bf,singlelinecheck=off,labelsep=space}
 
 % Cambia el nombre de "cuadro" a "tabla" cuando se usa \cref{tab:alguna_tabla}
 \crefname{table}{tabla}{tablas}
 \crefname{listing}{consulta}{consultas}
 
+% Incluimos los graficos en formato pdf_tex
 \graphicspath{
 {capitulos/2/figuras/}
 {capitulos/4/figuras/}

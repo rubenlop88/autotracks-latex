@@ -69,11 +69,37 @@ La última técnica dentro de esta categoría es conocida como \emph{curva a cur
 
 Se conoce como \emph{topología} a la relación entre las distintas formas geométricas, como ser puntos, líneas y polígonos. Entre estos elementos pueden definirse relaciones de adyacencia y conectividad. Los mapas de calles se representan generalmente como puntos y líneas, donde las líneas representan secciones de calles y los puntos representan intersecciones entre las calles. Por ejemplo, los mapas digitales cuentan con relaciones topológicas tales como límites de velocidad, restricciones de giro y sentido de circulación. Así, los algoritmos de MM que incorporan este tipo de información en la reconstrucción del camino de un vehículo se conocen como algoritmos topológicos \cite{quddus2007current}.
 
-El algoritmo topológico desarrollado en \cite{greenfeld2002matching} utiliza distintos criterios de similaridad para determinar la mejor calle candidata para cada punto. Los criterios utilizados son la similaridad en la orientación entre dos puntos consecutivos y la calle candidata, la proximidad entre la localización del punto y la calle candidata y el tamaño del ángulo comprendido entre la dirección de desplazamiento del vehículo (\emph{bearing}) y la dirección de la calle candidata. Para cada calle candidata se realiza una suma ponderada de los criterios y se elige como mejor candidata a aquella con la mayor suma.
+El algoritmo topológico desarrollado en \cite{greenfeld2002matching} utiliza distintos criterios de similaridad para determinar la mejor calle candidata para cada punto. Los criterios utilizados son la similaridad en la orientación entre dos puntos consecutivos y la calle candidata, la proximidad entre la localización del punto y la calle candidata y el tamaño del ángulo comprendido entre la dirección de desplazamiento del vehículo (\emph{bearing}) y la dirección de la calle candidata. Para cada calle candidata se realiza una suma ponderada de los criterios y se elige como mejor candidata a aquella con la mayor suma. 
 
-El mismo procedimiento es utilizado en \cite{quddus2003general} pero se agrega información adicional como la velocidad del vehículo y la posición relativa del punto con respecto al vértice más cercano. En este algoritmo el proceso para determinar si el vehículo sigue o no en la calle seleccionada anteriormente se aplica cada vez que el vehículo pasa por una intersección de calles. Ambos métodos requieren que se identifique correctamente la primera calle, para luego ir eligiendo las calles que tienen conexión con la misma. Un fallo en la elección inicial puede llevar a resultados incorrectos.
+El mismo procedimiento es utilizado en \cite{quddus2003general} pero se agrega información adicional como la velocidad del vehículo y la posición relativa del punto con respecto al vértice más cercano, también se incorpora un proceso para identificar la posición real del vehículo en la calle. Para el primer punto de la trayectoria se utiliza la técnica de punto a punto para encontrar el vértice más cercano, luego se obtienen todos los enlaces conectados a dicho vértice y se aplican los criterios de similaridad para seleccionar el primer enlace. Los siguientes puntos se asignan al mismo enlace hasta que se detecta una intersección o una maniobra de giro y se vuelven a aplicar los criterios para determinar si el vehículo sigue en el mismo enlace o no. Una descripción general del algoritmo puede verse en la \Cref{fig:algoritmo-topologico}. Ambos algoritmos requieren que se identifique correctamente la primera calle, para luego ir eligiendo las calles que tienen conexión con la misma, nn fallo en la elección inicial puede llevar a resultados incorrectos.
 
-El algoritmo desarrollado en \cite{lou2009map}, conocido como \emph{ST-Matching}, utiliza información geográfica y topológica para asignar un valor numérico a cada camino posible y luego selecciona el camino con el mayor valor. El algoritmo utiliza la técnica de punto a curva para determinar el conjunto de puntos candidatos para cada punto de la trayectoria. Existe un camino entre cada punto candidato y todos los puntos candidatos del punto siguiente, formando así todos los posibles caminos del vehículo. Para asignar el valor numérico a cada camino se tienen en cuenta dos tipos de análisis: \begin{enumerate*}[a)] \item el \emph{análisis espacial}, en el que se calcula una probabilidad de observación para cada punto candidato y una probabilidad de transmisión entre cada par de puntos candidatos consecutivos, y \item el \emph{análisis temporal}, en el que se calcula la similaridad entre la velocidad promedio entre dos puntos candidatos y las restricciones de velocidad del camino comprendido entre los puntos.\end{enumerate*} Otros trabajos posteriores han agregado diversas mejoras al algoritmo original, como un proceso de detección de localizaciones inválidas en  \cite{sakic2012map} y, la normalización del cálculo de la probabilidad de transmisión y la prevención de bucles en el camino final obtenido que se presenta en  \cite{budigm2012algorithm}.
+\begin{figure}[h]
+\centering
+\begin{singlespace}
+\begin{tikzpicture}
+
+\node (pro1) [start] {Inicio};
+\node (pro2) [process,  below=of pro1] {MM en nodo inicial o intersección para seleccionar una calle};
+\node (dec1) [decision, below=of pro2] {¿Realizó un giro o ha cruzado una intersección?};
+\node (pro3) [process,  below=of dec1] {Asignar punto a calle previamente seleccionada y ubicar vehículo};
+\node (dec2) [decision, below=of pro3] {¿Fin de la trayectoria?};
+\node (pro4) [start,  below=of dec2] {Fin};
+
+\draw [arrow] (pro1) -- (pro2);
+\draw [arrow] (pro2) -- (dec1);
+\draw [arrow] (pro3) -- (dec2);
+\draw [arrow] (dec1) -- node[anchor=east] {Sí} (pro3);
+\draw [arrow] (dec2) -- node[anchor=east]  {Sí} (pro4);
+\draw [arrow] (dec1.east) -- ++(1cm,0cm) |- node[anchor=west, yshift=-2cm] {No} (pro2.east);
+\draw [arrow] (dec2.west) -- ++(-2cm,0cm) |- node[anchor=east, yshift=-4cm] {No} (dec1.west);
+
+\end{tikzpicture}
+\end{singlespace}
+\caption{Algoritmo topológico de \cite{quddus2003general}}
+\label{fig:algoritmo-topologico} 
+\end{figure}
+
+El algoritmo desarrollado en \cite{lou2009map}, conocido como \emph{ST-Matching}, utiliza información geográfica y topológica para asignar un valor numérico a cada camino posible y luego selecciona el camino con el mayor valor. El algoritmo utiliza la técnica de punto a curva para determinar un conjunto de puntos candidatos para cada punto de la trayectoria. Existe un camino entre cada punto candidato y todos los puntos candidatos del punto siguiente, formando así todos los posibles caminos del vehículo. Para asignar el valor numérico a cada camino se tienen en cuenta dos tipos de análisis: \begin{enumerate*}[a)] \item el \emph{análisis espacial}, en el que se calcula una probabilidad de observación para cada punto candidato y una probabilidad de transmisión entre cada par de puntos candidatos consecutivos, y \item el \emph{análisis temporal}, en el que se calcula la similaridad entre la velocidad promedio entre dos puntos candidatos y las restricciones de velocidad del camino comprendido entre los puntos.\end{enumerate*} Otros trabajos posteriores han agregado diversas mejoras al algoritmo original, como un proceso de detección de localizaciones inválidas en  \cite{sakic2012map} y, la normalización del cálculo de la probabilidad de transmisión y la prevención de bucles en el camino final obtenido que se presenta en  \cite{budigm2012algorithm}.
 
 En \cite{yuan2010interactive} se propone un algoritmo basado en ST-Matching que incorpora el concepto de \emph{voto interactivo} para modelar la influencia mutua que tienen entre sí todos los puntos de la trayectoria del vehículo (a mayor distancia entre candidatos, menor la influencia). Para cada punto candidato existe un conjunto de caminos posibles que pasan por él, el objetivo es determinar cuál de los caminos es el óptimo para cada punto candidato, luego cada punto candidato vota por su “mejor camino” y finalmente se selecciona el camino óptimo global de acuerdo al resultado de esta votación.
 
@@ -84,9 +110,38 @@ Los algoritomos presentados en \cite{lou2009map} y \cite{yuan2010interactive}, e
 Los algoritmos estadísticos, también conocidos como probabilísticos, son aquellos que definen regiones de “confiabilidad” alrededor de las localizaciones y seleccionan una calle candidata de entre todas aquellas que están dentro de esta región \cite{quddus2007current}. Para determinar la región de confianza se tienen en cuenta los posibles errores originados por los sensores utilizados para obtener la localización y los errores en el mapa digital. Estos algoritmos también pueden utilizar información geométrica y topológica de la red de calles.
 
 El algoritmo desarrollado en \cite{ochieng2009map} toma en cuenta diversas fuentes de error asociadas con los sensores de localización, la trayectoria anterior del vehículo, la información topológica de las calles (conectividad y orientación de las calles), e información sobre la velocidad y la dirección del vehículo. Este algoritmo está específicamente diseñado para aplicaciones con requerimientos de tiempo real y con una alta frecuencia de muestreo. El algoritmo se divide en dos partes, \begin{enumerate*}[a)]
-\item el proceso de inicial de selección (Initial Matching Process), y \item el proceso de selección subsecuente (Subsequent Matching Process)\end{enumerate*}. 
+\item el proceso de selección inicial (Initial Matching Process), y \item el proceso de selección subsecuente (Subsequent Matching Process)\end{enumerate*}. 
 
-En el \emph{proceso de selección inicial} se define alrededor de la primera localización una región de confiabilidad rectangular o elíptica, si dentro de esta región no existe ningún candidato se asume que el vehículo está fuera de la red de calles, si existe más de un candidato se utiliza información sobre la conectividad de los candidatos y la dirección de desplazamiento del vehículo para determinar el candidato más apropiado. El \emph{proceso de selección  subsecuente} es utilizado para determinar si en la siguiente localización el vehículo sigue viajando o no por la misma calle, para ello se intenta identificar si el vehículo ha hecho alguna maniobra de giro o si está atravesando una intersección de calles y en caso de que se detecte alguna de estas dos condiciones se vuelve a realizar el proceso de selección inicial para determinar la siguiente calle sobre la que esta viajando el vehículo.
+En el \emph{proceso de selección inicial} se define alrededor de la primera localización una región de confiabilidad rectangular o elíptica, si dentro de esta región no existe ningún candidato se asume que el vehículo está fuera de la red de calles, si existe más de un candidato se utiliza información sobre la conectividad de los candidatos y la dirección de desplazamiento del vehículo para determinar el candidato más apropiado. El \emph{proceso de selección  subsecuente} es utilizado para determinar si en la siguiente localización el vehículo sigue viajando o no por la misma calle, para ello se intenta identificar si el vehículo ha hecho alguna maniobra de giro o si está atravesando una intersección de calles y en caso de que se detecte alguna de estas dos condiciones se vuelve a realizar el proceso de selección inicial para determinar la siguiente calle sobre la que esta viajando el vehículo. La velocidad registrada en un punto debe ser superior a una mínima preestablecida para poder utilizar la información sobre la dirección de desplazamiento del vehículo en el proceso de selección subsecuente. La \Cref{fig:algoritmo-estadistico} ilustra los pasos principales del algoritmo.
+
+\begin{figure}[h]
+\centering
+\begin{singlespace}
+\begin{tikzpicture}
+
+\node (pro1) [start] {Inicio};
+\node (pro2) [process,  below=of pro1] {Proceso de selección inicial para un punto};
+\node (dec1) [decision, below=of pro2] {¿Velocidad menor a velocidad mínima o ha cruzado una intersección?};
+\node (dec2) [decision, right=of dec1] {¿Realizó un giro o ha cruzado una intersección?};
+\node (pro3) [process,  below=of dec1] {Proceso de selección subsecuente para el siguiente punto};
+\node (dec3) [decision, below=of pro3] {¿Fin de la trayectoria?};
+\node (pro4) [start,  below=of dec3] {Fin};
+
+\draw [arrow] (pro1) -- (pro2);
+\draw [arrow] (pro2) -- (dec1);
+\draw [arrow] (pro3) -- (dec3);
+\draw [arrow] (dec1) -- node[anchor=east] {No} (pro3);
+\draw [arrow] (dec1) -- node[anchor=north] {Sí} (dec2);
+\draw [arrow] (dec2.north) |- node[anchor=west] {Sí} (pro2.east);
+\draw [arrow] (dec2.south) |- node[anchor=west] {No} (pro3.east);
+\draw [arrow] (dec3.west) -- ++(-2cm,0cm) |- node[anchor=east, yshift=-3.5cm] {No} (dec1.west);
+\draw [arrow] (dec3) -- node[anchor=east]  {Sí} (pro4);
+
+\end{tikzpicture}
+\end{singlespace}
+\caption{Algoritmo estadístico de \cite{ochieng2009map}}
+\label{fig:algoritmo-estadistico} 
+\end{figure}
 
 \subsection{Algoritmos avanzados}
 
@@ -117,7 +172,38 @@ Otra técnica utilizada en algoritmos de MM es la Lógica Difusa. A diferencia d
 \item finalmente se convierten los resultados nuevamente a un valor concreto
 \end{enumerate*}. Una explicación más detallada se puede encontrar en \cite{zadeh1988fuzzy}
 
-El algoritmo propuesto en \cite{quddus2006high} funciona de forma muy similar al propuesto en \cite{ochieng2009map} pues también está divido en dos partes principales: el \emph{proceso de selección inicial} y el \emph{proceso de selección subsecuente}, que se divide a su vez nuevamente en dos partes: \emph{la selección a lo largo de un enlace} y  \emph{la selección en una intersección}. El \emph{proceso inicial} se aplica para seleccionar la primera calle, a partir de ahí se aplica \emph{la selección a lo largo de un enlace} para determinar si el vehículo sigue sobre la misma calle, cuando se detecta una intersección se aplica \emph{la selección en una intersección} para determinar si el vehículo ha hecho una maniobra de giro. Para el \emph{proceso inicial} se tienen en cuenta la velocidad, la dirección, la distancia perpendicular a la calle y el error horizontal del GPS. El \emph{proceso de selección subsecuente a lo largo de un enlace} tiene en cuenta la velocidad, la dirección, la lectura del giroscopio y otras variables más. Para el \emph{proceso de selección subsecuente en una intersección} se aplican dos variables más, la conectividad de las calles y la distancia recorrida por el vehículo. Finalmente, para cada paso se determina la ubicación del vehículo sobre la calle teniendo en cuenta la proyección del punto sobre la calle, la velocidad y dirección del vehículo. El algoritmo está especialmente diseñado para aplicaciones de tiempo real (\emph{on-line}) con una alta frecuencia de muestreo.
+El algoritmo propuesto en \cite{quddus2006high} funciona de forma muy similar al propuesto en \cite{ochieng2009map} pues también está divido en dos partes principales: el \emph{proceso de selección inicial} y el \emph{proceso de selección subsecuente}, que se divide a su vez nuevamente en dos partes: \emph{la selección a lo largo de un enlace} y  \emph{la selección en una intersección}. El \emph{proceso inicial} se aplica para seleccionar la primera calle, a partir de ahí se aplica \emph{la selección a lo largo de un enlace} para determinar si el vehículo sigue sobre la misma calle, cuando se detecta una intersección se aplica \emph{la selección en una intersección} para determinar si el vehículo ha hecho una maniobra de giro. Para cada punto procesado se determina la ubicación del vehículo sobre la calle seleccionada y se aplica un test de confiabilidad para determinar si dicha posición es aceptable o no y si no lo es, se vuelve a aplicar el \emph{proceso de selección inicial}. En la \Cref{fig:algoritmo-avanzado} se puede apreciar un diagrama conceptual del funcionamiento del algoritmo. Para el \emph{proceso inicial} se tienen en cuenta la velocidad, la dirección, la distancia perpendicular a la calle y el error horizontal del GPS. El \emph{proceso de selección subsecuente a lo largo de un enlace} tiene en cuenta la velocidad, la dirección, la lectura del giroscopio y otras variables más. Para el \emph{proceso de selección subsecuente en una intersección} se aplican dos variables más, la conectividad de las calles y la distancia recorrida por el vehículo. Para determinar la ubicación del vehículo se tiene en cuenta la proyección del punto sobre la calle, la velocidad y dirección del vehículo. El algoritmo está especialmente diseñado para aplicaciones de tiempo real (\emph{on-line}) con una alta frecuencia de muestreo. 
+
+\begin{figure}[h]
+\centering
+\begin{singlespace}
+\begin{tikzpicture}
+
+\node (pro1) [start] {Inicio};
+\node (pro2) [process,  below=of pro1] {Proceso de selección inicial para un punto};
+\node (pro3) [process,  below=of pro2] {Proceso de selección subsecuente a lo largo de un enlace};
+\node (pro4) [process,  below=of pro3] {Determinar la posición del vehículo};
+
+\node (dec1) [decision, below=of pro4] {¿Pasó el test de confiabilidad?};
+\node (dec2) [decision, below=of dec1] {¿Realizó un giro o ha cruzado una intersección?};
+\node (pro5) [process,  below=of dec2] {Proceso de selección subsecuente en una intersección};
+\node (pro6) [start,  below=of pro5] {Fin};
+
+\draw [arrow] (pro1) -- (pro2);
+\draw [arrow] (pro2) -- (pro3);
+\draw [arrow] (pro3) -- (pro4);
+\draw [arrow] (pro4) -- (dec1);
+\draw [arrow] (dec1) -- node[anchor=east] {Sí} (dec2);
+\draw [arrow] (dec1.west) -- ++(-2cm,0cm) |- node[anchor=east, yshift=-3cm] {No} (pro2.west);
+\draw [arrow] (dec2.east) -- ++(2cm,0cm) |- node[anchor=west, yshift=-3cm] {Sí} (pro3.east);
+\draw [arrow] (dec2) -- node[anchor=west] {Sí} (pro5);
+\draw [arrow] (pro5) -- node[anchor=east]  {No} (pro6);
+
+\end{tikzpicture}
+\end{singlespace}
+\caption{Algoritmo avanzado de \cite{quddus2006high}}
+\label{fig:algoritmo-avanzado} 
+\end{figure}
 
 Existen otras técnicas avanzadas que se utilizan en conjunto con algunas de las técnicas descritas anteriormente ya sea como parte del algoritmo, como un proceso previo o como una forma de verificación del resultado. Entre estas técnicas podemos citar a la Distancia de Fréchet \cite{chen2011approximate,eisner2011algorithms}, que determina la similaridad entre dos curvas y es utilizada en los algoritmos de curva a curva para determinar la curva a seleccionar. La Distancia de Fréchet también es generalmente utilizada para validar los resultados de los algoritmos. Otra técnica muy popular son los Filtros de Kalman y los Filtros Extendidos de Kalman \cite{kim2001adaptive}, que generalmente se utilizan cuando existe una alta densidad de muestras y se desea realizar un paso previo para mejorar su calidad.
 
