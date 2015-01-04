@@ -19,6 +19,7 @@
 *.lof
 *.log
 *.lot
+*.loa
 *.maf
 *.mtc
 *.mtc0
@@ -33,5 +34,6 @@
 *.vrb
 *.xdy
 *.tdo
-tesis.pdf
+*.pdf
+*.lol
 Thumbs.db

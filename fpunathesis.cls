@@ -4,6 +4,7 @@
 
 \NeedsTeXFormat{LaTeX2e}[1995/12/01]
 \ProvidesClass{fpunathesis}[2014/08/25 v0.02 Formato para tesis de la FPUNA]
+\LoadClass[a4paper,onecolumn,openright,12pt]{report}[1996/10/31]
 
 \newif\if@isdraft
 \newif\if@atstyle
@@ -12,9 +13,7 @@
 \usepackage[pdftex]{graphicx}
 \usepackage{listings}
 \usepackage{algorithm}
-%\usepackage{algorithmic}
 \usepackage{algpseudocode}
-\usepackage{caption}
 \input{spanish_algorithmic}
 
 \bibliographystyle{unsrt} % Numeros ordenados por entrada
@@ -36,7 +35,6 @@
 
 \ExecuteOptions{final,oneside,openright,fmstyle,black}
 \ProcessOptions
-\LoadClass[a4paper,onecolumn,openright,12pt]{report}[1996/10/31]
 
 % load babel using spanish %
 \RequirePackage[spanish,activeacute]{babel}
@@ -450,14 +448,12 @@
 }
 
 
-
-\DeclareCaptionFormat{mylst}{\hrule#1#2#3}
-
 \lstset{
 language=SQL,
-basicstyle=\small,
+basicstyle=\small\singlespacing,
 numbers=left,
-numbersep=5pt,
+numbersep=10pt,
+numberstyle=\footnotesize,
 xleftmargin=20pt,
 frame=tb,
 framexleftmargin=20pt

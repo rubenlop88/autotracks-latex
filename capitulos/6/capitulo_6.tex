@@ -193,28 +193,26 @@ El primer paso es seleccionar todos los segmentos de calles $e \in E$ tales que 
 
 \begin{figure}[h*]
 	\centering
-	\includegraphics[width=0.5\textwidth]{capitulos/6/figuras/figura6.jpg}
+	\includegraphics[width=0.7\textwidth]{capitulos/6/figuras/figura6.jpg}
 	\caption{\label{fig:puntos_candidatos} Puntos candidatos para un punto de la trayectoria}	
 \end{figure}
 
 Para la obtención de cada conjunto $C_i$ se ejecuta la \Cref{lst:candidatos}, donde los comandos precedidos por el prefijo \emph{ST\_} son funciones espaciales implementadas por PostGIS. Utilizando \emph{ST\_DWithin} se obtienen todos los segmentos de calle que se encuentren a una distancia menor o igual a un radio $r$ del punto observado $p$. Luego, el punto observado es proyectado sobre cada segmento de calle utilizando \emph{ST\_LineLocatePoint} y \emph{ST\_LineInterpolatePoint} para obtener el punto candidato correspondiente.
 
-Una vez que se han obtenidos todos los conjuntos $C_i = \{c_{i}^{1}, c_{i}^{2}, \dots, c_{i}^{m}\}$ correspondientes a cada punto $p_i$ de la trayectoria $T$, el problema de MM se reduce a cómo seleccionar un punto candidato $c_i$ de cada conjunto $C_i$, a partir del cual se obtiene el segmento de calle $e_i$, de manera tal que el camino real resultante $R = \{ e_1, e_2, \dots, e_n \}$ sea lo más aproximado posible a $T = \{ p_1, p_2, \dots, p_n\}$, conforme se describe en los siguientes apartados.
-
-\begin{lstlisting}[caption={Obtención de datos de tráfico}, label={lst:candidatos}]
-SELECT  id,     -- identificador del segmento de calle 
-        source, -- identificador del nodo inicial
-        target, -- identificador del nodo final
-        km,     -- longitud del segmento de calle
-        kmh,    -- limite de velocidad del segmento de calle
-        x1,     -- longitud del nodo inicial
-        y1,     -- latitud del noto inicial
-        x2,     -- longitud del nodo final
-        y2,     -- latitud del nodo final
-        ST_X(point) AS lon, -- longitud del punto proyectado
-        ST_Y(point) AS lat  -- latitud del punto proyectado
-FROM (
-    SELECT 
+\begin{lstlisting}[float,floatplacement=!htb,caption={Selección de puntos candidatos}, label={lst:candidatos}]
+select pgr.id,     -- identificador del segmento de calle 
+       pgr.source, -- identificador del nodo inicial
+       pgr.target, -- identificador del nodo final
+       pgr.km,     -- longitud del segmento de calle
+       pgr.kmh,    -- limite de velocidad del segmento
+       pgr.x1,     -- longitud del nodo inicial
+       pgr.y1,     -- latitud del noto inicial
+       pgr.x2,     -- longitud del nodo final
+       pgr.y2,     -- latitud del nodo final
+       ST_X(point) as lon, -- longitud del punto proyectado
+       ST_Y(point) as lat  -- latitud del punto proyectado
+from (
+    select 
         pgr.*,  -- datos del segmento de calle 
         ST_LineInterpolatePoint(
             geom_way, 
@@ -222,11 +220,13 @@ FROM (
                 geom_way, 
                 :geom
             )
-        ) AS point -- punto proyectado
-    FROM asu_2po_4pgr AS pgr
-    WHERE ST_DWithin(:geom, geom_way, :dist)
+        ) as point -- punto proyectado
+    from asu_2po_4pgr as pgr
+    where ST_DWithin(:geom, geom_way, :dist)
 ) a
 \end{lstlisting}
+
+Una vez que se han obtenidos todos los conjuntos $C_i = \{c_{i}^{1}, c_{i}^{2}, \dots, c_{i}^{m}\}$ correspondientes a cada punto $p_i$ de la trayectoria $T$, el problema de MM se reduce a cómo seleccionar un punto candidato $c_i$ de cada conjunto $C_i$, a partir del cual se obtiene el segmento de calle $e_i$, de manera tal que el camino real resultante $R = \{ e_1, e_2, \dots, e_n \}$ sea lo más aproximado posible a $T = \{ p_1, p_2, \dots, p_n\}$, conforme se describe en los siguientes apartados.
 
 \subsection{Análisis Espacial y Temporal}
 
@@ -283,6 +283,7 @@ F_{ t }(c_{ i-1 }^{ j },c_{ i }^{ k })=\frac { \sum _{ m=1 }^{ n }{ (e_{ m }.v\t
 \end{equation}
 
 \subsection{Búsqueda del Resultado}
+
 \label{busqueda_de_resultado}
 El resultado de los procesos descritos anteriormente es un grafo acíclico dirigido de puntos candidatos, que representa todos los posibles caminos entre el punto inicial $p_1$ y el punto final $p_n$ de la trayectoria $T$. Como se muestra en la \Cref{fig:grafo_de_candidatos}, los nodos del grafo corresponden a los candidatos de cada punto $p_i$ y las aristas representan los caminos más cortos entre cada par de candidatos $c_{i-1}^j$ y $c_i^k$ consecutivos. A cada arista se le asigna un peso de acuerdo a la probabilidad de transmisión entre su vértice inicial y final, y a la probabilidad de observación del vértice inicial.
 
@@ -292,35 +293,35 @@ El resultado de los procesos descritos anteriormente es un grafo acíclico dirig
 	\caption{\label{fig:grafo_de_candidatos} Grafo de puntos candidatos}	
 \end{figure}
 
-Para asignar el peso a cada arista se combinan la \cref{funcion_espacial} y la \cref{funcion_temporal} para definir la función espacio-temporal de la siguiente forma:
+Para asignar el peso a cada arista se combinan la \cref{funcion_espacial} y la \cref{funcion_temporal} definiendo así la función espacio-temporal de la siguiente forma:
 \begin{equation} \label{funcion_espacio_temporal}
 F(c_{i-1}^{j},c_{i}^{k}) = F_s(c_{i-1}^{j},c_{i}^{k}) \times F_{ t }(c_{ i-1 }^{ j },c_{ i }^{ k }), 2 \leq i \leq n
 \end{equation}
 
 Dada una secuencia de puntos candidatos $C_T = \{c_1, c_2, \dots, c_n\}$, el peso global se define como $F(C_T) = \sum _{ i=2 }^{ n }{F(c_{i-1}^{j},c_{i}^{k})}$, es decir, es la sumatoria de los pesos de todas las aristas que componen la secuencia. El objetivo del algoritmo es obtener la secuencia que tenga el mayor peso.
 
-El \Cref{alg:st_matching} muestra los pasos realizados para obtener la secuencia. El primer paso es construir el grafo $G_T$ de puntos candidatos. Para ello se obtienen todos los conjuntos de puntos candidatos $C_i$ correspondientes a cada punto $p_i$ de la trayectoria $T$. El siguiente paso, es la obtención del resultado final. Primeramente se asigna a todos los candidatos del primer conjunto $C_1$ el valor de su probabilidad de observación $N(c_i^k)$. Luego, para los demás conjuntos $C_i$, se obtienen los valores de la función espacio-temporal para cada par de candidatos consecutivos $c_{i-1}^j$ y $c_i^k$ y para cada $c_i^k$ se guarda el punto candidato previo $c_{i-1}^j$ cuyo valor acumulado sea el mayor. Finalmente se selecciona un punto candidato $c_n^k$ del último conjunto $C_n$, que tenga el valor acumulado más alto y se obtienen todos los puntos candidatos que conforman el camino.
+El \Cref{alg:st_matching} muestra los pasos realizados para obtener la secuencia de puntos candidatos. El primer paso es construir el grafo $G_T$ de puntos candidatos. Para ello se obtienen todos los conjuntos de puntos candidatos $C_i$ correspondientes a cada punto $p_i$ de la trayectoria $T$. El siguiente paso, es la obtención del resultado final. Primeramente se asigna a todos los candidatos del primer conjunto $C_1$ el valor de su probabilidad de observación $N(c_i^k)$. Luego, para los demás conjuntos $C_i$, se obtienen los valores de la función espacio-temporal para cada par de candidatos consecutivos $c_{i-1}^j$ y $c_i^k$, y para cada $c_i^k$ se guarda el punto candidato previo $c_{i-1}^j$ cuyo valor acumulado sea el mayor. Finalmente se selecciona un punto candidato $c_n^k$ del último conjunto $C_n$, que tenga el valor acumulado más alto y se obtienen todos los puntos candidatos que conforman el camino.
 
 \begin{algorithm}
 \caption{ST-Matching}
 \label{alg:st_matching}
 \begin{algorithmic}[1]
 \Procedure {STMatching}{$G:$ grafo de calles, $T:$ trayectoria}
-	\State $G_T = ObtenerCandidatos(G,T)$
-	\State $R = ObtenerResultado(G_T)$
+	\State $G_T = \Call{ObtenerCandidatos}{G,T}$
+	\State $R = \Call{ObtenerResultado}{G_T}$
 	\State \Return $R$
 \EndProcedure
 \Statex
-\Procedure {ObtenerCandidatos}{$G:$ grafo de calles, $T:$ trayectoria}
+\Function {ObtenerCandidatos}{$G:$ grafo de calles, $T:$ trayectoria}
 	\State Inicializar $G_T$ a un conjunto vacío
 	\For {$p_i \in T, 1 \leq i \leq n$} 
 		\State $C_i = SeleccionarCandidatos(p_i, G)$
 		\State Agregar $C_i$ a $G_T$
 	\EndFor
 	\State \Return $G_T$
-\EndProcedure
+\EndFunction
 \Statex
-\Procedure {ObtenerResultado}{$G_T:$ grafo de candidatos}
+\Function {ObtenerResultado}{$G_T:$ grafo de candidatos}
 	\State Definir $f[]$ como el máximo peso computado hasta ahora
 	\State Definir $pre[]$ como el padre del punto candidato actual
 	\ForAll {$c_1^k$}
@@ -348,7 +349,7 @@ El \Cref{alg:st_matching} muestra los pasos realizados para obtener la secuencia
 	\State Agregar $c$ a $C$
 	\State Invertir $C$
 	\State \Return $C$
-\EndProcedure
+\EndFunction
 \end{algorithmic}
 \end{algorithm}
 
@@ -366,14 +367,20 @@ donde ${ \hat { { v } } _{ j }(k) }$ es la velocidad estimada en la calle $j$ du
 
 Para obtener el estado estimado del tráfico en un momento dado, se utiliza la \Cref{lst:trafico} que da como resultado todos los segmentos de calle $A_iB_i$ formados por los puntos $A_i(r.x1, r.y1)$ y $B_i(r.x2, r.y2)$ junto con la cantidad de muestras disponibles y la sumatoria de las velocidades observadas en dichas muestras durante un periodo de tiempo determinado. Con ello se aplica la \Cref{eq:velocidad_media} para estimar la \emph{velocidad media local} de cada segmento de calle.
 
-\begin{lstlisting}[caption={Obtención de datos de tráfico}, label={lst:trafico}]
-SELECT r.x1, r.y1, r.x2, r.y2, COUNT(l.id), SUM(l.velocidad)
-FROM Localizacion l, Asu2po4pgr r
-WHERE l.wayId = r.id AND l.fecha BETWEEN :inicio AND :fin
-GROUP BY r.id
+\begin{lstlisting}[float,floatplacement=tbh,caption={Obtención de datos de tráfico}, label={lst:trafico}]
+select 
+    pgr.x1,            -- longitud del nodo inicial
+    pgr.y1,            -- latitud del nodo inicial
+    pgr.x2,            -- longitud del nodo final
+    pgr.y2,            -- latitud del nodo final
+    count(l.id),     -- cantidad de muestras observadas
+    sum(l.velocidad) -- sumatoria de velocidades observadas
+from localizacion as l, asu_2po_4pgr as pgr
+where l.wayId = r.id and l.fecha between :inicio and :fin
+group by r.id
 \end{lstlisting}
 
-Finalmente, para representar la información obtenida en intervalos discretos que faciliten su interpretación, se definen cuatro posibles niveles de velocidad en una calle:
+Finalmente, para representar la información obtenida en intervalos que faciliten su interpretación, se definen cuatro posibles niveles de velocidad en una calle:
 \begin{enumerate}
 \item \textbf{Rojo:}  para velocidades entre 0 y 14 kilómetros por hora.
 \item \textbf{Naranja:}  para velocidades entre 15 y 29 kilómetros por hora.
