@@ -10,8 +10,12 @@
 \usepackage{booktabs}
 \usepackage{cleveref}
 \usepackage[section]{placeins}
+\usepackage{caption}
+\usepackage{pgfplots}
 
+\pgfplotsset{width=10cm,compat=1.9}
 
+\DeclareCaptionFormat{mylst}{\hrule\hrule#1#2#3}
 \captionsetup[lstlisting]{format=mylst,labelfont=bf,singlelinecheck=off,labelsep=space}
 
 % Cambia el nombre de "cuadro" a "tabla" cuando se usa \cref{tab:alguna_tabla}
