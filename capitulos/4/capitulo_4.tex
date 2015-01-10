@@ -195,9 +195,9 @@ El algoritmo propuesto en \cite{quddus2006high} funciona de forma muy similar al
 \draw [arrow] (pro4) -- (dec1);
 \draw [arrow] (dec1) -- node[anchor=east] {Sí} (dec2);
 \draw [arrow] (dec1.west) -- ++(-2cm,0cm) |- node[anchor=east, yshift=-3cm] {No} (pro2.west);
-\draw [arrow] (dec2.east) -- ++(2cm,0cm) |- node[anchor=west, yshift=-3cm] {Sí} (pro3.east);
+\draw [arrow] (dec2.east) -- ++(2cm,0cm) |- node[anchor=west, yshift=-3cm] {No} (pro3.east);
 \draw [arrow] (dec2) -- node[anchor=west] {Sí} (pro5);
-\draw [arrow] (pro5) -- node[anchor=east]  {No} (pro6);
+\draw [arrow] (pro5) -- (pro6);
 
 \end{tikzpicture}
 \end{singlespace}

@@ -16,7 +16,7 @@
 \usepackage{algpseudocode}
 \input{spanish_algorithmic}
 
-\bibliographystyle{unsrt} % Numeros ordenados por entrada
+\bibliographystyle{alpha} % Numeros ordenados por entrada
 
 \DeclareOption{draft}{ \@isdrafttrue  \PassOptionsToClass{draft}{report} }
 \DeclareOption{final}{ \@isdraftfalse \PassOptionsToClass{final}{report} }
