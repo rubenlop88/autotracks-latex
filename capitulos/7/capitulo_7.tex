@@ -3,7 +3,7 @@
 
 En el presente capítulo se describen las pruebas de campo realizadas y los resultados obtenidos. El primer grupo de pruebas tuvo por objetivo determinar los valores más adecuados para los parámetros utilizados en la recolección de FCD, tanto en el reconocimiento de actividad como en la toma de localizaciones. El segundo grupo de pruebas se realizó con el objetivo determinar la efectividad del sistema implementado, para ello se verificó la tasa de acierto del algoritmo de MM y se analizaron los datos obtenidos para determinar las horas pico y los días con mayor flujo de tráfico.
 
-Para las pruebas se utilizaron dispositivos móviles de diversa gama y se realizaron tanto en vehículos de transporte público, como en vehículos privados. Debido a la complejidad y a la gran cantidad de variables intervinientes en el funcionamiento del sistema se optó por realizar pruebas de campo en lugar de utilizar simulaciones.
+Debido a la complejidad y a la gran cantidad de variables intervinientes en el funcionamiento del sistema se optó por realizar pruebas de campo en lugar de utilizar simulaciones. Para las pruebas se utilizaron dispositivos móviles de diversa gama y se realizaron tanto en vehículos de transporte público, como en vehículos privados, también se analizaron los datos generados por usuarios reales del sistema. 
 
 \section{Deducción de parámetros para FCD}
 
@@ -91,7 +91,7 @@ A continuación se presenta el desempeño del MM para un mismo recorrido utiliza
 
 \section{Análisis de Tráfico}
 
-Para realizar las pruebas de análisis de tráfico se distribuyó la aplicación Autotracks a través de Google Play\footnote{https://play.google.com/store} y se observaron los resultados obtenidos a durante un periodo de 5 semanas de uso de la aplicación. Durante ese periodo de tiempo un promedio de 212 usuarios utilizaron la aplicación diariamente, generando un total de 123419 puntos observados desde sus dispositivos móviles. En la \Cref{fig:cantidad_usuarios} se observa la cantidad de usuarios activos por día durante el periodo de prueba.
+Para realizar las pruebas de análisis de tráfico se distribuyó la aplicación Autotracks a través de Google Play\footnote{https://play.google.com/store} y se observaron los resultados obtenidos a durante un periodo de 5 semanas de uso de la aplicación. Durante ese periodo de tiempo un promedio de 212 usuarios utilizaron la aplicación diariamente, generando un total de 123419 puntos observados desde sus dispositivos móviles. Debido a que los usuarios pueden activar o desactivar los sensores de sus teléfonos, no se hace distinción entre los puntos obtenidos a través de GPS, Wifi o triangulación de antenas. En la \Cref{fig:cantidad_usuarios} se observa la cantidad de usuarios activos por día durante el periodo de prueba.
 
 \begin{figure}[h]
 	\centering
@@ -146,7 +146,7 @@ Con el objetivo de caracterizar el flujo de tráfico a lo largo de una semana, s
 
 En la \Cref{table:localizaciones_por_hora} se puede observar la distribución de las localizaciones durante las horas del día. Las horas con mayor cantidad de localizaciones recibidas son en la mañana de 6 a 9 y por la tarde de 17 a 19. Durante los días entre semana que son normalmente laborales, se hace más notoria esta diferencia. Mientras que durante los fines de semana la horas con mayor cantidad de localizaciones se encuentran hacia el mediodía.
 
-\begin{table}[h]
+\begin{table}[!h]
 	\centering
 	\begin{tabular}{cccc}
         \toprule
@@ -291,13 +291,13 @@ Otro parámetro que caracteriza el flujo de tráfico es la velocidad promedio de
 
 El resultado del análisis de tráfico puede ser observado en tiempo real por los usuarios de la aplicación móvil, o accediendo a accediendo a la aplicación web desarrollada para el efecto. En la \Cref{fig:trafico_lunes} se puede observar un ejemplo del estado del tráfico observado en un día lunes a las 9 de la mañana, como se puede ver existe una gran cantidad de calles con niveles de velocidad bajo. La \Cref{fig:trafico_sabado} corresponde al estado del tráfico observado un día sábado a las 9 de la mañana, se puede apreciar que existe una menor cantidad de información y que los niveles de velocidad son más variados con relación a un día lunes a la misma hora, esto se debe a que durante los fines de semana se registra una menor cantidad de localizaciones.
 
-\begin{figure}[!htb]
+\begin{figure}[!ht]
 	\centering
 	\includegraphics[width=0.7\textwidth]{capitulos/7/figuras/figura6.jpg}
 	\caption{\label{fig:trafico_lunes} Tráfico en día lunes a las 9 am}	
 \end{figure}
 
-\begin{figure}[!htb]
+\begin{figure}[!ht]
 	\centering
 	\includegraphics[width=0.7\textwidth]{capitulos/7/figuras/figura7.jpg}
 	\caption{\label{fig:trafico_sabado} Tráfico en día sábado a las 9 am}	
