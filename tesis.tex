@@ -1,4 +1,4 @@
-\documentclass[spanish]{fpunathesis}
+\documentclass[spanish,english]{fpunathesis}
 
 \usepackage{babel}
 \usepackage[utf8]{inputenc}
@@ -15,11 +15,6 @@
 
 \pgfplotsset{width=10cm,compat=1.9}
 
-\DeclareCaptionFormat
-{mylst}{\hrule\hrule#1#2#3}
-\captionsetup[lstlisting]{format=mylst,labelfont=bf,singlelinecheck=off,labelsep=space}
-
-
 \usetikzlibrary{shapes.geometric, arrows, positioning}
 
 % Definimos los componentes que usaremos para dibujar los diagramas
@@ -27,12 +22,6 @@
 \tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text badly centered, text width=5cm, draw=black, fill=white, inner sep=10pt, font=\footnotesize]
 \tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text badly centered, text width=3cm, draw=black, fill=white, font=\footnotesize, aspect=2]
 \tikzstyle{arrow} = [thick, ->, >=stealth, font=\footnotesize]
-
-% Define block styles
-%\tikzstyle{decision} = [diamond, draw, fill=blue!20, text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
-%\tikzstyle{block} = [rectangle, draw, fill=blue!20, text width=5em, text centered, rounded corners, minimum height=4em]
-%\tikzstyle{line} = [draw, -latex']
-%\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=3cm, minimum height=2em]
 
 % Definimos el caption para los listings, similar al de los algoritmos
 \DeclareCaptionFormat{lstcaption}{\hrule\hrule#1#2#3}
@@ -58,13 +47,17 @@
 \logosource{logo.png}
 \maketitle
 
+\input{resumen}
+
 \tableofcontents
+
 \listoffigures
 \listoftables
 \listofalgorithms
 \lstlistoflistings
 
 \mainmatter
+
 \input{capitulos/1/capitulo_1}
 \input{capitulos/2/capitulo_2}
 \input{capitulos/3/capitulo_3}
@@ -73,6 +66,7 @@
 \input{capitulos/6/capitulo_6}
 \input{capitulos/7/capitulo_7}
 \input{capitulos/8/capitulo_8}
+
 \bibliography{referencias}
 
 \end{document}
