@@ -49,24 +49,26 @@ El reconocimiento de actividad consiste en determinar la acción que está reali
 
 En \cite{liao2006location,bao2004activity,ravi2005activity} se describen técnicas que permiten detectar la actividad mediante los sensores GPS y el acelerómetro de los dispositivos móviles. En \cite{thiagarajan2010cooperative} se utilizan estas técnicas de reconocimiento de actividad para determinar si el usuario está en un vehículo en movimiento. En Autotracks, en lugar de implementar un algoritmo de reconocimiento de actividad propio, se reutiliza una implementación proveída como parte de Google Play Services\footnote{http://developer.android.com/google/play-services/index.html}, denominada Activity Recognition\footnote{http://developer.android.com/training/location/activity-recognition.html}, que permite detectar distintos tipos de actividad del usuario, por ejemplo si está en un vehículo, en bicicleta, caminando, corriendo, o si está totalmente quieto.
 
-Autotracks consulta periódicamente la actividad del usuario, cuando se ha detectado que el usuario se encuentra en un vehículo en movimiento se inicia el servicio de toma de localizaciones, este servicio permanece activo mientras el usuario se encuentra en movimiento. El intervalo de tiempo utilizado en la detección de actividad del usuario es de 15 segundos. Una vez que se ha detectado que el usuario ya no está en movimiento durante más de 10 minutos, el servicio de toma de localizaciones es detenido. Se utiliza la tolerancia de 10 minutos para evitar que el servicio se detenga cuando el vehículo se encuentra momentáneamente detenido en espera de algún evento, como en un semáforo en rojo, esperando por alguna persona o en un embotellamiento. Los valores utilizados en la detección de actividad fueron determinados empíricamente.
+Autotracks consulta periódicamente la actividad del usuario, cuando se ha detectado que el usuario se encuentra en un vehículo en movimiento se inicia el servicio de toma de localizaciones, este servicio permanece activo mientras el usuario se encuentra en movimiento. Para detectar la actividad del usuario se utiliza un intervalo de 30 segundos. Una vez que se ha detectado que el usuario ya no está en movimiento durante más de 10 minutos, el servicio de toma de localizaciones es detenido. Se utiliza la tolerancia de 10 minutos para evitar que el servicio se detenga cuando el vehículo se encuentra momentáneamente detenido en espera de algún evento, como en un semáforo en rojo, esperando por alguna persona o en un embotellamiento. Los valores previamente mencionados fueron determinados y ajustados empíricamente.
 
 El \Cref{alg:deteccion_actividad} muestra el procedimiento ejecutado periódicamente cada vez que se obtiene un resultado del reconocimiento de actividad. Este procedimiento verifica si la toma de localizaciones está o no iniciada y se encarga de iniciarla o finalizarla de acuerdo a la actividad detectada. El resultado de la detección es almacenado para ser utilizado en la siguiente invocación del procedimiento. Si se ha detectado que el usuario está en un vehículo, el tiempo en el que ocurrió la detección también es almacenado para utilizarlo en la siguiente invocación. En el sub-procedimiento $\Call {EstaEnVehiculo}{}$, si el usuario está a pie se detiene inmediatamente el rastreo, si está en un vehículo se continúa con el rastreo, y en cualquier otro caso (está en bicicleta, o quieto, o no se pudo determinar la actividad) se verifica el estado anterior de movimiento y el tiempo de la última detección de movimiento antes de tomar una decisión.
  
 \begin{algorithm}
-\caption{Reconocimiento de Actividad}
+\caption{Procedimientos de Reconocimiento de Actividad}
 \label{alg:deteccion_actividad}
 \begin{algorithmic}[1]
 \Procedure{ActividadDetectada}{$actividad$}
 	\State $enVehiculo =$ \Call {EstaEnVehiculo}{$actividad$}
-	\State Guardar $enVehiculo$ como el último estado detectado  
+%	\State Guardar $enVehiculo$ como el último estado detectado  
 	\If {$enVehiculo$}
-		\If {El rastreo no está iniciado}
-			\State Iniciar el rastreo
+		\State $ultimoEstado = \text{EN\_VEHICULO}$
+		\If {RASTREO no está iniciado}
+			\State Iniciar RASTREO
 		\EndIf
 	\Else
-		\If {El rastreo está iniciado}
-			\State Finalizar el rastreo
+		\State $ultimoEstado = null$
+		\If {RASTREO está iniciado}
+			\State Finalizar RASTREO
 		\EndIf
 	\EndIf
 \EndProcedure
@@ -74,19 +76,23 @@ El \Cref{alg:deteccion_actividad} muestra el procedimiento ejecutado periódicam
 \Function {EstaEnVehiculo}{$actividad$}
 	\If {$actividad == \text{A\_PIE}$}
 		\State \Return $falso$
-	\EndIf
-	\State Inicializar $t$ al tiempo actual
-	\If {$actividad == \text{EN\_VEHICULO}$}
-		\State Guardar $t$ como el tiempo de la última detección
-		\State \Return $verdadero$
-	\EndIf
-	\State Inicializar $estabaEnVehiculo$ al último estado detectado
-	\If {$estabaEnVehiculo$}
-		\State Inicializar $t_0$  al tiempo de la última detección
-		\State $\Delta t = t - t_0$
-		\State \Return {$\Delta t \leq$ TOLERANCIA}
 	\Else
-		\State \Return $falso$
+		\State Inicializar $t$ al tiempo actual
+		\If {$actividad == \text{EN\_VEHICULO}$}
+			\State $t\_ultimaDeteccion = t$ 
+			\State \Return $verdadero$
+		\Else
+		\If {$ultimoEstado == \text{EN\_VEHICULO}$}
+			\State $\Delta t = t - t\_ultimaDeteccion$
+			\If {$\Delta t \leq$ TOLERANCIA}
+				\State \Return $verdadero$
+			\Else
+				\State \Return $falso$
+			\EndIf
+		\Else
+			\State \Return $falso$
+		\EndIf
+		\EndIf
 	\EndIf
 \EndFunction
 \end{algorithmic}
@@ -98,10 +104,10 @@ El \Cref{alg:deteccion_actividad} muestra el procedimiento ejecutado periódicam
 Para obtener la ubicación de los teléfonos móviles existen varias opciones posibles, cada una con sus ventajas y desventajas, estas son: 
 \begin{itemize}
 \item \textbf{Triangulación de antenas}: Utiliza las antenas de telefonía para determinar la posición. Requiere un uso mínimo de batería pero produce resultados de baja precisión, dependiendo de la técnica utilizada la precisión varía de 50 a 200 metros en áreas urbanas, y hasta más de 2 kilómetros en zonas suburbanas.
-\item \textbf{WiFi}: Utiliza las posiciones conocidas de los puntos de acceso Wifi para estimar la ubicación. El uso de la batería es moderado y produce resultados con una precisión de menos de 50 metros. No es apropiado para zonas rurales donde existen una escasa cantidad de puntos de acceso Wifi.
+\item \textbf{WiFi}: Utiliza las posiciones conocidas de los puntos de acceso Wifi para estimar la ubicación. El uso de la batería es moderado y produce resultados con una precisión de menos de 50 metros. No es apropiado para zonas rurales donde existe una escasa cantidad de puntos de acceso Wifi de referencia.
 \item \textbf{GPS}: Utiliza la red de satélites GPS para obtener la posición del dispositivo. Este mecanismo requiere un alto consumo de batería y su precisión es de menos de 10 metros en el mejor caso. La precisión disminuye considerablemente cuando se pierde la visibilidad de los satélites.
 \end{itemize}
-A fin de tener la mayor flexibilidad posible, Autotracks es capaz de trabajar con cualquiera de estas opciones para obtener la ubicación de los dispositivos. Para ello se reutiliza una implementación denominada Fused Location Provider\footnote{http://developer.android.com/training/location/receive-location-updates.html} que está disponible como parte Google Play Services.
+A fin de tener la mayor flexibilidad posible, Autotracks es capaz de trabajar con cualquiera de estas opciones para obtener la ubicación de los dispositivos. Para ello se reutiliza una implementación denominada \emph{Fused Location Provider}\footnote{http://developer.android.com/training/location/receive-location-updates.html} que está disponible como parte \emph{Google Play Services}.
 
 En los casos en los que la localización es obtenida a través de las redes GSM o WiFi no se dispone de la información de velocidad, la cual es necesaria para el procesamiento posterior. Para paliar esta falta de información, la velocidad es estimada utilizando la localización anterior de la siguiente manera: \begin{equation} \label{eq:velocidad} v=\frac { d }{ t } \end{equation} donde $d$ es la distancia entre la localización actual y la anterior, y $t$ es el tiempo que transcurrió entre la toma de las localizaciones.
 
@@ -112,15 +118,14 @@ Algunas de las localizaciones capturadas pueden llegar a ser demasiado imprecisa
 \label{alg:toma_de_localizaciones}
 \begin{algorithmic}[1]
 \Procedure {RegistrarLocalizacion}{$localizacion$}
-	\State $enValida = \Call{EsValida}{localizacion}$
+	\State $esValida = \Call{EsValida}{localizacion}$
 	\If {$esValida$}
-		\State Guardar $localizacion$ como la última localización obtenida
+		\State $ultimaLocalizacion = localizacion$
 	\EndIf
 \EndProcedure
 \Statex
 \Function {EsValida}{$localizacion$}
-	\State Inicializar $p$ a la precisión de la $localizacion$
-	\State Inicializar $ultimaLocalizacion$ a la última localizacón guardada
+	\State Inicializar $p$ a la precisión de la $localizacion$	
 	\State $\Delta d = \Call{CalcularDistancia}{localizacion, ultimaLocalizacion}$
 	\State $\Delta t = \Call{CalcularTiempo}{localizacion, ultimaLocalizacion}$
 	\State $v = \Delta d / \Delta t$
@@ -129,7 +134,7 @@ Algunas de las localizaciones capturadas pueden llegar a ser demasiado imprecisa
 \end{algorithmic}
 \end{algorithm}
 
-Otro aspecto importante a tener en cuenta es la frecuencia con la que se toman las localizaciones. En \cite{tao2012real} se sugiere que intervalos de entre 10 y 20 segundos son los recomendados en aplicaciones prácticas. En \cite{fontaine2005part} se reivindica que intervalos de muestras más largos permiten obtener información sobre mayores distancias y reduce la probabilidad de capturar velocidades no representativas. En \cite{lou2009map,giovannini2011novel} se utilizan localizaciones con intervalos de más de 3 minutos en aplicaciones \emph{off-line}. Para lograr un balance entre la frecuencia y el consumo de batería, se establece un intervalo de 60 segundos para el muestreo utilizado en Autotracks, dicho valor también fue determinado empíricamente realizando pruebas en dispositivos de diversa gama.
+Otro aspecto importante a tener en cuenta es la frecuencia con la que se toman las localizaciones. En \cite{tao2012real} se sugiere que intervalos de entre 10 y 20 segundos son los recomendados en aplicaciones prácticas. En \cite{fontaine2005part} se reivindica que intervalos de muestras más largos permiten obtener información sobre mayores distancias y reduce la probabilidad de capturar velocidades no representativas. En \cite{lou2009map,giovannini2011novel} se utilizan localizaciones con intervalos de más de 3 minutos en aplicaciones \emph{off-line}. Para lograr un balance entre la frecuencia y el consumo de batería, se establece un intervalo de 60 segundos para el muestreo utilizado en Autotracks, dicho valor también fue determinado empíricamente realizando pruebas de campo en dispositivos de diversa gama.
 
 \subsection{Envío de datos}
 
@@ -144,7 +149,7 @@ Para enviar las localizaciones no es necesario que el usuario haya finalizado co
 
 Un proceso de Map Matching (MM) es ejecutado cada vez que las trayectorias de los vehículos son enviadas desde los teléfonos móviles al servidor central para determinar el camino real recorrido por cada vehículo. Para realizar este proceso se utiliza el algoritmo propuesto por \cite{lou2009map}, conocido como ST-Matching, con las mejoras propuestas por \cite{budigm2012algorithm} y \cite{sakic2012map}. 
 
-ST-Matching es un algoritmo topológico específicamente diseñado para funcionar de forma \emph{off-line} y con intervalos de tiempo relativamente largos entre las puntos. Su implementación es sencilla comparada con otras técnicas avanzadas como \cite{quddus2006high, newson2009hidden} y no requiere de procesamientos y cálculos matemáticos complejos. Estas características se adecuan a los requerimientos impuestos por la arquitectura de la solución propuesta. 
+ST-Matching es un algoritmo topológico específicamente diseñado para funcionar de forma \emph{off-line} y con intervalos de tiempo relativamente largos entre las muestras. Su implementación es sencilla comparada con otras técnicas avanzadas como \cite{quddus2006high, newson2009hidden} y no requiere de procesamientos y cálculos matemáticos complejos. Estas características se adecuan a los requerimientos impuestos por la arquitectura de la solución propuesta. 
 
 El algoritmo ST-Matching consta de tres partes principales: \begin{enumerate*}[a)]
 \item la \emph{Selección de Candidatos},
@@ -200,6 +205,8 @@ El primer paso es seleccionar todos los segmentos de calles $e \in E$ tales que 
 Para la obtención de cada conjunto $C_i$ se ejecuta la \Cref{lst:candidatos}, donde los comandos precedidos por el prefijo \emph{ST\_} son funciones espaciales implementadas por PostGIS. Utilizando \emph{ST\_DWithin} se obtienen todos los segmentos de calle que se encuentren a una distancia menor o igual a un radio $r$ del punto observado $p$. Luego, el punto observado es proyectado sobre cada segmento de calle utilizando \emph{ST\_LineLocatePoint} y \emph{ST\_LineInterpolatePoint} para obtener el punto candidato correspondiente.
 
 \begin{lstlisting}[float,floatplacement=!htb,caption={Selección de puntos candidatos}, label={lst:candidatos}]
+-- geom es la geometria del punto p
+-- dist es el radio r de consideracion
 select pgr.id,     -- identificador del segmento de calle 
        pgr.source, -- identificador del nodo inicial
        pgr.target, -- identificador del nodo final
