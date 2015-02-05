@@ -1,6 +1,6 @@
 %% Creator: Inkscape 0.48.3.1, www.inkscape.org
 %% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
-%% Accompanies image file 'figura61.pdf' (pdf, eps, ps)
+%% Accompanies image file 'figura62.pdf' (pdf, eps, ps)
 %%
 %% To include the image in your LaTeX document, write
 %%   \input{<filename>.pdf_tex}
@@ -49,7 +49,7 @@
   \global\let\svgscale\undefined%
   \makeatother%
   \begin{picture}(1,0.48076923)%
-    \put(0,0){\includegraphics[width=\unitlength]{figura61.pdf}}%
+    \put(0,0){\includegraphics[width=\unitlength]{figura62.pdf}}%
     \put(0.74506648,0.40239269){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{\scriptsize{Búsqueda de Resultado}}}}%
     \put(0.7630833,0.29078721){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{\scriptsize{Camino Recorrido}}}}%
     \put(0.41048068,0.25474172){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{\scriptsize{Análisis Temporal}}}}%
