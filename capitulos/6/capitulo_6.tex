@@ -15,7 +15,9 @@ En la \Cref{fig:arquitectura} se ilustra la arquitectura modular del sistema des
 	\caption{\label{fig:arquitectura} Arquitectura de+l Sistema}	
 \end{figure}
 
-Para el almacenamiento de la información se utiliza el motor de base de datos PostgreSQL\footnote{http://www.postgresql.org/} al que además se agregan las extensiones PostGIS\footnote{http://postgis.net/}, que añade capacidades GIS, y pgRouting\footnote{http://pgrouting.org/}, que añade funciones de ruteo geoespacial. Por otro lado, con el propósito de recolectar la información de FCD se cuenta con una aplicación móvil desarrollada para sistemas operativos Android\footnote{http://developer.android.com/index.html} 2.3 o superior, que se ejecuta en los dispositivos de los usuarios. Por último, para el procesamiento y recuperación de la información se cuenta con una aplicación web desarrollada con tecnología Java EE\footnote{http://docs.oracle.com/javaee/} que implementa servicios REST a través de los cuáles la aplicación móvil envía y obtiene datos del servidor.
+Para el almacenamiento de la información se utiliza el motor de base de datos PostgreSQL\footnote{http://www.postgresql.org/} al que además se agregan las extensiones PostGIS\begin{flushright}
+	\footnote{http://postgis.net/}
+\end{flushright}, que añade capacidades GIS, y pgRouting\footnote{http://pgrouting.org/}, que añade funciones de ruteo geoespacial. Por otro lado, con el propósito de recolectar la información de FCD se cuenta con una aplicación móvil desarrollada para sistemas operativos Android\footnote{http://developer.android.com/index.html} 2.3 o superior, que se ejecuta en los dispositivos de los usuarios. Por último, para el procesamiento y recuperación de la información se cuenta con una aplicación web desarrollada con tecnología Java EE\footnote{http://docs.oracle.com/javaee/} que implementa servicios REST a través de los cuáles la aplicación móvil envía y obtiene datos del servidor.
 
 \section{Almacenamiento de datos}
 \label{base-de-datos}
@@ -114,24 +116,28 @@ En los casos en los que la localización es obtenida a través de las redes GSM 
 Algunas de las localizaciones capturadas pueden llegar a ser demasiado imprecisas como para ser utilizadas en el procesamiento posterior. Para evitar este tipo de localizaciones erróneas se utilizan dos técnicas de filtrado. El primer método consiste simplemente en descartar las localizaciones que reportan una precisión mayor a 200 metros. El segundo método consiste en determinar la velocidad a la que tuvo que haber viajado el vehículo para pasar de la posición anterior a la posición actual utilizando la \cref{eq:velocidad}, si dicha velocidad es mayor a un valor preestablecido, en este caso de 140 km/h, la localización es descartada. Además, también se descartan las localizaciones que son muy próximas entre sí debido a que el algoritmo de MM utilizado en una siguiente etapa requiere que las localizaciones sean relativamente distantes entre sí. Los valores de referencia fueron determinados empíricamente en sucesivas pruebas de campo. En el \Cref{alg:toma_de_localizaciones} se describe el procedimiento utilizado para registrar una localización.
 
 \begin{algorithm}
-\caption{Toma de Localizaciones}
-\label{alg:toma_de_localizaciones}
-\begin{algorithmic}[1]
-\Procedure {RegistrarLocalizacion}{$localizacion$}
-	\State $esValida = \Call{EsValida}{localizacion}$
-	\If {$esValida$}
+	\caption{Toma de Localizaciones}
+	\label{alg:toma_de_localizaciones}
+	\begin{algorithmic}[1]
+		\Procedure {Registrar}{$localizacion$}
+		\State $esValida = \Call{EsValida}{localizacion}$
+		\If {$esValida$}
 		\State $ultimaLocalizacion = localizacion$
-	\EndIf
-\EndProcedure
-\Statex
-\Function {EsValida}{$localizacion$}
-	\State Inicializar $p$ a la precisión de la $localizacion$	
-	\State $\Delta d = \Call{CalcularDistancia}{localizacion, ultimaLocalizacion}$
-	\State $\Delta t = \Call{CalcularTiempo}{localizacion, ultimaLocalizacion}$
-	\State $v = \Delta d / \Delta t$
-	\State \Return $\Delta d > \text{D\_MINIMA} \land v < \text{V\_MAXIMA} \land p < \text{P\_MAXIMA}$
-\EndFunction
-\end{algorithmic}
+		\EndIf
+		\EndProcedure
+		\Statex
+		\Function {EsValida}{$localizacion$}
+		\State Inicializar $p$ a la precisión de la $localizacion$	
+		\State $\Delta d = \Call{Distancia}{localizacion, ultimaLocalizacion}$
+		\State $\Delta t = \Call{Tiempo}{localizacion, ultimaLocalizacion}$
+		\State $v = \Delta d / \Delta t$
+		\If {$\Delta d > \text{D\_MIN} \land v < \text{V\_MAX} \land p < \text{P\_MAX}$}
+		\State \Return $verdadero$
+		\Else
+		\State \Return $falso$
+		\EndIf
+		\EndFunction
+	\end{algorithmic}
 \end{algorithm}
 
 Otro aspecto importante a tener en cuenta es la frecuencia con la que se toman las localizaciones. En \cite{tao2012real} se sugiere que intervalos de entre 10 y 20 segundos son los recomendados en aplicaciones prácticas. En \cite{fontaine2005part} se reivindica que intervalos de muestras más largos permiten obtener información sobre mayores distancias y reduce la probabilidad de capturar velocidades no representativas. En \cite{lou2009map,giovannini2011novel} se utilizan localizaciones con intervalos de más de 3 minutos en aplicaciones \emph{off-line}. Para lograr un balance entre la frecuencia y el consumo de batería, se establece un intervalo de 60 segundos para el muestreo utilizado en Autotracks, dicho valor también fue determinado empíricamente realizando pruebas de campo en dispositivos de diversa gama.
@@ -284,7 +290,7 @@ Dados dos puntos candidatos $c_{i-1}^{j}$ y $c_{i}^{k}$ correspondientes a dos p
 \begin{equation}
 \overline{v} = \frac { \sum_{m=1}^{n} {e_m.l} }{ \Delta t_{i-1, i} }
 \end{equation}
-donde $e_m.l$ es la longitud del segmento $e_m$ y $\Delta t_{i-1, i} = p_i.t - p_{i-1}.t$ es el intervalo de tiempo entro dos puntos consecutivos de la trayectoria. Además, cada segmento $e_m$ tiene una velocidad $e_m.v$ correspondiente al límite de velocidad de la calle. La Similaridad Coseno\footnote{} es utilizada para medir la semejanza entre $\overline{v}$ y los límites de velocidad. De esta forma, la función de análisis temporal queda definida así:
+donde $e_m.l$ es la longitud del segmento $e_m$ y $\Delta t_{i-1, i} = p_i.t - p_{i-1}.t$ es el intervalo de tiempo entro dos puntos consecutivos de la trayectoria. Además, cada segmento $e_m$ tiene una velocidad $e_m.v$ correspondiente al límite de velocidad de la calle. La Similaridad Coseno\footnote{http://es.wikipedia.org/wiki/Similitud\_coseno} es utilizada para medir la semejanza entre $\overline{v}$ y los límites de velocidad. De esta forma, la función de análisis temporal queda definida así:
 \begin{equation} \label{funcion_temporal}
 F_{ t }(c_{ i-1 }^{ j },c_{ i }^{ k })=\frac { \sum _{ m=1 }^{ n }{ (e_{ m }.v\times \overline { v } ) }  }{ \sqrt { \sum _{ m=1 }^{ n }{ (e_{ m }.v)^{ 2 } }  } \times \sqrt { \sum _{ m=1 }^{ n }{ (\overline { v } )^{ 2 } }  }  } 
 \end{equation}
