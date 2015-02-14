@@ -48,15 +48,15 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.8)%
+  \begin{picture}(1,0.6)%
     \put(0,0){\includegraphics[width=\unitlength]{figura63.pdf}}%
-    \put(0.14305481,0.20022251){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_1$}}}%
-    \put(0.35728371,0.35561565){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_2$}}}%
-    \put(0.53505672,0.45166679){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_3$}}}%
-    \put(0.6328294,0.46310989){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_4$}}}%
-    \put(0.68460365,0.5149231){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_5$}}}%
-    \put(0.8246785,0.55966726){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_6$}}}%
-    \put(0.05250977,0.07374825){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_1.ini$}}}%
-    \put(0.2887314,0.25341022){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_1.fin$}}}%
+    \put(0.14305481,0.15622251){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_1$}}}%
+    \put(0.35728371,0.31161565){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_2$}}}%
+    \put(0.53505672,0.40766679){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_3$}}}%
+    \put(0.6328294,0.41910989){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_4$}}}%
+    \put(0.68460365,0.4709231){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_5$}}}%
+    \put(0.8246785,0.51566726){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_6$}}}%
+    \put(0.05250977,0.02974825){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_1.ini$}}}%
+    \put(0.2887314,0.20941022){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_1.fin$}}}%
   \end{picture}%
 \endgroup%

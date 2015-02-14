@@ -48,11 +48,11 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.8)%
+  \begin{picture}(1,0.6)%
     \put(0,0){\includegraphics[width=\unitlength]{figura64.pdf}}%
-    \put(0.13954498,0.06582306){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$p_1$}}}%
-    \put(0.28040642,0.38572338){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$p_2$}}}%
-    \put(0.56871159,0.54369884){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$p_3$}}}%
-    \put(0.89387772,0.46734406){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$p_4$}}}%
+    \put(0.13954498,0.04982306){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$p_1$}}}%
+    \put(0.28040642,0.36972338){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$p_2$}}}%
+    \put(0.56871159,0.52769884){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$p_3$}}}%
+    \put(0.89387772,0.45134406){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$p_4$}}}%
   \end{picture}%
 \endgroup%
