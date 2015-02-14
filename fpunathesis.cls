@@ -435,7 +435,7 @@
 }{\end{@oldthebibliography}}
 
 % some corrections of spanish leyends given by babel %
-\AtBeginDocument{
+\newcommand{\spanishcorrections}{
   \renewcommand{\contentsname}{Índice General}
   \renewcommand\listtablename{Índice de Tablas}
   \renewcommand\listfigurename{Índice de Figuras}
@@ -445,6 +445,9 @@
   \renewcommand\tablename{Tabla}
   \floatname{algorithm}{Algoritmo}
   \if@isdraft\setlength\overfullrule{5pt}\fi
+  % Cambia el nombre de "cuadro" a "tabla" cuando se usa \cref{tab:alguna_tabla}
+  \crefname{table}{tabla}{tablas}
+  \crefname{listing}{consulta}{consultas}
 }
 
 
