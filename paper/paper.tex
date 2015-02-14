@@ -1,0 +1,107 @@
+\documentclass[conference,spanish]{IEEEtran}
+
+
+
+\usepackage{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[inline,shortlabels]{enumitem}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{color}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage[section]{placeins}
+\usepackage{pgfplots}
+\usepackage{cleveref}
+
+
+  
+\bibliographystyle{ieeetr} % Numeros ordenados por entrada
+\input{spanish_algorithmic}
+\pgfplotsset{width=10cm,compat=1.9}
+
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+
+% Definimos los componentes que usaremos para dibujar los diagramas
+\tikzstyle{start}  = [rectangle, minimum width=2cm, minimum height=1cm, text badly centered, text width=2cm, draw=black, fill=white, inner sep=10pt, font=\footnotesize, rounded corners]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text badly centered, text width=5cm, draw=black, fill=white, inner sep=10pt, font=\footnotesize]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text badly centered, text width=3cm, draw=black, fill=white, font=\footnotesize, aspect=2]
+\tikzstyle{arrow} = [thick, ->, >=stealth, font=\footnotesize]
+
+% Definimos el caption para los listings, similar al de los algoritmos
+\DeclareCaptionFormat{lstcaption}{\hrule\hrule#1#2#3}
+\captionsetup[lstlisting]{format=lstcaption,labelfont=bf,singlelinecheck=off,labelsep=space}
+
+% Cambia el nombre de "cuadro" a "tabla" cuando se usa \cref{tab:alguna_tabla}
+\crefname{table}{tabla}{tablas}
+\crefname{listing}{consulta}{consultas}
+
+% Incluimos los graficos en formato pdf_tex
+\graphicspath{
+	{apartados/figuras/}
+}
+
+\begin{document}
+
+  \renewcommand{\lstlistingname}{\textbf{Consulta}}
+  \renewcommand\tablename{Tabla}
+  \floatname{algorithm}{Algoritmo}
+  \floatname{table}{Tabla}
+  
+	% paper title
+	% can use linebreaks \\ within to get better formatting as desired
+	\title{Aproximación colaborativa del tránsito vehicular basado en aplicaciones móviles}
+	
+	% author names and affiliations
+	% use a multiple column layout for up to three different
+	% affiliations
+	\author{
+		\IEEEauthorblockN{Alfredo Campuzano}
+		\IEEEauthorblockA{Facultad Politécnica\\
+			Universidad Nacional de Asunción\\
+			San Lorenzo - Paraguay\\
+			acampuzano@outlook.com}
+		\and
+		\IEEEauthorblockN{Rubén López}
+		\IEEEauthorblockA{Facultad Politécnica\\
+			Universidad Nacional de Asunción\\
+			San Lorenzo - Paraguay\\
+			ruben.lopez@konecta.com.py}
+		\and
+		\IEEEauthorblockN{Joaquín Lima}
+		\IEEEauthorblockA{Facultad Politécnica\\
+			Universidad Nacional de Asunción\\
+			San Lorenzo - Paraguay\\
+			joaquin.lima@pol.una.py}}
+
+	% make the title area
+	\maketitle
+	
+	\begin{abstract}
+El aumento del parque automotor en los países en vías de desarrollo representa un problema debido a que las ciudades no cuentan con infraestructura vial planificada y tampoco con tecnología instalada para monitorear el estado del tráfico, lo cual dificulta el tránsito diario y deteriora la calidad de vida de los ciudadanos. Aprovechando el crecimiento en la utilización de teléfonos móviles inteligentes, equipados con sensores GPS, surge la posibilidad de utilizar esta tecnología para obtener información sobre el estado del tráfico de forma económica y eficiente. En este trabajo se presentan los detalles de implementación del sistema denominado Autotracks, que permite recolectar y procesar información del tránsito vehicular a través de dispositivos móviles para aproximar el estado del tráfico en tiempo real. Se utiliza un esquema de \emph{Floating Car Data} en combinación con técnicas de detección de actividad para monitorear la ubicación de los vehículos en movimiento. La trayectoria real de los vehículos es determinada mediante un proceso de \emph{Map Matching}. Todas las trayectorias son agregadas para aproximar el estado del tráfico en un período de tiempo dado.
+	\end{abstract}
+	
+	\begin{IEEEkeywords}
+		Map Matching, Floating Car Data, GIS, Activity Recognition, Traffic State Estimation, Mobile Tracking
+	\end{IEEEkeywords}
+	
+	
+	
+	% For peerreview papers, this IEEEtran command inserts a page break and
+	% creates the second title. It will be ignored for other modes.
+	\IEEEpeerreviewmaketitle
+	
+	\input{apartados/apartado_1}
+	\input{apartados/apartado_2}
+	\input{apartados/apartado_3}
+	\input{apartados/apartado_4}
+	\input{apartados/apartado_5}
+	\input{apartados/apartado_6}
+	\input{apartados/apartado_7}
+	
+	\bibliography{referencias}
+\end{document}	

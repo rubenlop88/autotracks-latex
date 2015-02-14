@@ -1345,9 +1345,9 @@
                 \IEEEiedlistdecl% let user alter parameters
                 #1\relax%
                 % If the user has requested not to use the
-                % labelindent factor, don't revise \labelindent
+                % labelindent factor, don't revise \labeslindent
                 \ifIEEEnolabelindentfactor\relax%
-                \else\IEEElabelindent=\IEEElabelindentfactor\labelindent%
+                \else\IEEElabelindent=\IEEElabelindentfactor\labeslindent%
                 \fi%
                 % Unless the user has requested otherwise,
                 % calculate our left margin based
@@ -4706,7 +4706,7 @@ Use \@IEEEbackslash #2 instead.}}
 
 
 % provide for legacy IED commands/lengths when possible
-\let\labelindent\IEEElabelindent
+\let\labeslindent\IEEElabelindent
 \def\calcleftmargin{\@IEEElegacywarn{calcleftmargin}{IEEEcalcleftmargin}\IEEEcalcleftmargin}
 \def\setlabelwidth{\@IEEElegacywarn{setlabelwidth}{IEEEsetlabelwidth}\IEEEsetlabelwidth}
 \def\usemathlabelsep{\@IEEElegacywarn{usemathlabelsep}{IEEEusemathlabelsep}\IEEEusemathlabelsep}

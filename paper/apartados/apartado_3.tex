@@ -1,0 +1,24 @@
+\section{Map Matching}
+\label{sec:map_matching}
+
+Se conoce como \emph{Map Matching} (MM) al proceso de identificar la trayectoria seguida por un vehículo en una red de calles a partir de muestras recolectadas acerca de su ubicación. Este proceso es utilizado en una gran variedad de servicios y aplicaciones GIS, como la predicción de trayectorias de usuarios \cite{eisner2011algorithms}, sistemas de navegación en vehículos \cite{kim2001adaptive}, control del estado del tránsito \cite{thiagarajan2009vtrack}, estimación de llegada de buses \cite{thiagarajan2010cooperative}, entre otros.
+
+Para dar una definición formal del problema de MM deben tenerse en cuenta los siguientes conceptos:
+
+\textbf{Muestra o Punto}: Una muestra o punto es el conjunto de todas las mediciones recolectadas por el vehículo en un instante dado. Estas mediciones incluyen la localización del vehículo, su dirección de desplazamiento, su velocidad, etc.
+
+\textbf{Trayectoria}: Una trayectoria es una secuencia ordenada de muestras o puntos pertenecientes a un vehículo recolectados durante un viaje del mismo.
+
+\textbf{Red de calles}: Una red de calles es un grafo dirigido que representa la forma y las propiedades del sistema de calles de un área geográfica en particular. Los vértices del grafo describen las intersecciones entre las calles y las aristas representan la forma y los atributos de las calles.
+
+\textbf{Camino reconstruido}: Un camino reconstruido es una secuencia ordenada de calles conectadas entre sí a través de las cuáles se infiere que el vehículo pudo haber transitado.
+
+En función a lo anterior, el problema de MM puede definirse de la siguiente forma: \emph{Dada una trayectoria T y una red de calles G, encontrar el camino real R que hace coincidir a T con su reconstrucción más realista sobre G.}
+
+\subsection{Clasificación de algoritmos de MM}
+
+De acuerdo a la información y las técnicas utilizadas para su implementación los algoritmos de MM se pueden clasificar en: \begin{enumerate*}[1)]\item \emph{geométricos}, que utilizan sólo la información de posición y distancia entre las calles y puntos \cite{white2000some}, son sencillos de implementar y suelen utilizarse como paso inicial en la implementación de otros algoritmos; \item \emph{topológicos}, que incorporan información topológica de la red de calles \cite{lou2009map,yuan2010interactive,greenfeld2002matching,quddus2003general}, utilizan información sobre la conectividad, restricciones de giro, sentido y límite de velocidad de las calles; \item \emph{estadísticos}, que definen regiones de probabilidad alrededor de cada punto y analizan los tramos dentro de dichas regiones \cite{ochieng2009map}, estos análisis estadísticos también se utilizan como parte de otros algoritmos, y \item \emph{avanzados}, que combinan diversas técnicas geométricas, topológicas y estadísticas con otros conceptos tales como \emph{Filtros de Kalman}, \emph{Modelos Ocultos de Markov}, \emph{Lógica Difusa}, entre otros \cite{thiagarajan2009vtrack,quddus2006high,thiagarajan2011accurate,fang2011enacq}\end{enumerate*}.
+
+De acuerdo al momento en el que se realiza el procesamiento de los datos, existen dos categorías: \begin{enumerate*}[1)] \item los algoritmos \emph{incrementales} u \emph{on-line}, que realizan el proceso de MM a medida que se van obteniendo nuevos puntos \cite{thiagarajan2009vtrack,thiagarajan2011accurate,greenfeld2002matching,quddus2003general,quddus2006high} y se utilizan en aplicaciones de tiempo real como asistentes personales de navegación, y \item los algoritmos \emph{globales} u \emph{off-line}, que realizan el proceso MM luego de que se han recolectado todos los puntos \cite{lou2009map,yuan2010interactive} y se utilizan en aplicaciones de análisis de tráfico o estudios sobre el comportamiento de usuarios\end{enumerate*}.
+
+Dependiendo de la frecuencia de muestreo se pueden identificar dos categorías más: \begin{enumerate*}[1)] \item los algoritmos para \emph{alta frecuencia} o \emph{high-sampling}, que típicamente trabajan con intervalos de muestra en el rango de los pocos segundos y generalmente se ejecutan de forma \emph{on-line} \cite{greenfeld2002matching,quddus2003general,quddus2006high}, y \item los algoritmos para \emph{baja frecuencia} o \emph{low-sampling},  que funcionan para intervalos de muestreo de varios minutos y se ejecutan generalmente de forma \emph{off-line} \cite{lou2009map,yuan2010interactive}. \end{enumerate*} En general todos los algoritmos pueden ser alimentados con muestras de alta o baja frecuencia pero ciertos algoritmos dejan de ser efectivos a medida que disminuye la frecuencia de muestreo.
