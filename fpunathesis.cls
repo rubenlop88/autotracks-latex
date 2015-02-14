@@ -445,10 +445,9 @@
   \renewcommand\tablename{Tabla}
   \floatname{algorithm}{Algoritmo}
   \if@isdraft\setlength\overfullrule{5pt}\fi
-  % Cambia el nombre de "cuadro" a "tabla" cuando se usa \cref{tab:alguna_tabla}
-  \crefname{table}{tabla}{tablas}
-  \crefname{listing}{consulta}{consultas}
 }
+
+
 
 
 \lstset{
