@@ -36,7 +36,7 @@
   }%
   \providecommand\rotatebox[2]{#2}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{400bp}%
+    \setlength{\unitlength}{240bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -50,8 +50,10 @@
   \makeatother%
   \begin{picture}(1,1)%
     \put(0,0){\includegraphics[width=\unitlength]{arquitectura.pdf}}%
-    \put(0.20181329,0.67999999){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Módulo Web}}}%
-    \put(0.55806042,0.67999999){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Base de Datos GIS}}}%
-    \put(0.22997258,0.40126745){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Internet}}}%
+    \put(0.14985912,0.69144307){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Servicios REST}}}%
+    \put(0.50666117,0.69144307){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Base de Datos GIS}}}%
+    \put(0.23271299,0.4222117){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Internet}}}%
+    \put(0.51597234,0.27498656){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Aplicación Web de consulta}}}%
+    \put(0.03008057,0.02554931){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Aplicación móvil Autotracks}}}%
   \end{picture}%
 \endgroup%

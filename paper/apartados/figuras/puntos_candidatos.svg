@@ -8,13 +8,13 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="200"
-   height="200"
-   viewBox="0 0 160 160"
+   width="140"
+   height="140"
+   viewBox="0 0 112 112"
    version="1.1"
    id="svg2"
    inkscape:version="0.48.4 r9939"
-   sodipodi:docname="figura65.pdf">
+   sodipodi:docname="puntos_candidatos.svg">
   <metadata
      id="metadata4286">
     <rdf:RDF>
@@ -23,7 +23,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -41,7 +41,7 @@
      id="namedview4284"
      showgrid="false"
      inkscape:zoom="2.1485064"
-     inkscape:cx="117.51187"
+     inkscape:cx="57.00472"
      inkscape:cy="164.29291"
      inkscape:window-x="-9"
      inkscape:window-y="-9"
@@ -6791,7 +6791,7 @@
   </defs>
   <g
      id="g15742"
-     transform="translate(-32.58692,56.30369)">
+     transform="matrix(0.7,0,0,0.7,-22.810844,39.412583)">
     <g
        transform="translate(-104,-262.4)"
        clip-path="url(#clipPath15641)"

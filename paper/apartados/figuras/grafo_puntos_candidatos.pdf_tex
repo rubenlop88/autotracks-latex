@@ -1,6 +1,6 @@
 %% Creator: Inkscape 0.48.3.1, www.inkscape.org
 %% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
-%% Accompanies image file 'trayectoria_vehiculo.pdf' (pdf, eps, ps)
+%% Accompanies image file 'grafo_puntos_candidatos.pdf' (pdf, eps, ps)
 %%
 %% To include the image in your LaTeX document, write
 %%   \input{<filename>.pdf_tex}
@@ -48,11 +48,18 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.6)%
-    \put(0,0){\includegraphics[width=\unitlength]{trayectoria_vehiculo.pdf}}%
-    \put(0.13954498,0.04982306){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$p_1$}}}%
-    \put(0.28040642,0.36972338){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$p_2$}}}%
-    \put(0.56871159,0.52769884){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$p_3$}}}%
-    \put(0.89387772,0.45134406){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$p_4$}}}%
+  \begin{picture}(1,0.4)%
+    \put(0,0){\includegraphics[width=\unitlength]{grafo_puntos_candidatos.pdf}}%
+    \put(0.1246668,0.0104899){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$C_1$}}}%
+    \put(0.36827357,0.0104899){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$C_2$}}}%
+    \put(0.85548716,0.0104899){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$C_n$}}}%
+    \put(0.08377785,0.25521646){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$c_1^1$}}}%
+    \put(0.08377785,0.16270751){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$c_1^2$}}}%
+    \put(0.40738464,0.28481933){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$c_2^1$}}}%
+    \put(0.40738464,0.21081217){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$c_2^2$}}}%
+    \put(0.40738464,0.136805){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$c_2^3$}}}%
+    \put(0.88126485,0.25521646){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$c_n^1$}}}%
+    \put(0.88126485,0.16270751){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$c_n^2$}}}%
+    \put(0.1700323,0.3218227){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$c_1^1 \to c_2^1$}}}%
   \end{picture}%
 \endgroup%
