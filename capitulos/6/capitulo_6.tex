@@ -12,7 +12,7 @@ En la \Cref{fig:arquitectura} se ilustra la arquitectura modular del sistema des
 \begin{figure}[h]
 	\centering
 	\input{capitulos/6/figuras/figura61.pdf_tex}
-	\caption{\label{fig:arquitectura} Arquitectura del Sistema}	
+	\caption{\label{fig:arquitectura} Arquitectura de+l Sistema}	
 \end{figure}
 
 Para el almacenamiento de la información se utiliza el motor de base de datos PostgreSQL\footnote{http://www.postgresql.org/} al que además se agregan las extensiones PostGIS\footnote{http://postgis.net/}, que añade capacidades GIS, y pgRouting\footnote{http://pgrouting.org/}, que añade funciones de ruteo geoespacial. Por otro lado, con el propósito de recolectar la información de FCD se cuenta con una aplicación móvil desarrollada para sistemas operativos Android\footnote{http://developer.android.com/index.html} 2.3 o superior, que se ejecuta en los dispositivos de los usuarios. Por último, para el procesamiento y recuperación de la información se cuenta con una aplicación web desarrollada con tecnología Java EE\footnote{http://docs.oracle.com/javaee/} que implementa servicios REST a través de los cuáles la aplicación móvil envía y obtiene datos del servidor.

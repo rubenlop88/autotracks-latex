@@ -50,8 +50,10 @@
   \makeatother%
   \begin{picture}(1,1)%
     \put(0,0){\includegraphics[width=\unitlength]{figura61.pdf}}%
-    \put(0.20181329,0.67999999){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Módulo Web}}}%
-    \put(0.55806042,0.67999999){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Base de Datos GIS}}}%
-    \put(0.22997258,0.40126745){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Internet}}}%
+    \put(0.1664729,0.69199999){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Servicios REST}}}%
+    \put(0.54041101,0.69199999){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Base de Datos GIS}}}%
+    \put(0.22997253,0.41326745){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Internet}}}%
+    \put(0.59022882,0.27799999){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Aplicación Web de consulta}}}%
+    \put(0.09934504,0.02599999){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{Aplicación móvil Autotracks}}}%
   \end{picture}%
 \endgroup%
