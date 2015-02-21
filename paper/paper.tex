@@ -1,7 +1,5 @@
 \documentclass[conference,spanish]{IEEEtran}
 
-
-
 \usepackage{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -17,20 +15,13 @@
 \usepackage[section]{placeins}
 \usepackage{pgfplots}
 \usepackage{cleveref}
-
-
   
 \bibliographystyle{ieeetr} % Numeros ordenados por entrada
-\input{spanish_algorithmic}
+\input{../spanish}
+
 \pgfplotsset{width=10cm,compat=1.9}
 
 \usetikzlibrary{shapes.geometric, arrows, positioning}
-
-% Definimos los componentes que usaremos para dibujar los diagramas
-\tikzstyle{start}  = [rectangle, minimum width=2cm, minimum height=1cm, text badly centered, text width=2cm, draw=black, fill=white, inner sep=10pt, font=\footnotesize, rounded corners]
-\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text badly centered, text width=5cm, draw=black, fill=white, inner sep=10pt, font=\footnotesize]
-\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text badly centered, text width=3cm, draw=black, fill=white, font=\footnotesize, aspect=2]
-\tikzstyle{arrow} = [thick, ->, >=stealth, font=\footnotesize]
 
 % Definimos el caption para los listings, similar al de los algoritmos
 \DeclareCaptionFormat{lstcaption}{\hrule\hrule#1#2#3}
@@ -47,10 +38,10 @@
 
 \begin{document}
 
-  \renewcommand{\lstlistingname}{\textbf{Consulta}}
-  \renewcommand\tablename{Tabla}
-  \floatname{algorithm}{Algoritmo}
-  \floatname{table}{Tabla}
+    \renewcommand{\lstlistingname}{\textbf{Consulta}}
+    \renewcommand\tablename{Tabla}
+    \floatname{algorithm}{Algoritmo}
+    \floatname{table}{Tabla}
   
 	% paper title
 	% can use linebreaks \\ within to get better formatting as desired
@@ -88,9 +79,7 @@ El aumento del parque automotor en los países en vías de desarrollo representa
 	\begin{IEEEkeywords}
 		Map Matching, Floating Car Data, GIS, Activity Recognition, Traffic State Estimation, Mobile Tracking
 	\end{IEEEkeywords}
-	
-	
-	
+
 	% For peerreview papers, this IEEEtran command inserts a page break and
 	% creates the second title. It will be ignored for other modes.
 	\IEEEpeerreviewmaketitle
@@ -103,5 +92,6 @@ El aumento del parque automotor en los países en vías de desarrollo representa
 	\input{apartados/apartado_6}
 	\input{apartados/apartado_7}
 	
-	\bibliography{referencias}
+	\bibliography{../referencias}
+
 \end{document}	

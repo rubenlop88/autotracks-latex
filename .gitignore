@@ -34,6 +34,8 @@
 *.vrb
 *.xdy
 *.tdo
-*.pdf
 *.lol
 Thumbs.db
+libro/tesis.pdf
+paper/paper.pdf
+presentacion/presentacion.pdf

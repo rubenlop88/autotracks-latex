@@ -14,9 +14,9 @@
 \usepackage{listings}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
-\input{spanish_algorithmic}
+\input{../spanish}
 
-\bibliographystyle{alpha} % Numeros ordenados por entrada
+\bibliographystyle{apalike} % Numeros ordenados por entrada
 
 \DeclareOption{draft}{ \@isdrafttrue  \PassOptionsToClass{draft}{report} }
 \DeclareOption{final}{ \@isdraftfalse \PassOptionsToClass{final}{report} }
