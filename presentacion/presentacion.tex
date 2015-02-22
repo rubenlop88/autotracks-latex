@@ -8,7 +8,7 @@
           bullet=circle,% Use circles instead of squares for bullets.
           titleline=true,% Show a line below the frame title.
           alternativetitlepage=true,% Use the fancy title page.
-          titlepagelogo=../book/graphics/logo.png,% Logo for the first page.
+          titlepagelogo=../logo.png,% Logo for the first page.
           ]{Torino}
 % Nouvelle is a green and red alternative to the chameleon color theme.
 \usecolortheme{freewilly}
@@ -47,8 +47,8 @@
 \newcommand{\thismonth}{\monthname,\ \the\year}
 
 
-\author{\  \\ Autor del trabajo}
-\title{Titulo del trabajo}
+\author{\  \\ Autor del trabajo \\Autor 2}
+\title{Aproximación colaborativa del tránsito vehicular basada en aplicaciones móviles}
 \institute{Facultad Politécnica- UNA}
 %pone la fecha de generación como portada
 \date{\thismonth}
@@ -60,7 +60,7 @@
 \begin{frame}[t,plain]
 \titlepage
 \end{frame}
-\include{./introduccion}
+\input{./introduccion}
 %~ \include{./propuesta/objetivos}
 %~ \include{./propuesta/modelo-propuesto}
 %~ \include{./resultados/resultados}
@@ -68,6 +68,8 @@
 %~ \include{./conclusion/trabajos-futuros}
 %~ \include{./conclusion/aportes}
 %~ \include{./conclusion/despedida}
+\input{./recoleccionDatosTrafico}
+
 
 %\include{./anexos/anexos}
 
