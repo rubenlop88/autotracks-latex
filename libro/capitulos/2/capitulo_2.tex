@@ -1,7 +1,7 @@
 \chapter{Sistemas de Información Geográfica}
 \label{cap:2}
 
-Se conocen como Sistemas de Información Geográfica (\emph{Geographic Information Systems} - GIS) a aquellos sistemas basados en computadoras diseñados para la recolección, mantenimiento, análisis y distribución de datos e información geográfica \cite{bolstad2005gis}. Un GIS es un sistema de hardware, software, personas, datos, organización y mecanismos institucionales para recoger, almacenar, analizar y difundir información geográfica \cite{longley2005geographic}.
+Se conocen como Sistemas de Información Geográfica (\emph{Geographic Information Systems} - GIS) a aquellos sistemas basados en computadoras diseñados para la recolección, mantenimiento, análisis y distribución de datos e información geográfica \citep{bolstad2005gis}. Un GIS es un sistema de hardware, software, personas, datos, organización y mecanismos institucionales para recoger, almacenar, analizar y difundir información geográfica \citep{longley2005geographic}.
 
 Los GIS ayudan en el análisis y la toma de decisiones basadas en información geográfica y son aplicables en diversas áreas de la actividad humana como la planificación para el desarrollo de zonas urbanas y rurales, la delimitación de propiedades y el cobro de  impuestos, el análisis del flujo del tráfico en ciudades, etc. En este capítulo se explican los conceptos fundamentales que sirven de base para el desarrollo del GIS propuesto en este trabajo.
 
@@ -36,11 +36,11 @@ Los sistemas de coordenadas geográficas se componen de la \emph{latitud}, que v
 
 %TODO explicar qué es Geodesia.
 
-Con el sistema de coordenadas definido se procede a estimar las longitudes y latitudes de todas las demás ubicaciones a través de mediciones. Mediante estas estimaciones se establecen un conjunto de puntos de referencia para los cuales la latitud y la longitud han sido precisamente determinadas. Todas las demás coordenadas se miden en referencia a este conjunto de puntos. El conjunto de puntos resultante se conoce como \emph{datum geodésico}.  Un datum geodésico consta de dos componentes principales. El primer componente es un elipsoide con un sistema de coordenadas esféricas o cartesianas de tres dimensiones y un origen. La segunda parte consiste en un conjunto de puntos y líneas cuyas coordenadas han sido medidas cuidadosamente utilizando los mejores métodos y equipos \cite{bolstad2005gis}.
+Con el sistema de coordenadas definido se procede a estimar las longitudes y latitudes de todas las demás ubicaciones a través de mediciones. Mediante estas estimaciones se establecen un conjunto de puntos de referencia para los cuales la latitud y la longitud han sido precisamente determinadas. Todas las demás coordenadas se miden en referencia a este conjunto de puntos. El conjunto de puntos resultante se conoce como \emph{datum geodésico}.  Un datum geodésico consta de dos componentes principales. El primer componente es un elipsoide con un sistema de coordenadas esféricas o cartesianas de tres dimensiones y un origen. La segunda parte consiste en un conjunto de puntos y líneas cuyas coordenadas han sido medidas cuidadosamente utilizando los mejores métodos y equipos \citep{bolstad2005gis}.
 
 A lo largo de la historia diferentes estudios han determinado diversos valores para los radios y el centro del elipsoide. Debido a errores de medición, diferencias en los métodos de cálculo y a que la tierra no es un elipsoide perfecto, diferentes estimaciones alrededor del mundo tienen ligeramente diferentes orígenes, ejes de orientación y radios. Estas diferencias aunque pequeñas, generalmente resultan en estimaciones bastante diferentes para las coordenadas de una misma localización, dependiendo del elipsoide utilizado. En la actualidad las mediciones globales y la avanzada capacidad computacional permiten estimar elipsoides aplicables de forma global.
 
-El primer datum utilizado ampliamente en Norteamérica fue el \emph{North American Datum} de 1927 (NAD27), su sucesor fue el \emph{North American Datum} de 1983 (NAD83), las mejores estimaciones de las localizaciones de los puntos cambiaron en hasta 200 metros entre estos dos datums. En la \Cref{fig:datum-latitud} se puede apreciar el desplazamiento de la latitud entre los datums NAD83 y NAD27 y en la \Cref{fig:datum-longitud} se visualiza la diferencia de longitud entre los mismos. El \emph{World Geodetic System} de 1984 (WGS84) es un conjunto de datums globales desarrollado y utilizado principalmente por el Departamento de Defensa de los Estados Unidos y hoy en día es ampliamente aceptado y utilizado en todo el mundo \cite{longley2005geographic}.
+El primer datum utilizado ampliamente en Norteamérica fue el \emph{North American Datum} de 1927 (NAD27), su sucesor fue el \emph{North American Datum} de 1983 (NAD83), las mejores estimaciones de las localizaciones de los puntos cambiaron en hasta 200 metros entre estos dos datums. En la \Cref{fig:datum-latitud} se puede apreciar el desplazamiento de la latitud entre los datums NAD83 y NAD27 y en la \Cref{fig:datum-longitud} se visualiza la diferencia de longitud entre los mismos. El \emph{World Geodetic System} de 1984 (WGS84) es un conjunto de datums globales desarrollado y utilizado principalmente por el Departamento de Defensa de los Estados Unidos y hoy en día es ampliamente aceptado y utilizado en todo el mundo \citep{longley2005geographic}.
 
 \begin{figure}[h]
 	\centering
@@ -73,7 +73,7 @@ El primer datum utilizado ampliamente en Norteamérica fue el \emph{North Americ
 
 \section{Modelos de datos}
 
-Los fenómenos geográficos requieren de dos características para representar el mundo real; \emph{qué} se está representando, y \emph{dónde} está. Para lo primero comúnmente utilizamos conceptos como `ciudad', `calle', `río', etc. Los modelos de datos geográficos son los equivalentes formales de estos modelos conceptuales y definen las estructuras de datos abstractas que serán almacenadas en las bases de datos espaciales y manipuladas por el GIS \cite{burrough1998principles}.
+Los fenómenos geográficos requieren de dos características para representar el mundo real; \emph{qué} se está representando, y \emph{dónde} está. Para lo primero comúnmente utilizamos conceptos como `ciudad', `calle', `río', etc. Los modelos de datos geográficos son los equivalentes formales de estos modelos conceptuales y definen las estructuras de datos abstractas que serán almacenadas en las bases de datos espaciales y manipuladas por el GIS \citep{burrough1998principles}.
 
 \subsection{Modelo de Datos Vectorial}
 
@@ -124,7 +124,7 @@ Un TIN es una estructura topológica que almacena información acerca de los nod
 
 \section{Bases de Datos Espaciales}
 
-Una base de datos espacial es aquella en la que están definidos tipos de datos especiales para representar objetos geométricos y permite guardar estos objetos, que usualmente son de origen geográfico, en tablas regulares de una base de datos. Además provee funciones e índices para consultar y manipular estos datos \cite{obe2011postgis}. Las bases de datos espaciales no necesitan ser relacionales pero muchas de las más populares lo son.
+Una base de datos espacial es aquella en la que están definidos tipos de datos especiales para representar objetos geométricos y permite guardar estos objetos, que usualmente son de origen geográfico, en tablas regulares de una base de datos. Además provee funciones e índices para consultar y manipular estos datos \citep{obe2011postgis}. Las bases de datos espaciales no necesitan ser relacionales pero muchas de las más populares lo son.
 
 En las bases de datos espaciales se definen tipos de datos que representan puntos, líneas y polígonos a partir de los cuales se pueden construir otros tipos de datos más complejos y representar objetos del mundo real. Estas bases de datos están especialmente diseñadas para representar información en dos dimensiones en formato vectorial, pero también pueden almacenar datos \emph{raster} y topologías tridimensionales.
 

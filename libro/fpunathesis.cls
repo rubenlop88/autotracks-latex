@@ -16,7 +16,11 @@
 \usepackage{algpseudocode}
 \input{../spanish}
 
-\bibliographystyle{apalike} % Numeros ordenados por entrada
+\usepackage{natbib}
+\bibliographystyle{abbrvnat}
+\setcitestyle{authoryear,square}
+
+%\bibliographystyle{apalike} % Numeros ordenados por entrada
 
 \DeclareOption{draft}{ \@isdrafttrue  \PassOptionsToClass{draft}{report} }
 \DeclareOption{final}{ \@isdraftfalse \PassOptionsToClass{final}{report} }
