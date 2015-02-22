@@ -1,0 +1,72 @@
+\begin{frame}[c]
+	\begin{center}
+		\huge{Sistemas de Información Geográfica}
+    \end{center}
+\end{frame}
+
+\begin{frame}[c]{Sistemas de Información Geográfica}
+	\begin{center}
+	 Se conocen como Sistemas de Información Geográfica (\emph{Geographic Information Systems} - GIS) a aquellos sistemas basados en computadoras diseñados para la recolección, mantenimiento, análisis y distribución de datos e información geográfica 	
+	\end{center}
+\end{frame}
+
+\begin{frame}[c]{Sistemas de Información Geográfica}
+	\large{Para almacenar información geográfica se requiere:}
+	\vspace{\baselineskip}
+	\begin{center}
+		\begin{itemize}	 	
+			\item Seleccionar un sistema de coordenadas.
+			\item Seleccionar un modelo de datos.
+			\item Utilizar una base de datos espacial.
+		\end{itemize}			
+	\end{center}
+\end{frame}
+
+\begin{frame}[c]{Sistemas de Coordenadas}
+	Para	definir el sistema de coordenadas se tienen en cuenta:
+	\vspace{\baselineskip}
+	\begin{itemize}	 	
+		\item El tamaño y la forma de la Tierra (modelada como un elipsoide)	
+		\item Elementos de
+		referencia a partir de los cuales se puede determinar la ubicación de cualquier otro elemento
+	\end{itemize}			
+	\vspace{\baselineskip}	
+	Sistemas de coordenadas existentes:
+	\vspace{\baselineskip}
+	\begin{itemize}	 	
+		\item \emph{North American
+		Datum} de 1927 (NAD27)
+		\item \emph{North American Datum} de 1983
+		(NAD83)
+		\item \emph{World Geodetic System} de 1984 (WGS84)
+	\end{itemize}			
+\end{frame}
+
+\begin{frame}[c]{Modelos de Datos}
+	Definen las estructuras de datos abstractas que son almacenadas en las bases de datos espaciales.
+	\vspace{\baselineskip}
+	\begin{itemize}	
+		\item \textbf{Modelo de Datos Vectorial:} Representación de puntos, líneas y polígonos.	
+		\item \textbf{Modelo de Datos Raster:} Espacio dividido en colección de celdas
+		rectangulares.
+		\item \textbf{Modelos de Datos de Red:} Modelo vectorial que incluye información topológica.
+		\item \textbf{Red Irregular de Triángulos (TIN):} Representa superficies 3D como triángulos adyacentes.
+	\end{itemize}			
+\end{frame}
+
+%TODO Agregar frame con figuras de modelos de datos
+
+\begin{frame}[c]{Bases de Datos Espaciales}
+	Son aquellas que definen tipos de datos y funciones para representar y guardar objetos geométricos en tablas regulares de bases de datos.
+
+	\vspace{\baselineskip}
+	Ejemplos:
+
+	\vspace{\baselineskip}
+	\begin{itemize}	 	
+		\item PostgreSQL/PostGis.	
+		\item SQLite/SpatiaLite.
+		\item Oracle Spatial.
+	\end{itemize}			
+\end{frame}
+
