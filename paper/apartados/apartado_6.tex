@@ -3,16 +3,17 @@
 
 En esta sección se describen las pruebas de campo realizadas y los resultados obtenidos. Un primer grupo de pruebas tuvo por objetivo determinar los valores más adecuados para los parámetros utilizados en la recolección de FCD, tanto en el reconocimiento de actividad como en la toma de localizaciones. Otro grupo de pruebas se realizó con el objetivo determinar la efectividad del sistema implementado, para ello se verificó la tasa de acierto del algoritmo de MM y se analizaron los datos obtenidos para determinar las horas pico y los días con mayor flujo de tráfico.
 
-Debido a la complejidad y a la gran cantidad de variables intervinientes en el funcionamiento del sistema se optó por realizar pruebas de campo en lugar de utilizar simulaciones. Para las pruebas se utilizaron dispositivos móviles de diversa gama y se realizaron tanto en vehículos de transporte público, como en vehículos privados, también se analizaron los datos generados por usuarios reales del sistema. 
+Debido a la complejidad y a la gran cantidad de variables intervinientes en el funcionamiento del sistema se optó por realizar pruebas de campo en lugar de utilizar simulaciones. Para las pruebas se utilizaron dispositivos móviles de diversa gama y se realizaron tanto en vehículos de transporte público, como en vehículos privados, y por último se analizaron los datos generados por usuarios reales del sistema. 
 
 \subsection{Deducción de parámetros para FCD}
 
 En la recolección de FCD se utiliza un esquema de detección de actividad que permite a la aplicación registrar las localizaciones del usuario únicamente cuando se encuentra en un vehículo en movimiento. Para ello, la aplicación móvil verifica periódicamente cuál es la actividad que está realizando el usuario en base a las lecturas de los sensores del dispositivo. 
 
-El intervalo de tiempo en el que se realiza la verificación de actividad se denomina \emph{intervalo de reconocimiento} y determina qué tan rápido se detecta el movimiento para iniciar o finalizar el rastreo. Es importante tener en cuenta que mientras más corto es el intervalo, mayor es el consumo de batería debido a que el dispositivo móvil debe procesar más frecuentemente las muestras de los sensores. Para determinar el valor apropiado para el intervalo de reconocimiento se realizaron pruebas empíricas con diferentes valores obteniéndose para cada uno de ellos el tiempo promedio que tarda en detectarse el movimiento. 
+El intervalo de tiempo en el que se realiza la verificación de actividad se denomina \emph{intervalo de reconocimiento} y determina qué tan rápido se detecta el movimiento para iniciar o finalizar el rastreo. Es importante tener en cuenta que mientras más corto es el intervalo, mayor es el consumo de batería debido a que el dispositivo móvil debe procesar más frecuentemente las muestras de los sensores. 
 
-La \Cref{tab:prom_intervalo_reconocimiento} muestra el tiempo promedio que la aplicación tarda en detectar el movimiento e iniciar la toma de localizaciones para varios valores del intervalo de reconocimiento. Como se puede apreciar, un intervalo de reconocimiento corto ayuda a iniciar más rápidamente la toma de localizaciones. En base a las pruebas realizadas el intervalo de reconocimiento seleccionado es de 30 segundos, por ser el intervalo más largo que presenta un tiempo de respuesta que no causa pérdidas significativas en el trayecto rastreado.
+Para determinar el valor apropiado del intervalo de reconocimiento, que derive en un balance adecuado entre el consumo de batería y la rápida detección de movimiento, se realizaron pruebas empíricas con diferentes valores obteniéndose para cada valor el tiempo promedio que tarda en detectarse el movimiento. 
 
+La \Cref{tab:prom_intervalo_reconocimiento} muestra el tiempo promedio que la aplicación tarda en detectar el movimiento e iniciar la toma de localizaciones para varios valores del intervalo de reconocimiento. Como se puede apreciar, un intervalo de reconocimiento corto ayuda a iniciar más rápidamente la toma de localizaciones.
 
 \begin{table}[h]
   \centering
@@ -21,7 +22,7 @@ La \Cref{tab:prom_intervalo_reconocimiento} muestra el tiempo promedio que la ap
 	Intervalo (s) & Recorridos & En bus (min.) & En auto (min.) & Ambos (min.) \\
 	\midrule
 	15            & 30       & 1.55         & 1.25            & 1.40         \\
-	30            & 30       & 1.64         & 1.75            & 1.71         \\
+	30            & 30       & 1.64         & 1.30            & 1.47         \\
 	45            & 30       & 2.59         & 2.05            & 2.32         \\
 	60            & 30       & 4.37         & 2.75            & 3.66         \\
 	\bottomrule
@@ -30,12 +31,13 @@ La \Cref{tab:prom_intervalo_reconocimiento} muestra el tiempo promedio que la ap
   \label{tab:prom_intervalo_reconocimiento}
 \end{table}
 
+En base a las pruebas realizadas el intervalo de reconocimiento seleccionado es de 30 segundos, por ser el intervalo más largo que presenta un buen tiempo de respuesta con relación al consumo de batería producido por el número de veces de activación de los sensores. Debe notarse que el tiempo de detección de movimiento para el valor seleccionado, según las pruebas empíricas, oscila en promedio los 1.47 minutos, tiempo en el cual puede considerarse que los sensores fueron activados al menos en 3 oportunidades.
 
-El reconocimiento de actividad también es utilizado para detener la toma de localizaciones cuando el usuario ya no se encuentra en un vehículo en movimiento. Se debe tener en cuenta que durante una trayectoria el vehículo puede detenerse momentáneamente debido a diversas causas, como ser un semáforo en rojo o una parada de bus. En estos casos la toma de localizaciones no debe ser erróneamente detenida porque se producirían cortes en la captura del trayecto. 
+El reconocimiento de actividad también es utilizado para detener la toma de localizaciones cuando el usuario ya no se encuentra en un vehículo en movimiento. Se debe tener en cuenta que durante una trayectoria un vehículo puede detenerse momentáneamente debido a diversas causas, como ser un semáforo en rojo o una parada de bus. En estos casos la toma de localizaciones no debe ser erróneamente detenida porque se producirían cortes en la captura del trayecto, y podrían omitirse algunos segmentos debido a que existe un tiempo de espera en la detección de movimiento como se vio previamente.
 
-Para evitar cortes en el rastreo se introduce un \emph{tiempo de tolerancia} en el reconocimiento de actividad para detener el rastreo. Cada vez que se detecta el movimiento, se almacena el tiempo de detección y el rastreo no es detenido hasta que haya transcurrido el tiempo de tolerancia a partir de la última vez que se detectó movimiento. Se debe tener en cuenta también que un tiempo de tolerancia alto implica que se tardará más en detener el servicio de localización, lo que puede producir un impacto negativo en el consumo de batería.
+Así, para evitar cortes en el rastreo se introduce un \emph{tiempo de tolerancia} en el reconocimiento de actividad. Cada vez que se detecta el movimiento, se almacena el tiempo de detección y el rastreo no es detenido hasta que haya transcurrido el tiempo de tolerancia a partir de la última vez que se detectó movimiento. Se debe tener en cuenta también que un tiempo de tolerancia alto implica que se tardará más en detener el servicio de localización, lo que puede producir un impacto negativo en el consumo de batería debido a la activación innecesaria de los sensores.
 
-El tiempo que el dispositivo estuvo rastreando al usuario puede ser menor al tiempo total que duró realmente el viaje. El porcentaje de tiempo que el dispositivo estuvo rastreando al usuario con respecto al tiempo total que duró el viaje se denomina \emph{tiempo efectivo de rastreo}. Los valores de tiempo de tolerancia e intervalo de reconocimiento en conjunto influyen en el tiempo efectivo de rastreo por lo que deben ser escogidos apropiadamente.
+Por otra parte, el tiempo que el dispositivo estuvo rastreando al usuario puede ser menor al tiempo total que duró realmente el viaje. El porcentaje de tiempo que el dispositivo estuvo rastreando al usuario con respecto al tiempo total que duró el viaje se denomina \emph{tiempo efectivo de rastreo}. Los valores de tiempo de tolerancia e intervalo de reconocimiento en conjunto influyen en el tiempo efectivo de rastreo por lo que deben ser escogidos apropiadamente.
 
 En la \Cref{tab:prom_tiempo_efectivo_rastreo} se muestran los resultados acerca del tiempo efectivo de rastreo observado para diferentes combinaciones de valores de intervalo de reconocimiento y de tiempo de tolerancia considerados. 
 
@@ -45,21 +47,22 @@ En la \Cref{tab:prom_tiempo_efectivo_rastreo} se muestran los resultados acerca 
     	\toprule
     	Intervalo (s) & Tolerancia (min.) & En bus (\%) & En auto (\%) & Ambos (\%) \\
     	\midrule
-    	15            & 5                 & 89.31         & 93.67          & 91.49        \\
-    	30            & 5                 & 85.86         & 91.56          & 88.71        \\
-    	45            & 5                 & 83.34         & 89.32          & 86.33        \\
-    	60            & 5                 & 80.83         & 87.73          & 84.24        \\
-    	15            & 10                & 95.83         & 97.22          & 96.53        \\
-    	30            & 10                & 94.44         & 96.11          & 95.28        \\
-    	45            & 10                & 89.55         & 95.44          & 92.49        \\
-    	60            & 10                & 83.33         & 93.89          & 88.61        \\
+    	30            & 3                 & 85.86         & 91.56          & 88.71        \\
+    	30            & 5                 & 89.31         & 93.67          & 91.49        \\
+
+    	%45            & 5                 & 83.34         & 89.32          & 86.33        \\
+    	%60            & 5                 & 80.83         & 87.73          & 84.24        \\
+    	30            & 7                & 94.44         & 96.11          & 95.28        \\
+    	30            & 10                & 95.83         & 97.22          & 96.53        \\
+    	%45            & 10                & 89.55         & 95.44          & 92.49        \\
+    	%60            & 10                & 83.33         & 93.89          & 88.61        \\
     	\bottomrule
 	\end{tabular}
     \caption{Tiempos efectivos de rastreo}
     \label{tab:prom_tiempo_efectivo_rastreo}
 \end{table}
 
-De las pruebas realizadas puede notarse que con una tolerancia de 10 minutos combinada con un intervalo de reconocimiento de 30 segundos se obtienen coberturas del 95\%, seleccionándose dichos valores como apropiados para este trabajo.
+De las pruebas realizadas puede notarse que con una tolerancia de 10 minutos combinada con un intervalo de reconocimiento de 30 segundos se obtienen coberturas del 96\%, considerándose dichos valores como apropiados para este trabajo.
 
 \subsection{Verificación de efectividad de MM}
 

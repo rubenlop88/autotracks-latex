@@ -1,19 +1,19 @@
 \section{Map Matching}
 \label{sec:map_matching}
 
-Se conoce como \emph{Map Matching} (MM) al proceso de identificar la trayectoria seguida por un vehículo en una red de calles a partir de muestras recolectadas acerca de su ubicación. Este proceso es utilizado en una gran variedad de servicios y aplicaciones GIS, como la predicción de trayectorias de usuarios \cite{eisner2011algorithms}, sistemas de navegación en vehículos \cite{kim2001adaptive}, control del estado del tránsito \cite{thiagarajan2009vtrack}, estimación de llegada de buses \cite{thiagarajan2010cooperative}, entre otros.
+Se conoce como \emph{Map Matching} (MM) al proceso de identificar la trayectoria seguida por un vehículo en una red de calles a partir de muestras dispersas y poco precisas. Este proceso es utilizado en una gran variedad de servicios y aplicaciones de información geográfica, como la predicción de trayectorias de usuarios \cite{eisner2011algorithms}, sistemas de navegación en vehículos \cite{kim2001adaptive}, control del estado del tránsito \cite{thiagarajan2009vtrack}, estimación de llegada de buses \cite{thiagarajan2010cooperative}, entre otros.
 
-Para dar una definición formal del problema de MM deben tenerse en cuenta los siguientes conceptos:
+Para la realización de un proceso de MM deben tenerse en cuenta los siguientes conceptos:
 
-\textbf{Muestra o Punto}: Una muestra o punto es el conjunto de todas las mediciones recolectadas por el vehículo en un instante dado. Estas mediciones incluyen la localización del vehículo, su dirección de desplazamiento, su velocidad, etc.
+\textbf{Muestra o Punto}: Una muestra o punto $p$ es el conjunto de todas las mediciones recolectadas por el vehículo en un instante dado. Estas mediciones incluyen la localización del vehículo, su dirección de desplazamiento, su velocidad, etc.
 
-\textbf{Trayectoria}: Una trayectoria es una secuencia ordenada de muestras o puntos pertenecientes a un vehículo recolectados durante un viaje del mismo.
+\textbf{Trayectoria}: Una trayectoria $T$ es una secuencia ordenada de muestras o puntos pertenecientes a un vehículo sujeto de observación, recolectados durante un viaje del mismo.
 
-\textbf{Red de calles}: Una red de calles es un grafo dirigido que representa la forma y las propiedades del sistema de calles de un área geográfica en particular. Los vértices del grafo describen las intersecciones entre las calles y las aristas representan la forma y los atributos de las calles.
+\textbf{Red de calles}: Una red de calles $G(V,E)$ consiste en un grafo dirigido que representa la forma y las propiedades del sistema de calles de un área geográfica en particular. Los vértices $v \in V$ describen las intersecciones entre las calles y las aristas $e \in E$ representan la forma y los atributos de las calles.
 
-\textbf{Camino reconstruido}: Un camino reconstruido es una secuencia ordenada de calles conectadas entre sí a través de las cuáles se infiere que el vehículo pudo haber transitado.
+\textbf{Camino reconstruido}: Un camino reconstruido $R$ es una secuencia ordenada de calles $e$  conectadas entre sí, a través de las cuáles se infiere que el vehículo pudo haber transitado.
 
-En función a lo anterior, el problema de MM puede definirse de la siguiente forma: \emph{Dada una trayectoria T y una red de calles G, encontrar el camino real R que hace coincidir a T con su reconstrucción más realista sobre G.}
+Así, el problema de MM puede definirse de la siguiente forma: \emph{Dada una trayectoria $T$ y una red de calles $G(V,E)$, encontrar el camino $R$ que hace coincidir a $T$ con su reconstrucción más realista sobre $G(V,E)$.}
 
 \subsection{Clasificación de algoritmos de MM}
 
