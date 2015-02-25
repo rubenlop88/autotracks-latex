@@ -12,7 +12,7 @@ En la \Cref{fig:arquitectura} se ilustra la arquitectura modular del sistema des
 \begin{figure}[h]
 	\centering
 	\input{capitulos/6/figuras/figura61.pdf_tex}
-	\caption{\label{fig:arquitectura} Arquitectura del Sistema}	
+	\caption{\label{fig:arquitectura} Arquitectura del sistema propuesto}	
 \end{figure}
 
 Para el almacenamiento de la información se utiliza el motor de base de datos PostgreSQL\footnote{http://www.postgresql.org/} al que además se agregan las extensiones PostGIS\footnote{http://postgis.net/}, que añade capacidades GIS, y pgRouting\footnote{http://pgrouting.org/}, que añade funciones de ruteo geoespacial. Por otro lado, con el propósito de recolectar la información de FCD se cuenta con una aplicación móvil desarrollada para sistemas operativos Android\footnote{http://developer.android.com/index.html} 2.3 o superior, que se ejecuta en los dispositivos de los usuarios. Por último, para el procesamiento y recuperación de la información se cuenta con una aplicación web desarrollada con tecnología Java EE\footnote{http://docs.oracle.com/javaee/} que implementa servicios REST a través de los cuáles la aplicación móvil envía y obtiene datos del servidor.
@@ -54,7 +54,7 @@ Autotracks consulta periódicamente la actividad del usuario, cuando se ha detec
 El \Cref{alg:deteccion_actividad} muestra el procedimiento ejecutado periódicamente cada vez que se obtiene un resultado del reconocimiento de actividad. Este procedimiento verifica si la toma de localizaciones está o no iniciada y se encarga de iniciarla o finalizarla de acuerdo a la actividad detectada. El resultado de la detección es almacenado para ser utilizado en la siguiente invocación del procedimiento. Si se ha detectado que el usuario está en un vehículo, el tiempo en el que ocurrió la detección también es almacenado para utilizarlo en la siguiente invocación. En el sub-procedimiento $\Call {EstaEnVehiculo}{}$, si el usuario está a pie se detiene inmediatamente el rastreo, si está en un vehículo se continúa con el rastreo, y en cualquier otro caso (está en bicicleta, o quieto, o no se pudo determinar la actividad) se verifica el estado anterior de movimiento y el tiempo de la última detección de movimiento antes de tomar una decisión.
  
 \begin{algorithm}
-\caption{Procedimientos de Reconocimiento de Actividad}
+\caption{Procedimiento de reconocimiento de actividad}
 \label{alg:deteccion_actividad}
 \begin{algorithmic}[1]
 \Procedure{ActividadDetectada}{$actividad$}
@@ -114,7 +114,7 @@ En los casos en los que la localización es obtenida a través de las redes GSM 
 Algunas de las localizaciones capturadas pueden llegar a ser demasiado imprecisas como para ser utilizadas en el procesamiento posterior. Para evitar este tipo de localizaciones erróneas se utilizan dos técnicas de filtrado. El primer método consiste simplemente en descartar las localizaciones que reportan una precisión mayor a 200 metros. El segundo método consiste en determinar la velocidad a la que tuvo que haber viajado el vehículo para pasar de la posición anterior a la posición actual utilizando la \cref{eq:velocidad}, si dicha velocidad es mayor a un valor preestablecido, en este caso de 140 km/h, la localización es descartada. Además, también se descartan las localizaciones que son muy próximas entre sí debido a que el algoritmo de MM utilizado en una siguiente etapa requiere que las localizaciones sean relativamente distantes entre sí. Los valores de referencia fueron determinados empíricamente en sucesivas pruebas de campo. En el \Cref{alg:toma_de_localizaciones} se describe el procedimiento utilizado para registrar una localización.
 
 \begin{algorithm}
-	\caption{Toma de Localizaciones}
+	\caption{Procedimiento de toma de localizaciones}
 	\label{alg:toma_de_localizaciones}
 	\begin{algorithmic}[1]
 		\Procedure {Registrar}{$localizacion$}
@@ -165,7 +165,7 @@ La \Cref{fig:st-matching} muestra una descripción general del proceso cuyo resu
 \begin{figure}[h]
 	\centering
 	\input{capitulos/6/figuras/figura62.pdf_tex}
-	\caption[Descripción General de ST-Matching]{Descripción general del algoritmo ST-Matching.}
+	\caption[Descripción general de ST-Matching]{Descripción general del algoritmo ST-Matching.}
 	\label{fig:st-matching} 
 \end{figure}
 
@@ -186,7 +186,7 @@ La trayectoria $T$ de un vehículo es representada como una secuencia ordenada d
 \begin{figure}[h*]
 	\centering
 	\input{capitulos/6/figuras/figura64.pdf_tex}
-	\caption{\label{fig:trayectoria} Trayectoria de un vehículo}	
+	\caption{\label{fig:trayectoria} Representación de la trayectoria de un vehículo}	
 \end{figure}
 
 El camino real $R$ es definido como una secuencia de segmentos de calles $e_i$ conectados entre sí, que se inicia en un vértice $v_{ini} \in V$ y finaliza en un vértice $v_{fin} \in V$, es decir, $R = \{ e_1, e_2, \dots, e_n \}$, donde $e_1.ini = v_{ini}$, $e_n.fin = v_{fin}$ y $e_i.fin = e_{i + 1}.ini$ para $1 \le i < n$.

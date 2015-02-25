@@ -81,10 +81,9 @@ La rápida expansión de los teléfonos y dispositivos inteligentes, y los múlt
 En 2007, Fraser \citep{fraser2007use} habla de la viabilidad de utilización de dispositivos móviles como alternativa a los métodos típicos de detección de tráfico, utilizando ubicación de objetos mediante triangulación con antenas de telefonía, tal como se muestra en la \Cref{fig:triangulacionAntenas}. En el mismo trabajo se mencionan las dificultades que tienen tales sistemas en cuanto a la precisión de ubicación, quedando este punto como una problemática a ser resuelta.
 
 \begin{figure}[h]
-%TODO cambiar al español
 	\centering
 	\includegraphics[width=0.7\textwidth]{capitulos/3/figuras/figura5.jpg}
-	\caption{\label{fig:triangulacionAntenas} Triangulación de Antenas}	
+	\caption{\label{fig:triangulacionAntenas} Esquema de triangulación de antenas}	
 \end{figure}
 
 A pesar de la baja precisión de los sistemas GSM para la ubicación de dispositivos móviles, se ha propuesto un trabajo denominado CTrack \citep{thiagarajan2011accurate}, que utiliza la red GSM y otros sensores disponibles en el teléfono para la ubicación y obtención de información de FCD. El sistema consiste en dos componentes de software, una librería para el teléfono y un servicio en la web. La librería recolecta, filtra y escanea los datos obtenidos con el teléfono y los transmite a través de la red inalámbrica al servicio web, el cual corre un algoritmo de \emph{Map Matching} con los datos recibidos para identificar las vías en utilización. El trabajo comentado tiene como premisa hacer un uso eficiente del consumo de la batería del dispositivo, evitando usar sensores de alto consumo tales como el sensor GPS o la antena WiFi.
