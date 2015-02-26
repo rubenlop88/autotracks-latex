@@ -13,9 +13,17 @@ Los tipos de sensores y la ubicación de los mismos se pueden observar en la \Cr
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.7\textwidth]{capitulos/3/figuras/figura1.jpg}
-	\caption{\label{fig:intrusiva} Típicas configuraciones de detección intrusiva}	
-	%TODO cambiar el texto 3 del gráfico por Detectortes de inducción %
+	\input{capitulos/3/figuras/figura31.pdf_tex}
+	\captionsetup{singlelinecheck=off}
+	\caption[Configuraciones de detección intrusiva]{
+	Típicas configuraciones de detección intrusiva:
+	\begin{enumerate}[1)]
+	\item Magnetómetros embedidos
+	\item Tubos neumáticos sobre la calzada
+	\item Detectores inductivos enterrados en la calzada
+	\end{enumerate}
+	}
+	\label{fig:intrusiva} 
 \end{figure}
 
 Un segundo tipo de unidades utiliza \emph{tubos neumáticos} que son extendidos a través de la calzada y que se fijan en la acera en ambos extremos. Una ráfaga de presión de aire se produce en el tubo de goma cuando un vehículo pasa por encima. El pulso de presión de aire cierra un interruptor produciendo una señal eléctrica que es transmitida.
@@ -26,8 +34,11 @@ Otro tipo de detector intrusivo, denominado \emph{weigh-in-motion} mostrado en l
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.7\textwidth]{capitulos/3/figuras/figura2.jpg}
-	\caption{\label{fig:Weight-In-Motion}  Sistema de detección weight-in-motion}	
+	\begin{footnotesize}
+	\input{capitulos/3/figuras/figura32.pdf_tex}
+	\end{footnotesize}
+	\caption{Sistema de detección weight-in-motion}
+	\label{fig:Weight-In-Motion} 
 \end{figure}
 
 \subsection{Sensores de tecnología no intrusiva}
@@ -36,8 +47,17 @@ Los sensores de tecnología no intrusiva incluyen:  recolección de datos por vi
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.7\textwidth]{capitulos/3/figuras/figura3.jpg}
-	\caption{\label{fig:noIntrusica}  Configuraciones típicas de tecnologías no intrusivas}	
+	\input{capitulos/3/figuras/figura33.pdf_tex}
+	\captionsetup{singlelinecheck=off}
+	\caption[Configuraciones de detección no intrusivas]{
+	Configuraciones típicas de tecnologías no intrusivas:
+	\begin{enumerate}[1)]
+	\item Dispositivos montados en mástil
+	\item Dispositivos montados debajo de puentes
+	\item Dispositivos de fuego cruzado
+	\end{enumerate}
+	}
+	\label{fig:noIntrusica} 	
 \end{figure}
 
 En la \Cref{fig:noIntrusica} pueden notarse una disposición de 3 tipos de detectores no intrusivos. El primer tipo corresponde a los \emph{montados en mástil} al costado de la carretera, tales como cámaras fotográficas o de video, capaces de procesar un campo de visión que cubre un área oblicua.  Problemas de oscurecimiento pueden ocurrir cuando vehículos grandes cubren a vehículos pequeños o cuando el campo de visión es muy grande, causando la detección de vehículos fuera del carril deseado.
@@ -57,10 +77,10 @@ Los primeros sistemas AVL se basaron en vehículos equipados con transpondedores
 Un sistema basado en FCD consiste en recolectar y procesar datos de tráfico obtenidos en tiempo real a través de dispositivos AVL montados en vehículos que circulan en una red de caminos sujeta a observación, como se muestra en la \Cref{fig:ComunicacionGPS}. Todos los vehículos equipados con estos dispositivos actúan como sensores dentro de la red de caminos. Datos como la ubicación del vehículo, la velocidad y dirección del viaje son enviados a un centro de procesamiento de información. Luego de la recolección y extracción de los datos, información útil como el estado del tráfico y rutas alternativas pueden ser derivadas y posteriormente distribuidas.
 
 \begin{figure}[h]
-    %TODO crear nueva figura
 	\centering
-	\includegraphics[width=0.7\textwidth]{capitulos/3/figuras/figura4.jpg}
-	\caption{\label{fig:ComunicacionGPS} Esquema típico de recolección de datos mediante FCD}	
+	\input{capitulos/3/figuras/figura34.pdf_tex}
+	\caption{Esquema de recolección de datos mediante FCD}
+	\label{fig:ComunicacionGPS} 	
 \end{figure}
 
 \subsection{FCD basado en GPS}
@@ -71,9 +91,6 @@ En \citep{giovannini2011novel} se utilizan vehículos sonda particulares con GPS
 
 En \citep{sevlian2010travel} se utilizan taxis equipados con GPS que toman localizaciones cada 2 minutos junto con información histórica de las rutas y un algoritmo de aprendizaje de máquinas para predecir tiempos de viaje.
 
-
-%TODO describir algunos trabajos citados.
-
 \subsection{FCD basado en dispositivos móviles}
 
 La rápida expansión de los teléfonos y dispositivos inteligentes, y los múltiples sensores que actualmente poseen los mismos, los convierte en potenciales dispositivos AVL utilizables para la implementación de sistemas basados en FCD. Muchos trabajos se centran en la utilización de dispositivos móviles para la detección del tráfico, la mayoría aprovechando los sensores A-GPS\footnote{http://es.wikipedia.org/wiki/GPS\_Asistido} disponibles en los mismos, como también existen otros que utilizan las redes GSM\footnote{http://en.wikipedia.org/wiki/GSM}, WiFi\footnote{http://en.wikipedia.org/wiki/Wi-Fi} e incluso con tecnología Bluetooth\footnote{http://en.wikipedia.org/wiki/Bluetooth} \citep{thiagarajan2010cooperative,thiagarajan2009vtrack,fraser2007use,fang2011enacq,ruppe2012augmenting}.
@@ -82,8 +99,17 @@ En 2007, Fraser \citep{fraser2007use} habla de la viabilidad de utilización de 
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.7\textwidth]{capitulos/3/figuras/figura5.jpg}
-	\caption{\label{fig:triangulacionAntenas} Esquema de triangulación de antenas}	
+	\input{capitulos/3/figuras/figura35.pdf_tex}
+	\captionsetup{singlelinecheck=off}
+	\caption[Esquema de triangulación de antentas]{
+	Esquema de triangulación de antenas:
+	\begin{itemize}
+	\item La primera torre determina la distancia.
+	\item La segunda torre disminuye las opciones a dos puntos.
+	\item La tercera torre señala la ubicación.
+	\end{itemize}
+	}
+	\label{fig:triangulacionAntenas}
 \end{figure}
 
 A pesar de la baja precisión de los sistemas GSM para la ubicación de dispositivos móviles, se ha propuesto un trabajo denominado CTrack \citep{thiagarajan2011accurate}, que utiliza la red GSM y otros sensores disponibles en el teléfono para la ubicación y obtención de información de FCD. El sistema consiste en dos componentes de software, una librería para el teléfono y un servicio en la web. La librería recolecta, filtra y escanea los datos obtenidos con el teléfono y los transmite a través de la red inalámbrica al servicio web, el cual corre un algoritmo de \emph{Map Matching} con los datos recibidos para identificar las vías en utilización. El trabajo comentado tiene como premisa hacer un uso eficiente del consumo de la batería del dispositivo, evitando usar sensores de alto consumo tales como el sensor GPS o la antena WiFi.
