@@ -276,7 +276,7 @@ Como resultado del análisis espacial se asigna un valor numérico a todos los p
 
 \subsubsection{Análisis Temporal}
 
-Existen casos en los que el análisis espacial no es suficiente para identificar un segmento de calle correctamente. En la \Cref{fig:analisis_temporal} la línea más gruesa representa a una autopista mientras que la línea más delgada representa a una calle vecinal, el límite de velocidad de la autopista es superior al de la calle vecinal cercana, utilizando sólo el análisis espacial se podría seleccionar incorrectamente una de las dos. Para evitar esto se calcula la velocidad promedio entre dos puntos consecutivos $p_{i-1}$ y $p_i$ y se compara con los límites de velocidad promedio de los segmentos de calles comprendidos entre dos puntos candidatos $c_{i-1}^{j}$ y $c_{i}^{k}$ con el fin de seleccionar el segmento cuya velocidad promedio es la más cercana a la velocidad promedio de desplazamiento del vehículo.
+Existen casos en los que el análisis espacial no es suficiente para identificar un segmento de calle correctamente. En la \Cref{fig:analisis_temporal} la línea más gruesa representa a una autopista mientras que la línea más delgada representa a una calle vecinal, el límite de velocidad de la autopista es superior al de la calle vecinal cercana, utilizando sólo el análisis espacial se podría seleccionar incorrectamente una de las dos. Para evitar esto se calcula la velocidad promedio entre dos puntos consecutivos $p_{i-1}$ y $p_i$ y se compara con los límites de velocidad promedio de los segmentos de calles comprendidos entre dos puntos candidatos $c_{i-1}^{j}$ y $c_{i}^{k}$ con el fin de seleccionar el segmento cuya velocidad es la más cercana a la velocidad promedio de desplazamiento del vehículo.
 
 \begin{figure}[h*]
 	\centering
@@ -284,7 +284,7 @@ Existen casos en los que el análisis espacial no es suficiente para identificar
 	\caption{\label{fig:analisis_temporal} Error en el análisis espacial}	
 \end{figure}
 
-Dados dos puntos candidatos $c_{i-1}^{j}$ y $c_{i}^{k}$ correspondientes a dos puntos consecutivos $p_{i-1}$ y $p_i$ respectivamente, el camino más corto entre $c_{i-1}^{j}$ y $c_{i}^{k}$ es una lista de segmentos $[e_1, e_2, \dots, e_n]$. La velocidad promedio de desplazamiento del vehículo en este camino más corto se define como:
+Dados dos puntos candidatos $c_{i-1}^{j}$ y $c_{i}^{k}$ correspondientes a dos puntos consecutivos $p_{i-1}$ y $p_i$ respectivamente, el camino más corto entre $c_{i-1}^{j}$ y $c_{i}^{k}$ es una lista de segmentos $[e_1, e_2, \dots, e_n]$. La velocidad promedio de desplazamiento del vehículo en ese camino más corto se define como:
 \begin{equation}
 \overline{v} = \frac { \sum_{m=1}^{n} {e_m.l} }{ \Delta t_{i-1, i} }
 \end{equation}

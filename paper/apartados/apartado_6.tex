@@ -1,19 +1,19 @@
-\section{Pruebas y Resultados}
+\section{Pruebas Empíricas y Resultados Conseguidos}
 \label{sec:pruebas}
 
-En esta sección se describen las pruebas de campo realizadas y los resultados obtenidos. Un primer grupo de pruebas tuvo por objetivo determinar los valores más adecuados para los parámetros utilizados en la recolección de FCD, tanto en el reconocimiento de actividad como en la toma de localizaciones. Otro grupo de pruebas se realizó con el objetivo determinar la efectividad del sistema implementado, para ello se verificó la tasa de acierto del algoritmo de MM y se analizaron los datos obtenidos para determinar las horas pico y los días con mayor flujo de tráfico.
+En esta sección se describen las pruebas de campo realizadas y los resultados obtenidos. En primer lugar se realizó un grupo de pruebas empíricas que tuvo por objetivo determinar los valores más adecuados para los parámetros utilizados en la recolección de FCD. Otro grupo de pruebas empíricas se realizó con el objetivo determinar un valor apropiado para el parámetro que interviene en la detección del camino recorrido.
 
-Debido a la complejidad y a la gran cantidad de variables intervinientes en el funcionamiento del sistema se optó por realizar pruebas de campo en lugar de utilizar simulaciones. Para las pruebas se utilizaron dispositivos móviles de diversa gama y se realizaron tanto en vehículos de transporte público, como en vehículos privados, y por último se analizaron los datos generados por usuarios reales del sistema. 
+Por último, por medio de la distribución de la aplicación móvil que conforma la plataforma diseñada para este trabajo, se procedió a capturar y evaluar datos reales que luego permitieron derivar resultados que representan una caracterización realista del tráfico, siendo los datos analizados correspondientes al periodo de mayor cantidad de usuarios finales.
 
 \subsection{Deducción de parámetros para FCD}
 
 En la recolección de FCD se utiliza un esquema de detección de actividad que permite a la aplicación registrar las localizaciones del usuario únicamente cuando se encuentra en un vehículo en movimiento. Para ello, la aplicación móvil verifica periódicamente cuál es la actividad que está realizando el usuario en base a las lecturas de los sensores del dispositivo. 
 
-El intervalo de tiempo en el que se realiza la verificación de actividad se denomina \emph{intervalo de reconocimiento} y determina qué tan rápido se detecta el movimiento para iniciar o finalizar el rastreo. Es importante tener en cuenta que mientras más corto es el intervalo, mayor es el consumo de batería debido a que el dispositivo móvil debe procesar más frecuentemente las muestras de los sensores. 
+Un parámetro importante es el intervalo de tiempo en el que se realiza la verificación de actividad del usuario, que se denomina \emph{intervalo de reconocimiento}, y determina qué tan rápido se detecta el movimiento para iniciar o finalizar el rastreo. Es importante tener en cuenta que mientras más corto es este intervalo, mayor es el consumo de batería debido a que el dispositivo móvil debe activar más frecuentemente sus sensores. 
 
-Para determinar el valor apropiado del intervalo de reconocimiento, que derive en un balance adecuado entre el consumo de batería y la rápida detección de movimiento, se realizaron pruebas empíricas con diferentes valores obteniéndose para cada valor el tiempo promedio que tarda en detectarse el movimiento. 
+%TODO: agregar trayecto prueba.
 
-La \Cref{tab:prom_intervalo_reconocimiento} muestra el tiempo promedio que la aplicación tarda en detectar el movimiento e iniciar la toma de localizaciones para varios valores del intervalo de reconocimiento. Como se puede apreciar, un intervalo de reconocimiento corto ayuda a iniciar más rápidamente la toma de localizaciones.
+Para determinar el valor apropiado del intervalo de reconocimiento, tal que se derive en un balance adecuado entre el consumo de batería y la rápida detección de movimiento, se realizaron pruebas empíricas de 30 iteraciones en el trayecto de recorrido ilustrado por la figura X con diferentes valores, obteniéndose para cada valor el tiempo promedio que tarda en detectarse el movimiento según se muestra en la \Cref{tab:prom_intervalo_reconocimiento}. Como se puede apreciar en los resultados, un intervalo de reconocimiento corto ayuda a iniciar más rápidamente la toma de localizaciones.
 
 \begin{table}[h]
   \centering
@@ -33,13 +33,13 @@ La \Cref{tab:prom_intervalo_reconocimiento} muestra el tiempo promedio que la ap
 
 En base a las pruebas realizadas el intervalo de reconocimiento seleccionado es de 30 segundos, por ser el intervalo más largo que presenta un buen tiempo de respuesta con relación al consumo de batería producido por el número de veces de activación de los sensores. Debe notarse que el tiempo de detección de movimiento para el valor seleccionado, según las pruebas empíricas, oscila en promedio los 1.47 minutos, tiempo en el cual puede considerarse que los sensores fueron activados al menos en 3 oportunidades.
 
-El reconocimiento de actividad también es utilizado para detener la toma de localizaciones cuando el usuario ya no se encuentra en un vehículo en movimiento. Se debe tener en cuenta que durante una trayectoria un vehículo puede detenerse momentáneamente debido a diversas causas, como ser un semáforo en rojo o una parada de bus. En estos casos la toma de localizaciones no debe ser erróneamente detenida porque se producirían cortes en la captura del trayecto, y podrían omitirse algunos segmentos debido a que existe un tiempo de espera en la detección de movimiento como se vio previamente.
+El reconocimiento de actividad también es utilizado para detener la toma de localizaciones cuando el usuario ya no se encuentra en un vehículo en movimiento. Debe tenerse en cuenta también que durante una trayectoria un vehículo puede detenerse momentáneamente debido a diversas causas, como ser un semáforo en rojo o una parada de bus. En estos casos la toma de localizaciones no debe ser erróneamente detenida porque se producirían cortes en la captura del trayecto, y podrían omitirse algunos segmentos debido a que existe un tiempo de espera en la detección de movimiento para reanudar el rastreo como se vio previamente.
 
 Así, para evitar cortes en el rastreo se introduce un \emph{tiempo de tolerancia} en el reconocimiento de actividad. Cada vez que se detecta el movimiento, se almacena el tiempo de detección y el rastreo no es detenido hasta que haya transcurrido el tiempo de tolerancia a partir de la última vez que se detectó movimiento. Se debe tener en cuenta también que un tiempo de tolerancia alto implica que se tardará más en detener el servicio de localización, lo que puede producir un impacto negativo en el consumo de batería debido a la activación innecesaria de los sensores.
 
-Por otra parte, el tiempo que el dispositivo estuvo rastreando al usuario puede ser menor al tiempo total que duró realmente el viaje. El porcentaje de tiempo que el dispositivo estuvo rastreando al usuario con respecto al tiempo total que duró el viaje se denomina \emph{tiempo efectivo de rastreo}. Los valores de tiempo de tolerancia e intervalo de reconocimiento en conjunto influyen en el tiempo efectivo de rastreo por lo que deben ser escogidos apropiadamente.
+Por otra parte, también es importante tener en cuenta el porcentaje de tiempo que el dispositivo estuvo rastreando al usuario con respecto al tiempo total que duró el viaje y que se denomina \emph{tiempo efectivo de rastreo}. Los valores de tiempo de tolerancia e intervalo de reconocimiento en conjunto influyen en el tiempo efectivo de rastreo por lo que deben ser escogidos apropiadamente.
 
-En la \Cref{tab:prom_tiempo_efectivo_rastreo} se muestran los resultados acerca del tiempo efectivo de rastreo observado para diferentes combinaciones de valores de intervalo de reconocimiento y de tiempo de tolerancia considerados. 
+En base al intervalo de reconocimiento de actividad seleccionado previamente, en la \Cref{tab:prom_tiempo_efectivo_rastreo} se muestran resultados acerca del tiempo efectivo de rastreo observado para diferentes valores de tiempo de tolerancia considerados. 
 
 \begin{table}[h]
     \centering
@@ -62,13 +62,13 @@ En la \Cref{tab:prom_tiempo_efectivo_rastreo} se muestran los resultados acerca 
     \label{tab:prom_tiempo_efectivo_rastreo}
 \end{table}
 
-De las pruebas realizadas puede notarse que con una tolerancia de 10 minutos combinada con un intervalo de reconocimiento de 30 segundos se obtienen coberturas del 96\%, considerándose dichos valores como apropiados para este trabajo.
+De las pruebas realizadas puede notarse que con una tolerancia de 10 minutos se obtienen coberturas del 96\%, tomándose dichos valores como apropiados para este trabajo.
 
 \subsection{Verificación de efectividad de MM}
 
-Para el MM se utiliza el algoritmo ST-Matching como se describe en \cref{implementacion_mm}. Este algoritmo recibe como entrada un conjunto de localizaciones correspondientes a una trayectoria seguida por un usuario, el intervalo de tiempo con el que se obtienen estos puntos se denomina \emph{intervalo de muestreo}. Si el intervalo es grande, se tiene un menor número de muestras para un periodo de tiempo dado y por ende un menor consumo de batería del dispositivo móvil. En cambio, para intervalos pequeños, se tiene un mayor número de muestras y un elevado consumo de batería. Para medir la efectividad del MM, se observa la cantidad de puntos que son correctamente asignados a las calles al estimar el camino real recorrido.
+Para realizar el proceso de MM se utilizó el algoritmo ST-Matching como se describe en \cref{implementacion_mm}. Este algoritmo toma como entrada un conjunto de localizaciones capturadas durante una trayectoria seguida por un usuario para determinar el recorrido correspondiente. Así, el intervalo de tiempo con el que se obtienen dichos puntos se denomina \emph{intervalo de muestreo}. Con un valor de intervalo grande se tiene un menor número de muestras y por ende un menor consumo de batería del dispositivo móvil, pero a su vez podría obtenerse una pobre aproximación del camino recorrido. En cambio, con intervalos pequeños se tiene un mayor número de muestras lo cual aumenta la calidad de la aproximación pero implica un elevado consumo de batería. Finalmente, para medir la efectividad del proceso MM debe observarse la cantidad de puntos que son correctamente asignados a calles al estimar el camino real recorrido.
 
-Las pruebas de MM consistieron en la observación de su efectividad con diferentes intervalos de muestreo. Los intervalos observados fueron de 30, 60 y 120 segundos, para cada intervalo se realizaron varios recorridos por un mismo trayecto, se sumó la cantidad total de puntos recolectados y se comparó con la cantidad de puntos correctamente asignados. Los resultados obtenidos pueden ser apreciados en la \Cref{table:map_matching}. Para intervalos pequeños de toma localizaciones se tienen mejores resultados, con una leve diferencia a favor del intervalo de 30 segundos en comparación al intervalo de 60 segundos y con una diferencia un poco mayor en comparación al de 120 segundos. En base a estos resultados se decidió utilizar el intervalo de 60 segundos debido a que consume menos batería y produce resultados similares al intervalo de 30 segundos.
+Las pruebas del proceso de MM consistieron en observar su efectividad con diferentes valores de intervalo de muestreo. Los intervalos observados fueron de 30, 60 y 120 segundos, y para cada intervalo se realizaron 30 recorridos en el trayecto indicado en la figura X. Para cada valor de intervalo de muestreo se consideró el total de puntos recolectados y se comparó con la cantidad de puntos correctamente asignados. Los resultados obtenidos pueden ser apreciados en la \Cref{table:map_matching}. Puede notarse que se tiene una leve diferencia a favor del intervalo de 30 segundos en comparación al intervalo de 60 segundos y una diferencia un poco mayor en comparación al de 120 segundos. En base a estos resultados se decidió utilizar el intervalo de 60 segundos debido a que implica un menor consumo de batería y produce resultados muy cercanos al intervalo de 30 segundos.
 
 \begin{table}[h]
 	\centering
@@ -85,9 +85,11 @@ Las pruebas de MM consistieron en la observación de su efectividad con diferent
 	\label{table:map_matching}
 \end{table}
 
+Es importante destacar que intervalos menores a 30 segundos no fueron considerados debido a que el algoritmo \emph{ST-Matching} está específicamente diseñado para trabajar con muestras de baja frecuencia \cite{lou2009map}.
+
 \subsection{Análisis de Tráfico}
 
-Para realizar las pruebas de análisis de tráfico se distribuyó la aplicación Autotracks a través de Google Play\footnote{https://play.google.com/store} y se observaron los resultados obtenidos a durante un periodo de 5 semanas de uso de la aplicación. Durante ese periodo de tiempo un promedio de 212 usuarios utilizaron la aplicación diariamente, generando un total de 123419 puntos observados desde sus dispositivos móviles. Debido a que los usuarios pueden activar o desactivar los sensores de sus teléfonos, no se hace distinción entre los puntos obtenidos a través de GPS, Wifi o triangulación de antenas. En la \Cref{fig:cantidad_usuarios} se observa la cantidad de usuarios activos por día durante el periodo de prueba.
+Para realizar el Análisis de Tráfico se distribuyó la aplicación Autotracks a través de \emph{Google Play}\footnote{https://play.google.com/store} y se observaron los resultados obtenidos de usuarios finales durante un periodo de 5 semanas, en el que se registró un mayor uso de la aplicación. Durante este periodo de tiempo un promedio de 212 usuarios utilizaron diariamente la aplicación, recolectándose un total de 123.419 muestras. En la \Cref{fig:cantidad_usuarios} se observa la cantidad de usuarios activos por día durante el periodo de prueba.
 
 \begin{figure}[h]
 	\centering
@@ -119,8 +121,7 @@ Para realizar las pruebas de análisis de tráfico se distribuyó la aplicación
 	\label{fig:cantidad_usuarios}
 \end{figure}
 
-Con el objetivo de caracterizar el flujo de tráfico a lo largo de una semana, se analizó la distribución de la cantidad de puntos recolectados por día de la semana y por hora del día. En la \Cref{table:localizaciones_por_dia} se puede ver la distri
-bución por día de la semana, se observa que los lunes son los días en que más localizaciones se reciben, mientras que en los días domingos se recibe el menor número de localizaciones. También se puede apreciar que se recibe una mayor cantidad de localizaciones durante los días entre semana.
+Con el objetivo de caracterizar la actividad de los usuarios a lo largo de una semana, se analizó la distribución de la cantidad de puntos recolectados por día de la semana y por hora del día. Así, en la \Cref{table:localizaciones_por_dia}  puede verse la distribución de muestras por día de la semana, observándose que los lunes son los días en que más localizaciones se recibieron, mientras que en los días domingos se recibió un menor número de localizaciones. Por último, se puede apreciar que en general se recibe una mayor cantidad de localizaciones durante los días entre semana.
 
 \begin{table}[h]
 	\centering
@@ -141,7 +142,7 @@ bución por día de la semana, se observa que los lunes son los días en que má
 	\label{table:localizaciones_por_dia}
 \end{table}
 
-En la \Cref{table:localizaciones_por_hora} se puede observar la distribución de las localizaciones durante las horas del día. Las horas con mayor cantidad de localizaciones recibidas son en la mañana de 6 a 9 y por la tarde de 17 a 19. Durante los días entre semana que son normalmente laborales, se hace más notoria esta diferencia. Mientras que durante los fines de semana la horas con mayor cantidad de localizaciones se encuentran hacia el mediodía.
+En la \Cref{table:localizaciones_por_hora} se puede observar la distribución de las localizaciones durante las horas del día. Por las mañanas, entre las 6 y 9 horas la mayor cantidad de localizaciones son recibidas y por la tarde entre las 17 y 19 horas. Durante los días entre semana que son normalmente laborales, se hace más notoria esta diferencia. Mientras que durante los fines de semana la horas con mayor cantidad de localizaciones se encuentran hacia el mediodía.
 
 \begin{table}[!h]
 	\centering
@@ -179,7 +180,9 @@ En la \Cref{table:localizaciones_por_hora} se puede observar la distribución de
 	\label{table:localizaciones_por_hora}
 \end{table}
 
-Otro parámetro que caracteriza el flujo de tráfico es la velocidad promedio de desplazamiento de los vehículos. En la \Cref{table:velocidad_por_hora} se observa el promedio de velocidad por hora del día. Como se aprecia en la \Cref{fig:promedio_velocidad} por las mañanas el promedio más bajo de velocidad se da entre las 6 y las 9 horas, mientras que por las tardes esto sucede de 18 a 21 horas, también se observa una disminución en la velocidad promedio durante el mediodía. En la \Cref{fig:promedio_velocidad_es_fs} se pueden apreciar las diferencias que existen en los promedios de velocidad de los días entre semana y fines de semana. Durante los días entre semana se observa un promedio menor de velocidad a partir de las 5 horas, esta velocidad promedio se mantiene menor hasta las 19 horas.
+Finalmente, para caracterizar el flujo de tráfico se escogió como medida la velocidad promedio de desplazamiento de los vehículos, siendo valores mayores de esta mejores y peores los valores bajos. Así, en la \Cref{table:velocidad_por_hora} y la \Cref{fig:promedio_velocidad} se presentan el promedio de velocidad por hora del día y se aprecia que por las mañanas el promedio más bajo de velocidad ocurre entre las 6 y las 9 horas, mientras que por las tardes esto sucede de 18 a 21 horas. También se observa una disminución en la velocidad promedio durante el mediodía. 
+
+En la \Cref{fig:promedio_velocidad_es_fs} se realiza una comparación de modo a contrastar la diferencia que existe en los promedios de velocidad los días entre semana y los fines de semana. Durante los días entre semana se observa un promedio menor de velocidad a partir de las 5 horas hasta las 19 horas. Mientras que los fines de semana se observan dos periodos con bajos valores de velocidad promedio, siendo uno entre las 11 y 13 horas, y otro entre las 20 y 23 horas.
 
 \begin{table}[h]
 	\centering
@@ -285,3 +288,7 @@ Otro parámetro que caracteriza el flujo de tráfico es la velocidad promedio de
 \caption{Comparativa de Promedio de velocidad por hora del día}
 \label{fig:promedio_velocidad_es_fs}
 \end{figure}
+
+\subsection{Aproximación del Tráfico en Tiempo Real}
+
+....
