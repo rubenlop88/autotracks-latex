@@ -68,7 +68,7 @@ Finalmente, el tercer tipo, conocidos como de \emph{fuego cruzado}, consiste en 
 
 \section{Tecnologías de Floating Car Data}
 
-Además de la utilización de tecnologías in-situ, muchas aplicaciones de gestión de tráfico utilizan dispositivos montados en vehículos en circulación, conocidos como sistemas de ubicación automática de vehículo (\emph{Automatic Vehicle Location} - AVL). Los dispositivos AVL pueden proveer dos tipos de información: \begin{enumerate*}[a)]
+Además de la utilización de tecnologías in-situ, muchas aplicaciones de gestión de tráfico utilizan dispositivos montados en vehículos en circulación, conocidos como sistemas de ubicación automática de vehículo (\emph{Automatic Vehicle Location} - AVL). Los Disposition AVL pueden proveer dos tipos de información: \begin{enumerate*}[a)]
 \item información de posición, cuando un vehículo equipado con ellos pasa cierto punto de la red donde existe un sensor, o \item información continua, a medida que el vehículo transita a través de la red, en este caso el dispositivo AVL cuenta con una conexión dedicada para transmitir activamente los eventos.
 \end{enumerate*}
 
@@ -87,7 +87,7 @@ Un sistema basado en FCD consiste en recolectar y procesar datos de tráfico obt
 
 Hoy en día la tecnología GPS se encuentra altamente disponible, lo que se refleja en el aumento del número de vehículos y dispositivos móviles equipados con este sistema de ubicación. Esto lleva al desarrollo de trabajos que aprovechan esta tecnología para la implementación de sistemas basados en FCD tales como  \citep{giovannini2011novel,li2007practical,sevlian2010travel,yin2004weight}
 
-En \citep{giovannini2011novel} se utilizan vehículos sonda particulares con GPS integrado, la toma de posiciones puede funcionar en dos modos: \begin{enumerate*}[1)] \item el modo standard donde el dispositivo toma y almacena posiciones cada 2 km, luego de almacenar 50 posiciones, las envía a un servidor. \item El modo información de tráfico donde se toman posiciones cada 30 segundos y se envían al servidor una vez que se tengan 24 posiciones almacenadas.\end{enumerate*}
+En \citep{giovannini2011novel} se utilizan vehículos sonda particulares con GPS integrado, la toma de posiciones puede funcionar en dos modos: \begin{enumerate*}[1)] \item el modo standard, donde el dispositivo toma y almacena posiciones cada 2 km, luego de almacenar 50 posiciones las envía a un servidor, y \item el modo información de tráfico, donde se toman posiciones cada 30 segundos y se envían al servidor una vez que se tengan 24 posiciones almacenadas.\end{enumerate*}
 
 En \citep{sevlian2010travel} se utilizan taxis equipados con GPS que toman localizaciones cada 2 minutos junto con información histórica de las rutas y un algoritmo de aprendizaje de máquinas para predecir tiempos de viaje.
 
