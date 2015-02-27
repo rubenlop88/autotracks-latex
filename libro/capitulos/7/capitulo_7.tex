@@ -303,7 +303,11 @@ Otro parámetro que caracteriza el flujo de tráfico es la velocidad promedio de
 \label{fig:promedio_velocidad_es_fs}
 \end{figure}
 
-El resultado del análisis de tráfico puede ser observado en tiempo real por los usuarios de la aplicación móvil, o accediendo a accediendo a la aplicación web desarrollada para el efecto. En la \Cref{fig:trafico_lunes} se puede observar un ejemplo del estado del tráfico observado en un día lunes a las 9 de la mañana, como se puede ver existe una gran cantidad de calles con niveles de velocidad bajo. La \Cref{fig:trafico_sabado} corresponde al estado del tráfico observado un día sábado a las 9 de la mañana, se puede apreciar que existe una menor cantidad de información y que los niveles de velocidad son más variados con relación a un día lunes a la misma hora, esto se debe a que durante los fines de semana se registra una menor cantidad de localizaciones.
+\section{Aproximación del Tráfico en Tiempo Real}
+
+Para aproximar el estado del tráfico en tiempo real, se saca un promedio de todas las velocidades de puntos que hayan sido asociados a un segmento de calle en particular durante un periodo determinado de tiempo. Con la cantidad de usuarios activos durante las pruebas, no fue posible mantener el estado del tráfico de manera continua en el mapa de calles.
+
+Los momentos donde se registraron mayor cantidad de segmentos de calles con información de tráfico se corresponden a las franjas horarias denominadas horas pico, que se identificaron anteriormente. En la \Cref{fig:trafico_lunes} se puede observar un ejemplo del estado del tráfico observado en un día lunes a las 9 de la mañana, puede verse que existe una gran cantidad de calles con niveles de velocidad bajo. La \Cref{fig:trafico_sabado} corresponde al estado del tráfico observado un día sábado a las 9 de la mañana, se puede apreciar que existe una menor cantidad de información y que los niveles de velocidad son más variados con relación a un día lunes a la misma hora, esto se debe a que durante los fines de semana se registra una menor cantidad de localizaciones.
 
 \begin{figure}[!ht]
 	\centering
@@ -316,5 +320,74 @@ El resultado del análisis de tráfico puede ser observado en tiempo real por lo
 	\includegraphics[width=0.7\textwidth]{capitulos/7/figuras/figura7.jpg}
 	\caption{\label{fig:trafico_sabado} Tráfico en día sábado a las 9 am}	
 \end{figure}
+
+De las pruebas realizadas, se pudieron identificar segmentos de calles que cuentan con mayor información de tráfico a lo largo del día. La \Cref{fig:trafico_en_tr} muestra el estado del tráfico en tiempo real en una porción del mapa entre las 6 y 17 horas.
+
+\begin{figure}[!htbp]
+	\centering
+	\begin{subfigure}[b]{0.30\textwidth}
+		\includegraphics[width=\textwidth]{capitulos/7/figuras/6.jpg}
+		\caption{6:00}
+	\end{subfigure}
+	~~
+	\begin{subfigure}[b]{0.30\textwidth}
+		\includegraphics[width=\textwidth]{capitulos/7/figuras/7.jpg}
+		\caption{7:00}		
+	\end{subfigure}
+	~~
+	\begin{subfigure}[b]{0.30\textwidth}
+		\includegraphics[width=\textwidth]{capitulos/7/figuras/8.jpg}
+		\caption{8:00}
+	\end{subfigure}
+	
+	\begin{subfigure}[b]{0.30\textwidth}
+		\includegraphics[width=\textwidth]{capitulos/7/figuras/9.jpg}
+		\caption{9:00}
+	\end{subfigure}
+	~~
+	\begin{subfigure}[b]{0.30\textwidth}
+		\includegraphics[width=\textwidth]{capitulos/7/figuras/10.jpg}
+		\caption{10:00}
+	\end{subfigure}
+	~~
+	\begin{subfigure}[b]{0.30\textwidth}
+		\includegraphics[width=\textwidth]{capitulos/7/figuras/11.jpg}
+		\caption{11:00}
+	\end{subfigure}
+	
+	\begin{subfigure}[b]{0.30\textwidth}
+		\includegraphics[width=\textwidth]{capitulos/7/figuras/12.jpg}
+		\caption{12:00}
+	\end{subfigure}
+	~~
+	\begin{subfigure}[b]{0.30\textwidth}
+		\includegraphics[width=\textwidth]{capitulos/7/figuras/13.jpg}
+		\caption{13:00}
+	\end{subfigure}
+	~~
+	\begin{subfigure}[b]{0.30\textwidth}
+		\includegraphics[width=\textwidth]{capitulos/7/figuras/14.jpg}
+		\caption{14:00}
+	\end{subfigure}
+	
+	\begin{subfigure}[b]{0.30\textwidth}
+		\includegraphics[width=\textwidth]{capitulos/7/figuras/15.jpg}
+		\caption{15:00}
+	\end{subfigure}
+	~~
+	\begin{subfigure}[b]{0.30\textwidth}
+		\includegraphics[width=\textwidth]{capitulos/7/figuras/16.jpg}
+		\caption{16:00}
+	\end{subfigure}
+	~~
+	\begin{subfigure}[b]{0.30\textwidth}
+		\includegraphics[width=\textwidth]{capitulos/7/figuras/17.jpg}
+		\caption{17:00}
+	\end{subfigure}
+	
+	\caption{\label{fig:trafico_en_tr} Tráfico en un tramo a lo largo del día}
+\end{figure}
+
+
 
 
