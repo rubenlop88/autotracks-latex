@@ -1,70 +1,59 @@
 \chapter{Conclusiones y Trabajos Futuros}
 \label{cap:8}
 
-En este trabajo se presentaron los detalles de implementación del sistema  denominado Autotracks, que permite recolectar y procesar información del estado del tránsito vehicular a través de dispositivos móviles para aproximar el estado del tráfico en tiempo real.
-
-A continuación se presentan las conclusiones y principales aportes de este trabajo y se proponen los posibles trabajos futuros.
+En este trabajo se presentaron los detalles de implementación de un sistema inteligente de información de tráfico, denominado Autotracks, que permite recolectar y procesar información del tránsito vehicular que es obtenida a través de dispositivos móviles para aproximar el estado del tráfico en tiempo real. A continuación se presentan las conclusiones y principales aportes, y se proponen posibles trabajos futuros.
 
 \section{Conclusiones}
 
-Se presentaron los conceptos básicos sobre sistemas de coordenadas y los distintos modelos de datos utilizados para representar y guardar información geográfica. Se seleccionó el modelo de datos vectorial por ser el más adecuado para la implementación de los algoritmos de análisis de tráfico. El mapa de calles utilizado fue obtenido de Open Street Maps y para almacenar el mapa y las trayectorias de los vehículos se utilizó una base de datos GIS.
+Del estudio de los conceptos de sistemas de coordenadas y de modelos de datos utilizados para representar la información geográfica, se determinó que el modelo de datos vectorial resulta adecuado para la implementación de algoritmos de análisis de tráfico, así como para la representación de los datos resultantes y de las trayectorias de los vehículos. Así también, se encontró apropiada la utilización de Bases de Datos GIS, con la que se consigue que la información tanto generada como recolectada por el sistema pueda estar disponible para su utilización futura.
 
-Se estudiaron las técnicas de recolección de datos de tránsito, que incluyen las tecnologías in situ, que consisten en dispositivos instalados en los lugares sujetos de medición y las tecnologías de FCD, que utilizan dispositivos montados en vehículos en circulación. Se optó por la utilización de un modelo FCD, en el cual los dispositivos móviles de los usuarios son utilizados como dispositivos AVL para monitorear de forma continua la ubicación del vehículo en el cual el usuario está transitando. En el dispositivo móvil se utiliza un esquema de detección de actividad para activar el monitoreo sólo cuando el usuario se encuentra dentro de un vehículo en movimiento.
+Con respecto a la recolección de datos de tránsito, se encontró conveniente y efectiva la utilización de un modelo basado en FCD, en el cual los dispositivos móviles de los usuarios son utilizados como elementos AVL para recolectar muestras de las trayectorias de los usuarios en tránsito. En este mismo sentido, se encontró efectiva la aplicación de mecanismos de detección de actividad para realizar la captura de muestras sólo cuando los usuarios se encuentran abordo de un vehículo en movimiento, evitándose de esta forma un consumo innecesario de energía en los dispositivos respecto a que si se aplicare algún enfoque de seguimiento continuo.
 
-Se analizaron las diferentes clases de algoritmos de MM (geométricos, topológicos, estadísticos y avanzados), utilizados para aproximar el trayecto real de los vehículo, y se describieron los principales algoritmos de cada clase. Se seleccionó un algoritmo topológico, denominado ST-Matching, diseñado para trabajar con muestras de baja frecuencia y relativamente imprecisas, lo cual se adecua a los datos obtenidos mediante el esquema de FCD utilizado.
+Para la reconstrucción de trayectorias, se aplicó con éxito un esquema de muestreo periódico en conjunto con un algoritmo de MM denominado ST-Matching. Esto permitió que a partir de muestras poco frecuentes e imprecisas se consiga de forma eficiente información suficiente para proveer una estimación del estado de tráfico. También, con este esquema, en los dispositivos móviles no se requiere de un seguimiento activo que recolecte y transmita una gran cantidad de datos, ni de la utilización exclusiva de sensores GPS, permitiendo estos factores un uso eficiente de los recursos de los dispositivos.
 
-Se explicaron los distintos parámetros que caracterizan al flujo del tráfico, como ser la velocidad, la densidad y el volumen. Se utilizaron los datos obtenidos a partir del proceso de MM para determinar las velocidades promedio de los distintos segmentos de calles en un período de tiempo determinado. La información generada se encuentra disponible en tiempo real para los usuarios de la aplicación móvil y a través de la aplicación web de Autotracks.
-
-Todos los componentes utilizados en la implementación de este sistema son libres y gratuitos. Además el código fuente, tanto de la aplicación web como de la aplicación móvil, está disponible con la Licencia MIT, que permite su libre utilización, distribución y modificación. Toda la información generada por el sistema está almacenada y disponible de manera gratuita para su utilización en trabajos futuros.
-
-Se realizaron pruebas de campo con el objetivo de determinar los valores de algunos parámetros utilizados en la detección de actividad y en la toma de localizaciones, y para verificar el funcionamiento del algoritmo de MM implementado. También se analizaron los datos recolectados durante un período de 5 semanas para verificar si la información de tráfico generada durante este tiempo se corresponde con la realidad percibida.
-
-A partir de las pruebas de campo realizadas y los resultados obtenidos, pueden derivarse las siguientes conclusiones:
+A partir de las pruebas de campo realizadas y los resultados obtenidos, pueden derivarse las siguientes apreciaciones:
 \begin{itemize}
-\item La información recolectada durante el período de prueba muestra que los días entre semana son los que registran un mayor volumen de tráfico. Además, se identificó que las horas con mayor volumen se dan de 6 y a 9 de la mañana, al mediodía y entre las 18 y 21 horas.
+\item La información recolectada durante el período de prueba tiene una amplia semejanza con la realidad percibida, lo cual demuestra empíricamente la efectivadad del modelo propuesto e implementado.
+\item Se verifica que la velocidad promedio observada constituye una medida representativa del estado del tráfico.
 
-\item Durante las horas pico en las que se registra un mayor volumen de tráfico también se aprecia una disminución considerable en la velocidad promedio de los vehículos.
+\item Se comprueba que los dispositivos móviles pueden ser utilizados como alternativa válida para recolectar información de FCD y así estimar el estado del tránsito.
 
-\item Los dispositivos móviles pueden ser utilizados como alternativa válida para recolectar información del estado del tránsito en países en vías de desarrollo que no cuentan con infraestructura instalada para el efecto.
+\item Al utilizar un esquema de reconocimiento de actividad se evita un consumo excesivo de batería y se facilita la recolección de información ya que esta sucede de manera transparente para el usuario.
 
-\item Utilizando un esquema de reconocimiento de actividad se evita un consumo excesivo de batería y se facilita la recolección de información ya que esta sucede de manera transparente para el usuario.
-
-\item En el esquema de reconocimiento de actividad es necesario utilizar un tiempo de tolerancia para evitar cortes en la trayectoria cuando un vehículo está momentáneamente detenido.
+\item Para evitar cortes en la captura de datos en un esquema de reconocimiento de actividad se hace necesario utilizar un tiempo de tolerancia antes de detener el seguimiento.
 
 \item La ubicación de los vehículos puede ser obtenida mediante cualquier sensor del dispositivo móvil, como ser los sensores GPS, Wifi y las redes de telefonía. Los datos obtenidos mediante Wifi o redes de telefonía son suficientemente aceptables.
 
-\item El algoritmo ST-Matching tiene una efectividad similar para intervalos de 30 y 60 segundos pero disminuye levemente para 120 segundos. Un intervalo de 60 segundos es suficiente para aproximar el trayecto de un vehículo.
-
-\item Si bien el volumen de datos recolectados es suficiente para determinar las horas pico y las velocidades promedio, no es suficiente para tener un panorama completo del estado del tráfico en la mayoría de las calles durante todo el día.
+\item Si bien el volumen de datos recolectados es suficiente para determinar las horas pico y las velocidades promedio en las mismas, con un mayor número de usuarios es altamente factible que con el sistema desarrollado pueda obtenerse un panorama completo del estado del tráfico en la mayoría de las calles durante todo el día.
 \end{itemize}
 
-Finalmente, como principales aportes del trabajo presentado en este libro se puede citar que:
+Finalmente, algunos de los principales aportes del presente trabajo son:
 
 \begin{itemize}
-\item Se realizó un análisis bibliográfico de los componentes necesarios para el desarrollo de un sistema de información de tráfico.
+\item Un resumen bibliográfico completo de los componentes necesarios para el desarrollo de un sistema inteligentes de información de tráfico.
 
-\item Se implementó un sistema de información de tráfico de bajo costo y adecuado a las condiciones de infraestructura de los países en vías de desarrollo.
+\item La implementación de un sistema inteligente de información de tráfico de bajo costo que resulta adecuado para condiciones de nula o escasa infraestructura de control de tráfico.
 
-\item El código fuente y toda la información recolectada a través del sistema queda disponible para su posterior utilización y análisis.
+\item La disponibilidad del código fuente y de toda la información recolectada a través del sistema para su posterior utilización y/o análisis.
 \end{itemize}
 
 \section{Trabajos futuros}
 
-De manera a continuar con el trabajo iniciado en esta tesis de grado, los siguientes puntos son propuestos como trabajos futuros:
+De manera a que pueda darse continuidad al trabajo iniciado con el presente proyecto de grado, los siguientes puntos son propuestos como trabajos futuros:
 
 \begin{itemize}
-\item Implementar una API para consulta y extracción de los datos recolectados. 
 
-\item Experimentar con datos FCD obtenidos mediante dispositivos dedicados instalados en buses o flotas de taxi.
+\item Experimentar con datos FCD obtenidos mediante dispositivos  instalados en flotas de vehículos de circulación continua tales como buses y taxis.
 
-\item Estudiar las técnicas de reconocimiento de actividad e incorporar una implementación propia en el sistema.
+\item Realizar un estudio orientado a documentar la implementación de técnicas de reconocimiento de actividad e incorporar una solución propia en el sistema.
 
-\item Implementar otros tipos de aplicaciones que hagan uso de la información de tráfico generada (ruteo dinámico, control de semáforos, etc.).
-
-\item Extender la aplicación móvil a diferentes plataformas, como iOS o Windows Phone.
+\item Implementar otros tipos de aplicaciones que hagan uso de la información de tráfico generada, como ser el cálculo de caminos menos congestionados, control inteligente de semáforos, entre otros.
 
 \item Analizar los datos recolectados mediante técnicas de minería de datos para determinar puntos críticos y posibles vías alternativas.
 
-\item Experimentar con diferentes clases de algoritmos de MM.
+\item Extender la aplicación móvil a diferentes plataformas, como iOS o Windows Phone, de manera a aumentar la posibilidad de que más usuarios utilicen la aplicación.
+
+
+
 \end{itemize}
 

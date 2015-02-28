@@ -305,9 +305,9 @@ Otro parámetro que caracteriza el flujo de tráfico es la velocidad promedio de
 
 \section{Aproximación del Tráfico en Tiempo Real}
 
-Para aproximar el estado del tráfico en tiempo real, se saca un promedio de todas las velocidades de puntos que hayan sido asociados a un segmento de calle en particular durante un periodo determinado de tiempo. Con la cantidad de usuarios activos durante las pruebas, no fue posible mantener el estado del tráfico de manera continua en el mapa de calles.
+Para aproximar el estado del tráfico en tiempo real, se obtiene el promedio de velocidad de todos los puntos que hayan sido asociados a un segmento de calle en particular durante la última hora. De esta forma, es posible presentar información del estado del tráfico en aquellas calles que han sido transitadas recientemente. En contrapartida, para aquellas calles que no cuentan con información reciente, no se presentan una aproximación de su estado. Cabe destacar que dada la cantidad de usuarios activos durante las pruebas, se da el caso de que no es posible presentar el estado del tráfico de manera continua en todas las calles. También es posible consultar el estado del tráfico en momento particular del pasado siguiendo la misma lógica, es decir, eligiendo un momento en particular y hallando el promedio de las velocidades registradas en la última hora hasta ese momento.
 
-Los momentos donde se registraron mayor cantidad de segmentos de calles con información de tráfico se corresponden a las franjas horarias denominadas horas pico, que se identificaron anteriormente. En la \Cref{fig:trafico_lunes} se puede observar un ejemplo del estado del tráfico observado en un día lunes a las 9 de la mañana, puede verse que existe una gran cantidad de calles con niveles de velocidad bajo. La \Cref{fig:trafico_sabado} corresponde al estado del tráfico observado un día sábado a las 9 de la mañana, se puede apreciar que existe una menor cantidad de información y que los niveles de velocidad son más variados con relación a un día lunes a la misma hora, esto se debe a que durante los fines de semana se registra una menor cantidad de localizaciones.
+Los momentos en los que se registraron mayor cantidad de segmentos de calles con información de tráfico se corresponden a las franjas horarias denominadas horas pico y que se identificaron anteriormente a partir de las muestras obtenidas. En la \Cref{fig:trafico_lunes} se puede observar un ejemplo del estado del tráfico observado en un día lunes entre las 8 y las 9 de la mañana, puede verse que existe una gran cantidad de calles con niveles de velocidad bajo. La \Cref{fig:trafico_sabado} corresponde al estado del tráfico observado para la misma zona un día sábado, también entre las 8 y las 9 de la mañana, y se puede apreciar que existe una menor cantidad de información y que los niveles de velocidad son más variados con relación a lo recabado para el día lunes.
 
 \begin{figure}[!ht]
 	\centering
@@ -321,7 +321,7 @@ Los momentos donde se registraron mayor cantidad de segmentos de calles con info
 	\caption{\label{fig:trafico_sabado} Tráfico en día sábado a las 9 am}	
 \end{figure}
 
-De las pruebas realizadas, se pudieron identificar segmentos de calles que cuentan con mayor información de tráfico a lo largo del día. La \Cref{fig:trafico_en_tr} muestra el estado del tráfico en tiempo real en una porción del mapa entre las 6 y 17 horas.
+A modo de ilustración, en la \Cref{fig:trafico_en_tr} se muestra el estado del tráfico aproximado en tiempo real para un día entre semana, entre las 6 y 17 horas. Se puede observar cómo el estado de los segmentos de calles va variando a lo largo del día, conforme a los datos recolectados.
 
 \begin{figure}[!htbp]
 	\centering

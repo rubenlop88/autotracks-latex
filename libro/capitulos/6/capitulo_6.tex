@@ -376,7 +376,7 @@ La estimación se realiza calculando la \emph{velocidad media local} de cada seg
 \end{equation}
 donde ${ \hat { { v } } _{ j }(k) }$ es la velocidad estimada en la calle $j$ durante el intervalo $\left[ { t }_{ k },{ t }_{ k+\Delta T } \right] $, y ${ { n }_{ { t }_{ k },{ t }_{ k+\Delta T }}}$ es el número total de muestras disponibles para la calle $j$ durante dicho intervalo.
 
-Para obtener el estado estimado del tráfico en un momento dado, se utiliza la \Cref{lst:trafico} que da como resultado todos los segmentos de calle $A_iB_i$ formados por los puntos $A_i(r.x1, r.y1)$ y $B_i(r.x2, r.y2)$ junto con la cantidad de muestras disponibles y la sumatoria de las velocidades observadas en dichas muestras durante un periodo de tiempo determinado. Con ello se aplica la \Cref{eq:velocidad_media} para estimar la \emph{velocidad media local} de cada segmento de calle.
+Para obtener el estado estimado del tráfico en un momento dado, se utiliza la \Cref{lst:trafico} que da como resultado todos los segmentos de calle $A_iB_i$ formados por los puntos $A_i(r.x1, r.y1)$ y $B_i(r.x2, r.y2)$ junto con la cantidad de muestras disponibles y la sumatoria de las velocidades observadas en dichas muestras durante un intervalo de tiempo de 1 hora. Con ello se aplica la \Cref{eq:velocidad_media} para estimar la \emph{velocidad media local} de cada segmento de calle.
 
 \begin{lstlisting}[float,floatplacement=tbh,caption={Obtención de datos de tráfico}, label={lst:trafico}]
 select 
