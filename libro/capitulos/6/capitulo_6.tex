@@ -1,7 +1,7 @@
 \chapter{Implementación de la Solución}
 \label{cap:6}
 
-En este capítulo se presentan los detalles de implementación de un sistema centralizado cuyo objetivo es aproximar el estado del tráfico en tiempo real. La solución propuesta está basada en FCD obtenido mediante dispositivos móviles. La información resultante es almacenada en una base de datos GIS y se encuentra disponible para consultas a través de una aplicación móvil y una página web desarrolladas para el efecto.
+En este capítulo se presentan los detalles de implementación de un sistema centralizado cuyo objetivo es aproximar el estado del tráfico en tiempo real. La solución propuesta está basada en FCD obtenido mediante dispositivos móviles. La información obtenida es procesada en el servidor utilizando un algoritmo de MM y el resultado es almacenado en una base de datos GIS para consultas a través de una aplicación móvil y una página web desarrolladas para el efecto.
 
 \section{Arquitectura}
 
@@ -24,18 +24,17 @@ A modo de generar información sobre el estado del tráfico de un área geográf
 
 Primeramente, para el mapa de calles se utilizan los datos geográficos disponibles en Open Street Maps\footnote{http://www.openstreetmap.org/} (OSM). Los datos descargados desde OSM están en el formato OSM XML, el cual consiste en una lista de instancias de nodos, caminos y relaciones dentro de su modelo. Antes de almacenar estos datos es necesario transformarlos a un formato soportado por PostGIS y pgRouting. pgRouting representa toda la información de las rutas como un grafo dirigido, donde los vértices corresponden a las intersecciones de las calles y las aristas corresponden a los segmentos de calles, la longitud de la calle determina su peso, que es utilizado para el cálculo del camino más corto. Para convertir e importar los datos de OSM a la base de datos se utiliza la herramienta osm2po\footnote{http://osm2po.de/} y como resultado de esta importación se crea una tabla en la que cada fila corresponde a un segmento de calle. 
 
-Por otro lado, para almacenar la información de las trayectorias de los usuarios se definen las siguientes tablas:
+Por otro lado, para almacenar la información de las trayectorias de muestra de los usuarios se definen las siguientes tablas en la base de datos GIS:
 \begin{enumerate}
-\item \textbf{Localizaciones}: En esta tabla se guardan los datos de ubicación que son recibidos periódicamente de los usuarios de la aplicación móvil. Se almacena la fecha, la latitud, la longitud, la velocidad, la dirección, la precisión, altitud y la ruta a la que pertenece. Las localizaciones representan los puntos de una trayectoria.
-\item \textbf{Rutas}: Una ruta es un conjunto de localizaciones que sirven como dato de entrada para el proceso de MM. La ruta representa a la trayectoria recorrida por el usuario durante un viaje.
+	\item \textbf{Localizaciones}: En esta tabla se guardan los datos de ubicación que son recibidos periódicamente de los usuarios de la aplicación móvil. Se almacena la fecha, la latitud, la longitud, la velocidad, la dirección, la precisión, altitud y la trayectoria a la que pertenece.
+	\item \textbf{Rutas}: Una ruta es un conjunto de localizaciones que sirven como dato de entrada para el proceso de MM. Cada ruta representa una muestra de una trayectoria recorrida por el usuario durante un viaje.
 \end{enumerate}
-
 Todos los datos geométricos, tanto del mapa de calles como de las trayectorias, son almacenados utilizando un sistema de coordenadas WGS84 conforme se describe en el \cref{sistema_de_coordenadas}.
 
 \section{Implementación de FCD}
 \label{floating-car-data}
 
-La información de FCD es obtenida por medio de una aplicación móvil desarrollada como parte del presente trabajo que ha sido denominada Autotracks\footnote{https://play.google.com/store/apps/details?id=py.com.fpuna.autotracks}. La misma se encarga de capturar, almacenar y enviar periódicamente a un servidor central las trayectorias de los usuarios, además la aplicación sólo captura las localizaciones mientras los usuarios están en un vehículo en movimiento. Para este propósito, Autotracks cuenta con tres componentes principales: 
+La información de FCD es obtenida por medio de una aplicación móvil desarrollada como parte del presente trabajo que ha sido denominada Autotracks\footnote{https://play.google.com/store/apps/details?id=py.com.fpuna.autotracks}. La misma se encarga de capturar, almacenar y enviar periódicamente a un servidor central las muestras de las trayectorias de los usuarios, además la aplicación sólo captura las localizaciones mientras los usuarios están en un vehículo en movimiento. Para este propósito, Autotracks cuenta con tres componentes principales: 
 \begin{itemize}
 	\item Reconocimiento de actividad.
 	\item Toma de localizaciones.
@@ -367,7 +366,7 @@ El \Cref{alg:st_matching} muestra los pasos realizados para obtener la secuencia
 \section{Estimación del tráfico}
 \label{estimacion_trafico}
 
-Una vez finalizado el proceso MM, a cada punto de la trayectoria se le asocia una arista del mapa de calles por la cual se ha determinado que el vehículo transitó en ese momento. Además cada punto de la trayectoria tiene como dato la velocidad a la cual el vehículo se desplazó. Para realizar la estimación del estado del tráfico se utilizan todas las velocidades de los puntos asociados a cada segmento de calle del mapa durante un período de tiempo determinado.
+Una vez finalizado el proceso MM, a cada punto de la trayectoria de muestra se le asocia una arista del mapa de calles por la cual se ha determinado que el vehículo transitó en ese momento. Además cada punto de la trayectoria tiene como dato la velocidad a la cual el vehículo se desplazó. Para realizar la estimación del estado del tráfico se utilizan todas las velocidades de los puntos asociados a cada segmento de calle del mapa durante un período de tiempo determinado.
 
 La estimación se realiza calculando la \emph{velocidad media local} de cada segmento de calle. Para ello se define la velocidad media en la calle $j$ durante el intervalo de interés como:
 \begin{equation}
@@ -391,14 +390,14 @@ where l.wayId = r.id and l.fecha between :inicio and :fin
 group by r.id
 \end{lstlisting}
 
-Finalmente, para representar la información obtenida en intervalos que faciliten su interpretación, se definen cuatro posibles niveles de velocidad en una calle:
+Finalmente, para representar la información obtenida en intervalos que faciliten su interpretación, se definen cuatro posibles niveles de velocidad sobre cada segmento de calle:
 \begin{enumerate}
 \item \textbf{Rojo:}  para velocidades entre 0 y 14 kilómetros por hora.
 \item \textbf{Naranja:}  para velocidades entre 15 y 29 kilómetros por hora.
 \item \textbf{Amarillo:}  para velocidades entre 30 y 39 kilómetros por hora.
 \item \textbf{Verde:}  para velocidades de 40 o más kilómetros por hora.
 \end{enumerate}
-Las calles son pintadas en el mapa de acuerdo a su nivel de velocidad como se puede apreciar en la \Cref{fig:calles}.
+De esta forma, los segmentos de calles en el mapa son coloreados de acuerdo a su nivel de velocidad como se puede apreciar en la \Cref{fig:calles}.
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\textwidth]{capitulos/6/figuras/figura3.jpg}

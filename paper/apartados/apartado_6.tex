@@ -21,7 +21,7 @@ Para determinar el valor apropiado del intervalo de reconocimiento, tal que se d
 	\toprule
 	Intervalo (s) & Recorridos & En bus (min.) & En auto (min.) & Ambos (min.) \\
 	\midrule
-	15            & 30       & 1.55         & 1.25            & 1.40         \\
+	15            & 30       & 1.55         & 1.18            & 1.37         \\
 	30            & 30       & 1.64         & 1.30            & 1.47         \\
 	45            & 30       & 2.59         & 2.05            & 2.32         \\
 	60            & 30       & 4.37         & 2.75            & 3.66         \\
@@ -47,15 +47,10 @@ En base al intervalo de reconocimiento de actividad seleccionado previamente, en
     	\toprule
     	Intervalo (s) & Tolerancia (min.) & En bus (\%) & En auto (\%) & Ambos (\%) \\
     	\midrule
-    	30            & 3                 & 85.86         & 91.56          & 88.71        \\
-    	30            & 5                 & 89.31         & 93.67          & 91.49        \\
-
-    	%45            & 5                 & 83.34         & 89.32          & 86.33        \\
-    	%60            & 5                 & 80.83         & 87.73          & 84.24        \\
+    	30            & 3                 & 80.34         & 89.16          & 84.75        \\
+    	30            & 5                 & 85.86         & 91.56          & 88.71		\\
     	30            & 7                & 94.44         & 96.11          & 95.28        \\
     	30            & 10                & 95.83         & 97.22          & 96.53        \\
-    	%45            & 10                & 89.55         & 95.44          & 92.49        \\
-    	%60            & 10                & 83.33         & 93.89          & 88.61        \\
     	\bottomrule
 	\end{tabular}
     \caption{Tiempos efectivos de rastreo}
@@ -67,6 +62,8 @@ De las pruebas realizadas puede notarse que con una tolerancia de 10 minutos se 
 \subsection{Verificación de efectividad de MM}
 
 Para realizar el proceso de MM se utilizó el algoritmo ST-Matching como se describe en \cref{implementacion_mm}. Este algoritmo toma como entrada un conjunto de localizaciones capturadas durante una trayectoria seguida por un usuario para determinar el recorrido correspondiente. Así, el intervalo de tiempo con el que se obtienen dichos puntos se denomina \emph{intervalo de muestreo}. Con un valor de intervalo grande se tiene un menor número de muestras y por ende un menor consumo de batería del dispositivo móvil, pero a su vez podría obtenerse una pobre aproximación del camino recorrido. En cambio, con intervalos pequeños se tiene un mayor número de muestras lo cual aumenta la calidad de la aproximación pero implica un elevado consumo de batería. Finalmente, para medir la efectividad del proceso MM debe observarse la cantidad de puntos que son correctamente asignados a calles al estimar el camino real recorrido.
+
+%TODO agregar referencia a la figura
 
 Las pruebas del proceso de MM consistieron en observar su efectividad con diferentes valores de intervalo de muestreo. Los intervalos observados fueron de 30, 60 y 120 segundos, y para cada intervalo se realizaron 30 recorridos en el trayecto indicado en la figura X. Para cada valor de intervalo de muestreo se consideró el total de puntos recolectados y se comparó con la cantidad de puntos correctamente asignados. Los resultados obtenidos pueden ser apreciados en la \Cref{table:map_matching}. Puede notarse que se tiene una leve diferencia a favor del intervalo de 30 segundos en comparación al intervalo de 60 segundos y una diferencia un poco mayor en comparación al de 120 segundos. En base a estos resultados se decidió utilizar el intervalo de 60 segundos debido a que implica un menor consumo de batería y produce resultados muy cercanos al intervalo de 30 segundos.
 
