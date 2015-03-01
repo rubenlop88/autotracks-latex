@@ -219,7 +219,7 @@ En la \Cref{fig:promedio_velocidad_es_fs} se realiza una comparación de modo a 
 
 \begin{figure}[h]
 \centering
-\begin{tikzpicture}[thick,scale=0.85, every node/.style={scale=0.85}]
+\begin{tikzpicture}[thick,scale=0.8, every node/.style={scale=0.8}]
 \begin{axis}[
     xlabel={hora},
     ylabel={Velocidoad [km/h]},
@@ -249,7 +249,7 @@ En la \Cref{fig:promedio_velocidad_es_fs} se realiza una comparación de modo a 
 
 \begin{figure}[h]
 \centering
-\begin{tikzpicture}[thick,scale=0.85, every node/.style={scale=0.85}]
+\begin{tikzpicture}[thick,scale=0.8, every node/.style={scale=0.8}]
 \begin{axis}[
     xlabel={hora},
     ylabel={Velocidoad [km/h]},
@@ -282,10 +282,92 @@ En la \Cref{fig:promedio_velocidad_es_fs} se realiza una comparación de modo a 
  
 \end{axis}
 \end{tikzpicture}
-\caption{Comparativa de Promedio de velocidad por hora del día}
+\caption{Comparativa de promedios de velocidad por hora}
 \label{fig:promedio_velocidad_es_fs}
 \end{figure}
 
 \subsection{Aproximación del Tráfico en Tiempo Real}
 
-....
+Para aproximar el estado del tráfico en tiempo real, se obtiene el promedio de velocidad de todos los puntos que hayan sido asociados a un segmento de calle en particular durante la última hora. De esta forma, es posible presentar información del estado del tráfico en aquellas calles que han sido transitadas recientemente. En contrapartida, para aquellas calles que no cuentan con información reciente, no se presentan una aproximación de su estado. 
+%Cabe destacar que dada la cantidad de usuarios activos durante las pruebas, se da el caso de que no es posible presentar el estado del tráfico de manera continua en todas las calles. También es posible consultar el estado del tráfico en momento particular del pasado siguiendo la misma lógica, es decir, eligiendo un momento en particular y hallando el promedio de las velocidades registradas en la última hora hasta ese momento.
+
+%Los momentos en los que se registraron mayor cantidad de segmentos de calles con información de tráfico se corresponden a las franjas horarias denominadas horas pico y que se identificaron anteriormente a partir de las muestras obtenidas. En la \Cref{fig:trafico_lunes} se puede observar un ejemplo del estado del tráfico observado en un día lunes entre las 8 y las 9 de la mañana, puede verse que existe una gran cantidad de calles con niveles de velocidad bajo. La \Cref{fig:trafico_sabado} corresponde al estado del tráfico observado para la misma zona un día sábado, también entre las 8 y las 9 de la mañana, y se puede apreciar que existe una menor cantidad de información y que los niveles de velocidad son más variados con relación a lo recabado para el día lunes.
+
+%\begin{figure}[!ht]
+%	\centering
+%	\includegraphics[width=0.4\textwidth]{apartados/figuras/figura6.jpg}
+%	\caption{\label{fig:trafico_lunes} Tráfico en día lunes a las 9 am}	
+%\end{figure}
+%
+%\begin{figure}[!ht]
+%	\centering
+%	\includegraphics[width=0.4\textwidth]{apartados/figuras/figura7.jpg}
+%	\caption{\label{fig:trafico_sabado} Tráfico en día sábado a las 9 am}	
+%\end{figure}
+
+A modo de ilustración, en la \Cref{fig:trafico_en_tr} se muestra el estado del tráfico aproximado en tiempo real para un día entre semana, entre las 6 y 17 horas. Se puede observar cómo el estado de los segmentos de calles va variando a lo largo del día, conforme a los datos recolectados.
+
+\begin{figure*}[!htbp]
+	\centering
+%	\begin{subfigure}[b]{0.30\textwidth}
+%		\includegraphics[width=\textwidth]{apartados/figuras/6.jpg}
+%		\caption{6:00}
+%	\end{subfigure}
+%	~~
+%	\begin{subfigure}[b]{0.30\textwidth}
+%		\includegraphics[width=\textwidth]{apartados/figuras/7.jpg}
+%		\caption{7:00}		
+%	\end{subfigure}
+%	~~
+%	\begin{subfigure}[b]{0.30\textwidth}
+%		\includegraphics[width=\textwidth]{apartados/figuras/8.jpg}
+%		\caption{8:00}
+%	\end{subfigure}
+	
+	\begin{subfigure}[b]{0.30\textwidth}
+		\includegraphics[width=\textwidth]{apartados/figuras/9.jpg}
+		\caption{9:00}
+	\end{subfigure}
+	~~
+	\begin{subfigure}[b]{0.30\textwidth}
+		\includegraphics[width=\textwidth]{apartados/figuras/10.jpg}
+		\caption{10:00}
+	\end{subfigure}
+	~~
+	\begin{subfigure}[b]{0.30\textwidth}
+		\includegraphics[width=\textwidth]{apartados/figuras/11.jpg}
+		\caption{11:00}
+	\end{subfigure}
+	
+	\begin{subfigure}[b]{0.30\textwidth}
+		\includegraphics[width=\textwidth]{apartados/figuras/12.jpg}
+		\caption{12:00}
+	\end{subfigure}
+	~~
+	\begin{subfigure}[b]{0.30\textwidth}
+		\includegraphics[width=\textwidth]{apartados/figuras/13.jpg}
+		\caption{13:00}
+	\end{subfigure}
+	~~
+	\begin{subfigure}[b]{0.30\textwidth}
+		\includegraphics[width=\textwidth]{apartados/figuras/14.jpg}
+		\caption{14:00}
+	\end{subfigure}
+	
+	\begin{subfigure}[b]{0.30\textwidth}
+		\includegraphics[width=\textwidth]{apartados/figuras/15.jpg}
+		\caption{15:00}
+	\end{subfigure}
+	~~
+	\begin{subfigure}[b]{0.30\textwidth}
+		\includegraphics[width=\textwidth]{apartados/figuras/16.jpg}
+		\caption{16:00}
+	\end{subfigure}
+	~~
+	\begin{subfigure}[b]{0.30\textwidth}
+		\includegraphics[width=\textwidth]{apartados/figuras/17.jpg}
+		\caption{17:00}
+	\end{subfigure}
+	
+	\caption{\label{fig:trafico_en_tr} Tráfico en un tramo a lo largo del día}
+\end{figure*}
