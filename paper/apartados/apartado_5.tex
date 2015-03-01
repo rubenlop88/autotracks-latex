@@ -8,9 +8,11 @@ En la \Cref{fig:arquitectura} se ilustra la arquitectura modular del sistema des
 \end{enumerate*}
 
 \begin{figure}[h*]
+	\begin{footnotesize}
 	\centering
 	\input{apartados/figuras/arquitectura.pdf_tex}
 	\caption{\label{fig:arquitectura} Arquitectura del Sistema}	
+	\end{footnotesize}
 \end{figure}
 
 \subsection{Almacenamiento de datos}
@@ -139,17 +141,20 @@ Los datos de entrada del algoritmo de MM son la red de calles, que se describió
 La red de calles es modelada como un grafo dirigido $G(V,E)$, donde $V$ es el conjunto de todos los vértices correspondientes a las intersecciones y extremos de los segmentos de calles, y $E$ es el conjunto de todas las aristas que representan segmentos de calles. Además, cada segmento $e \in E$ tiene como datos un identificador único $e.id$, el límite de velocidad $e.v$ de la calle, la longitud $e.l$ del segmento, el identificador del vértice inicial $e.ini$ y el del vértice final $e.fin$. En la \Cref{fig:segmentos_de_calle} se aprecia como una calle puede estar dividida en varios segmentos, donde cada segmento está comprendido entre dos vértices del mapa.
 
 \begin{figure}[h*]
+	\begin{footnotesize}
 	\centering
 	\input{apartados/figuras/segmentos_calle.pdf_tex}
-	\caption{\label{fig:segmentos_de_calle} Representación de segmentos de calles}	
+	\caption{\label{fig:segmentos_de_calle} Representación de segmentos de calles}	\end{footnotesize}	
 \end{figure}
 
 La trayectoria de muestra $T$ de un vehículo es representada como una secuencia ordenada de puntos $p_1, p_2, \dots, p_n$ donde cada punto $p_i$ tiene además como datos su latitud $p.lat$, su longitud $p.lon$, su velocidad aproximada $p.v$, su dirección de desplazamiento $p.d$ y el tiempo $p.t$ en que fue tomada la muestra. Esta trayectoria está ordenada con respecto al tiempo de tal manera que $p_i.t < p_{i + 1}.t$ para $1 \le i < n$. La \Cref{fig:trayectoria} muestra un ejemplo de una trayectoria correspondiente a un vehículo de prueba.
 
 \begin{figure}[h*]
+	\begin{footnotesize}
 	\centering
 	\input{apartados/figuras/trayectoria_vehiculo.pdf_tex}
-	\caption{\label{fig:trayectoria} Trayectoria de un vehículo}	
+	\caption{\label{fig:trayectoria} Trayectoria de un vehículo}
+	\end{footnotesize}
 \end{figure}
 
 El camino real $R$ es definido como una secuencia de segmentos de calles $e_i$ conectados entre sí, que se inicia en un vértice $v_{ini} \in V$ y finaliza en un vértice $v_{fin} \in V$, es decir, $R = \{ e_1, e_2, \dots, e_n \}$, donde $e_1.ini = v_{ini}$, $e_n.fin = v_{fin}$ y $e_i.fin = e_{i + 1}.ini$ para $1 \le i < n$.
@@ -162,9 +167,11 @@ La primera etapa del proceso es la selección de puntos candidatos. Un punto can
 El primer paso es seleccionar todos los segmentos de calles $e \in E$ tales que la distancia entre un punto $p_i$ y un segmento $e$ sea menor a un radio $r$, de esta forma se obtiene un conjunto de segmentos $E_i = \{ e : \text{ } e \in E \text{ } \wedge \text{ } dist(p_i, e) < r \}$. Luego, para cada segmento $e_{i}^{j}$ perteneciente al conjunto $E_i = \{e_{i}^{1}, e_{i}^{2}, \dots, e_{i}^{m}\}$ resultante, se obtiene un punto candidato $c_{i}^{j}$ realizando una proyección del punto $p_i$ sobre el segmento $e_{i}^{j}$. La proyección $proy(p, e)$ de un punto $p$ sobre un segmento $e$ se define como el punto $c$ perteneciente a $e$ más cercano a $p$, es decir, $c = \text{arg } min(dist(c_i, p)) \text{ } \forall c_i \in e$. Así, se obtiene el conjunto de puntos candidatos $C_i = \{ proy(p_i, e_j) \text{ } \forall e_j \in E_i \}$. Como se puede apreciar en la \Cref{fig:puntos_candidatos} un punto candidato puede ser cualquier punto del segmento, como en el caso de $c_{i}^{1}$ y $c_{i}^{2}$, o uno de sus vértices como en el caso de $c_{i}^{3}$.
 
 \begin{figure}[h*]
+	\begin{footnotesize}
 	\centering
 	\input{apartados/figuras/puntos_candidatos.pdf_tex}
 	\caption{\label{fig:puntos_candidatos} Puntos candidatos para un punto de la trayectoria}	
+	\end{footnotesize}
 \end{figure}
 
 Una vez que se han obtenidos todos los conjuntos $C_i = \{c_{i}^{1}, c_{i}^{2}, \dots, c_{i}^{m}\}$ correspondientes a cada punto $p_i$ de la trayectoria de muestra $T$, el problema de MM se reduce a cómo seleccionar un punto candidato $c_i$ de cada conjunto $C_i$, a partir del cual se obtiene el segmento de calle $e_i$, de manera tal que el camino real resultante $R = \{ e_1, e_2, \dots, e_n \}$ sea lo más aproximado posible a $T = \{ p_1, p_2, \dots, p_n\}$.
@@ -295,6 +302,6 @@ Finalmente, para representar la información obtenida en intervalos que facilite
 De esta forma, los segmentos de calles en el mapa son coloreados de acuerdo a su nivel de velocidad como se puede apreciar en la \Cref{fig:calles}.
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.45\textwidth]{apartados/figuras/estado_calles.jpg}
+	\includegraphics[width=0.35\textwidth]{apartados/figuras/estado_calles.jpg}
 	\caption{\label{fig:calles} Estado de calles en Autotracks}	
 \end{figure}

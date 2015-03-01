@@ -11,9 +11,14 @@ En la recolección de FCD se utiliza un esquema de detección de actividad que p
 
 Un parámetro importante es el intervalo de tiempo en el que se realiza la verificación de actividad del usuario, que se denomina \emph{intervalo de reconocimiento}, y determina qué tan rápido se detecta el movimiento para iniciar o finalizar el rastreo. Es importante tener en cuenta que mientras más corto es este intervalo, mayor es el consumo de batería debido a que el dispositivo móvil debe activar más frecuentemente sus sensores. 
 
-%TODO: agregar trayecto prueba.
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.35\textwidth]{apartados/figuras/trayecto.png}
+	\caption{\label{fig:trayecto} Trayecto de pruebas}	
+\end{figure}
 
-Para determinar el valor apropiado del intervalo de reconocimiento, tal que se derive en un balance adecuado entre el consumo de batería y la rápida detección de movimiento, se realizaron pruebas empíricas de 30 iteraciones en el trayecto de recorrido ilustrado por la figura X con diferentes valores, obteniéndose para cada valor el tiempo promedio que tarda en detectarse el movimiento según se muestra en la \Cref{tab:prom_intervalo_reconocimiento}. Como se puede apreciar en los resultados, un intervalo de reconocimiento corto ayuda a iniciar más rápidamente la toma de localizaciones.
+Para determinar el valor apropiado del intervalo de reconocimiento, tal que se derive en un balance adecuado entre el consumo de batería y la rápida detección de movimiento, se realizaron pruebas empíricas de 30 iteraciones en el trayecto de recorrido ilustrado por la \Cref{fig:trayecto} con diferentes valores, obteniéndose para cada valor el tiempo promedio que tarda en detectarse el movimiento según se muestra en la \Cref{tab:prom_intervalo_reconocimiento}. Como se puede apreciar en los resultados, un intervalo de reconocimiento corto ayuda a iniciar más rápidamente la toma de localizaciones.
+
 
 \begin{table}[h]
   \centering
@@ -63,9 +68,7 @@ De las pruebas realizadas puede notarse que con una tolerancia de 10 minutos se 
 
 Para realizar el proceso de MM se utilizó el algoritmo ST-Matching como se describe en \cref{implementacion_mm}. Este algoritmo toma como entrada un conjunto de localizaciones capturadas durante una trayectoria seguida por un usuario para determinar el recorrido correspondiente. Así, el intervalo de tiempo con el que se obtienen dichos puntos se denomina \emph{intervalo de muestreo}. Con un valor de intervalo grande se tiene un menor número de muestras y por ende un menor consumo de batería del dispositivo móvil, pero a su vez podría obtenerse una pobre aproximación del camino recorrido. En cambio, con intervalos pequeños se tiene un mayor número de muestras lo cual aumenta la calidad de la aproximación pero implica un elevado consumo de batería. Finalmente, para medir la efectividad del proceso MM debe observarse la cantidad de puntos que son correctamente asignados a calles al estimar el camino real recorrido.
 
-%TODO agregar referencia a la figura
-
-Las pruebas del proceso de MM consistieron en observar su efectividad con diferentes valores de intervalo de muestreo. Los intervalos observados fueron de 30, 60 y 120 segundos, y para cada intervalo se realizaron 30 recorridos en el trayecto indicado en la figura X. Para cada valor de intervalo de muestreo se consideró el total de puntos recolectados y se comparó con la cantidad de puntos correctamente asignados. Los resultados obtenidos pueden ser apreciados en la \Cref{table:map_matching}. Puede notarse que se tiene una leve diferencia a favor del intervalo de 30 segundos en comparación al intervalo de 60 segundos y una diferencia un poco mayor en comparación al de 120 segundos. En base a estos resultados se decidió utilizar el intervalo de 60 segundos debido a que implica un menor consumo de batería y produce resultados muy cercanos al intervalo de 30 segundos.
+Las pruebas del proceso de MM consistieron en observar su efectividad con diferentes valores de intervalo de muestreo. Los intervalos observados fueron de 30, 60 y 120 segundos, y para cada intervalo se realizaron 30 recorridos en el trayecto indicado en la \Cref{fig:trayecto}. Para cada valor de intervalo de muestreo se consideró el total de puntos recolectados y se comparó con la cantidad de puntos correctamente asignados. Los resultados obtenidos pueden ser apreciados en la \Cref{table:map_matching}. Puede notarse que se tiene una leve diferencia a favor del intervalo de 30 segundos en comparación al intervalo de 60 segundos y una diferencia un poco mayor en comparación al de 120 segundos. En base a estos resultados se decidió utilizar el intervalo de 60 segundos debido a que implica un menor consumo de batería y produce resultados muy cercanos al intervalo de 30 segundos.
 
 \begin{table}[h]
 	\centering
@@ -90,7 +93,7 @@ Para realizar el Análisis de Tráfico se distribuyó la aplicación Autotracks 
 
 \begin{figure}[h]
 	\centering
-	\begin{tikzpicture}[thick,scale=0.85, every node/.style={scale=0.85}]
+	\begin{tikzpicture}[thick,scale=0.8, every node/.style={scale=0.8}]
 	\begin{axis}[
 	xlabel={Día},
 	ylabel={Cantidad},
@@ -177,10 +180,6 @@ En la \Cref{table:localizaciones_por_hora} se puede observar la distribución de
 	\label{table:localizaciones_por_hora}
 \end{table}
 
-Finalmente, para caracterizar el flujo de tráfico se escogió como medida la velocidad promedio de desplazamiento de los vehículos, siendo valores mayores de esta mejores y peores los valores bajos. Así, en la \Cref{table:velocidad_por_hora} y la \Cref{fig:promedio_velocidad} se presentan el promedio de velocidad por hora del día y se aprecia que por las mañanas el promedio más bajo de velocidad ocurre entre las 6 y las 9 horas, mientras que por las tardes esto sucede de 18 a 21 horas. También se observa una disminución en la velocidad promedio durante el mediodía. 
-
-En la \Cref{fig:promedio_velocidad_es_fs} se realiza una comparación de modo a contrastar la diferencia que existe en los promedios de velocidad los días entre semana y los fines de semana. Durante los días entre semana se observa un promedio menor de velocidad a partir de las 5 horas hasta las 19 horas. Mientras que los fines de semana se observan dos periodos con bajos valores de velocidad promedio, siendo uno entre las 11 y 13 horas, y otro entre las 20 y 23 horas.
-
 \begin{table}[h]
 	\centering
 	\begin{tabular}{cccc}
@@ -217,6 +216,10 @@ En la \Cref{fig:promedio_velocidad_es_fs} se realiza una comparación de modo a 
 	\label{table:velocidad_por_hora}
 \end{table}
 
+Finalmente, para caracterizar el flujo de tráfico se escogió como medida la velocidad promedio de desplazamiento de los vehículos, siendo valores mayores de esta mejores y peores los valores bajos. Así, en la \Cref{table:velocidad_por_hora} y la \Cref{fig:promedio_velocidad} se presentan el promedio de velocidad por hora del día y se aprecia que por las mañanas el promedio más bajo de velocidad ocurre entre las 6 y las 9 horas, mientras que por las tardes esto sucede de 18 a 21 horas. También se observa una disminución en la velocidad promedio durante el mediodía. 
+
+En la \Cref{fig:promedio_velocidad_es_fs} se realiza una comparación de modo a contrastar la diferencia que existe en los promedios de velocidad los días entre semana y los fines de semana. Durante los días entre semana se observa un promedio menor de velocidad a partir de las 5 horas hasta las 19 horas. Mientras que los fines de semana se observan dos periodos con bajos valores de velocidad promedio, siendo uno entre las 11 y 13 horas, y otro entre las 20 y 23 horas.
+
 \begin{figure}[h]
 \centering
 \begin{tikzpicture}[thick,scale=0.8, every node/.style={scale=0.8}]
@@ -249,7 +252,7 @@ En la \Cref{fig:promedio_velocidad_es_fs} se realiza una comparación de modo a 
 
 \begin{figure}[h]
 \centering
-\begin{tikzpicture}[thick,scale=0.8, every node/.style={scale=0.8}]
+\begin{tikzpicture}[thick,scale=0.75, every node/.style={scale=0.75}]
 \begin{axis}[
     xlabel={hora},
     ylabel={Velocidoad [km/h]},
@@ -288,86 +291,54 @@ En la \Cref{fig:promedio_velocidad_es_fs} se realiza una comparación de modo a 
 
 \subsection{Aproximación del Tráfico en Tiempo Real}
 
-Para aproximar el estado del tráfico en tiempo real, se obtiene el promedio de velocidad de todos los puntos que hayan sido asociados a un segmento de calle en particular durante la última hora. De esta forma, es posible presentar información del estado del tráfico en aquellas calles que han sido transitadas recientemente. En contrapartida, para aquellas calles que no cuentan con información reciente, no se presentan una aproximación de su estado. 
-%Cabe destacar que dada la cantidad de usuarios activos durante las pruebas, se da el caso de que no es posible presentar el estado del tráfico de manera continua en todas las calles. También es posible consultar el estado del tráfico en momento particular del pasado siguiendo la misma lógica, es decir, eligiendo un momento en particular y hallando el promedio de las velocidades registradas en la última hora hasta ese momento.
+Para aproximar el estado del tráfico en tiempo real, se obtiene el promedio de velocidad de todos los puntos que hayan sido asociados a un segmento de calle en particular durante la última hora. De esta forma, es posible presentar información del estado del tráfico en aquellas calles que han sido transitadas recientemente. En contrapartida, para aquellas calles que no cuentan con información reciente, no se presentan una aproximación de su estado. A modo de ilustración, en la \Cref{fig:trafico_en_tr} se muestra el estado del tráfico aproximado en tiempo real para un día entre semana, entre las 6 y 17 horas. Se puede observar cómo el estado de los segmentos de calles va variando a lo largo del día, conforme a los datos recolectados.
 
-%Los momentos en los que se registraron mayor cantidad de segmentos de calles con información de tráfico se corresponden a las franjas horarias denominadas horas pico y que se identificaron anteriormente a partir de las muestras obtenidas. En la \Cref{fig:trafico_lunes} se puede observar un ejemplo del estado del tráfico observado en un día lunes entre las 8 y las 9 de la mañana, puede verse que existe una gran cantidad de calles con niveles de velocidad bajo. La \Cref{fig:trafico_sabado} corresponde al estado del tráfico observado para la misma zona un día sábado, también entre las 8 y las 9 de la mañana, y se puede apreciar que existe una menor cantidad de información y que los niveles de velocidad son más variados con relación a lo recabado para el día lunes.
-
-%\begin{figure}[!ht]
-%	\centering
-%	\includegraphics[width=0.4\textwidth]{apartados/figuras/figura6.jpg}
-%	\caption{\label{fig:trafico_lunes} Tráfico en día lunes a las 9 am}	
-%\end{figure}
-%
-%\begin{figure}[!ht]
-%	\centering
-%	\includegraphics[width=0.4\textwidth]{apartados/figuras/figura7.jpg}
-%	\caption{\label{fig:trafico_sabado} Tráfico en día sábado a las 9 am}	
-%\end{figure}
-
-A modo de ilustración, en la \Cref{fig:trafico_en_tr} se muestra el estado del tráfico aproximado en tiempo real para un día entre semana, entre las 6 y 17 horas. Se puede observar cómo el estado de los segmentos de calles va variando a lo largo del día, conforme a los datos recolectados.
-
-\begin{figure*}[!htbp]
+\begin{figure*}[t]
 	\centering
-%	\begin{subfigure}[b]{0.30\textwidth}
-%		\includegraphics[width=\textwidth]{apartados/figuras/6.jpg}
-%		\caption{6:00}
-%	\end{subfigure}
-%	~~
-%	\begin{subfigure}[b]{0.30\textwidth}
-%		\includegraphics[width=\textwidth]{apartados/figuras/7.jpg}
-%		\caption{7:00}		
-%	\end{subfigure}
-%	~~
-%	\begin{subfigure}[b]{0.30\textwidth}
-%		\includegraphics[width=\textwidth]{apartados/figuras/8.jpg}
-%		\caption{8:00}
-%	\end{subfigure}
-	
-	\begin{subfigure}[b]{0.30\textwidth}
+	\begin{subfigure}[b]{0.25\textwidth}
 		\includegraphics[width=\textwidth]{apartados/figuras/9.jpg}
 		\caption{9:00}
 	\end{subfigure}
 	~~
-	\begin{subfigure}[b]{0.30\textwidth}
+	\begin{subfigure}[b]{0.25\textwidth}
 		\includegraphics[width=\textwidth]{apartados/figuras/10.jpg}
 		\caption{10:00}
 	\end{subfigure}
 	~~
-	\begin{subfigure}[b]{0.30\textwidth}
+	\begin{subfigure}[b]{0.25\textwidth}
 		\includegraphics[width=\textwidth]{apartados/figuras/11.jpg}
 		\caption{11:00}
 	\end{subfigure}
 	
-	\begin{subfigure}[b]{0.30\textwidth}
+	\begin{subfigure}[b]{0.25\textwidth}
 		\includegraphics[width=\textwidth]{apartados/figuras/12.jpg}
 		\caption{12:00}
 	\end{subfigure}
 	~~
-	\begin{subfigure}[b]{0.30\textwidth}
+	\begin{subfigure}[b]{0.25\textwidth}
 		\includegraphics[width=\textwidth]{apartados/figuras/13.jpg}
 		\caption{13:00}
 	\end{subfigure}
 	~~
-	\begin{subfigure}[b]{0.30\textwidth}
+	\begin{subfigure}[b]{0.25\textwidth}
 		\includegraphics[width=\textwidth]{apartados/figuras/14.jpg}
 		\caption{14:00}
 	\end{subfigure}
 	
-	\begin{subfigure}[b]{0.30\textwidth}
+	\begin{subfigure}[b]{0.25\textwidth}
 		\includegraphics[width=\textwidth]{apartados/figuras/15.jpg}
 		\caption{15:00}
 	\end{subfigure}
 	~~
-	\begin{subfigure}[b]{0.30\textwidth}
+	\begin{subfigure}[b]{0.25\textwidth}
 		\includegraphics[width=\textwidth]{apartados/figuras/16.jpg}
 		\caption{16:00}
 	\end{subfigure}
 	~~
-	\begin{subfigure}[b]{0.30\textwidth}
+	\begin{subfigure}[b]{0.25\textwidth}
 		\includegraphics[width=\textwidth]{apartados/figuras/17.jpg}
 		\caption{17:00}
 	\end{subfigure}
-	
-	\caption{\label{fig:trafico_en_tr} Tráfico en un tramo a lo largo del día}
+	\caption{Tráfico en un tramo a lo largo del día}
+	\label{fig:trafico_en_tr} 
 \end{figure*}

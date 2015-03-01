@@ -36,7 +36,7 @@
   }%
   \providecommand\rotatebox[2]{#2}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{240bp}%
+    \setlength{\unitlength}{200bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -51,12 +51,12 @@
   \begin{picture}(1,0.6)%
     \put(0,0){\includegraphics[width=\unitlength]{segmentos_calle.pdf}}%
     \put(0.1430548,0.1562225){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_1$}}}%
-    \put(0.35728372,0.31161566){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_2$}}}%
-    \put(0.53505675,0.40766679){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_3$}}}%
-    \put(0.63282941,0.4191099){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_4$}}}%
-    \put(0.68460363,0.4709231){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_5$}}}%
-    \put(0.82467848,0.51566726){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_6$}}}%
-    \put(0.06584311,0.02974822){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_1.ini$}}}%
-    \put(0.29539808,0.1960769){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_1.fin$}}}%
+    \put(0.35728371,0.31161566){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_2$}}}%
+    \put(0.53505676,0.4076668){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_3$}}}%
+    \put(0.6328294,0.4191099){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_4$}}}%
+    \put(0.68460365,0.4709231){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_5$}}}%
+    \put(0.8246785,0.51566727){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_6$}}}%
+    \put(0.06584311,0.02974827){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_1.ini$}}}%
+    \put(0.29539808,0.19607689){\color[rgb]{0,0,0}\makebox(0,0)[lb]{\smash{$e_1.fin$}}}%
   \end{picture}%
 \endgroup%
