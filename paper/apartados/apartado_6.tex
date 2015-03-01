@@ -42,22 +42,22 @@ Por otra parte, también es importante tener en cuenta el porcentaje de tiempo q
 En base al intervalo de reconocimiento de actividad seleccionado previamente, en la \Cref{tab:prom_tiempo_efectivo_rastreo} se muestran resultados acerca del tiempo efectivo de rastreo observado para diferentes valores de tiempo de tolerancia considerados. 
 
 \begin{table}[h]
-    \centering
-	\begin{tabular}{ccccc}
-    	\toprule
-    	Intervalo (s) & Tolerancia (min.) & En bus (\%) & En auto (\%) & Ambos (\%) \\
-    	\midrule
-    	30            & 3                 & 80.34         & 89.16          & 84.75        \\
-    	30            & 5                 & 85.86         & 91.56          & 88.71		\\
-    	30            & 7                & 94.44         & 96.11          & 95.28        \\
-    	30            & 10                & 95.83         & 97.22          & 96.53        \\
-    	\bottomrule
+	\centering
+	\begin{tabular}{cccc}
+		\toprule
+		Intervalo (s) & Tolerancia (min.) & En bus (\%) & En auto (\%) \\
+		\midrule
+		30            & 3                 & 80.34         & 89.16 \\
+		30            & 5                 & 85.86         & 91.56 \\
+		30            & 7                & 94.44         & 96.11  \\
+		30            & 10                & 95.83         & 97.22 \\
+		\bottomrule
 	\end{tabular}
-    \caption{Tiempos efectivos de rastreo}
-    \label{tab:prom_tiempo_efectivo_rastreo}
+	\caption{Tiempos efectivos de rastreo}
+	\label{tab:prom_tiempo_efectivo_rastreo}
 \end{table}
 
-De las pruebas realizadas puede notarse que con una tolerancia de 10 minutos se obtienen coberturas del 96\%, tomándose dichos valores como apropiados para este trabajo.
+De las pruebas realizadas puede notarse que con una tolerancia de 10 minutos se obtienen coberturas del 95.83\% en bus y del 97.22\% en auto, tomándose dichos valores como apropiados para este trabajo.
 
 \subsection{Verificación de efectividad de MM}
 
@@ -73,9 +73,9 @@ Las pruebas del proceso de MM consistieron en observar su efectividad con difere
         \toprule
     	Intervalo (s) & Total de Puntos & Puntos Correctos & Tasa de Acierto (\%)\\
     	\midrule
-    	30 & 120  & 111 & 93 \\
-    	60 & 120 & 109 & 91 \\
-    	120 & 120 & 106 & 88 \\ 
+    	30 & 1227  & 1141 & 93 \\
+    	60 & 594 & 541 & 91 \\
+		120 & 313 & 275 & 88 \\  
     	\bottomrule
 	\end{tabular}
 	\caption{Efectividad del MM} 
@@ -90,7 +90,7 @@ Para realizar el Análisis de Tráfico se distribuyó la aplicación Autotracks 
 
 \begin{figure}[h]
 	\centering
-	\begin{tikzpicture}[thick,scale=0.85, every node/.style={scale=0.85}]
+	\begin{tikzpicture}[thick,scale=0.8, every node/.style={scale=0.8}]
 	\begin{axis}[
 	xlabel={Día},
 	ylabel={Cantidad},
@@ -305,7 +305,7 @@ Para aproximar el estado del tráfico en tiempo real, se obtiene el promedio de 
 %	\caption{\label{fig:trafico_sabado} Tráfico en día sábado a las 9 am}	
 %\end{figure}
 
-A modo de ilustración, en la \Cref{fig:trafico_en_tr} se muestra el estado del tráfico aproximado en tiempo real para un día entre semana, entre las 6 y 17 horas. Se puede observar cómo el estado de los segmentos de calles va variando a lo largo del día, conforme a los datos recolectados.
+A modo de ilustración, en la \Cref{fig:trafico_en_tr} se muestra el estado del tráfico aproximado en tiempo real para un día entre semana, entre las 9 y 17 horas. Se puede observar cómo el estado de los segmentos de calles va variando a lo largo del día, conforme a los datos recolectados.
 
 \begin{figure*}[!htbp]
 	\centering

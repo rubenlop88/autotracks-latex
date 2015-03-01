@@ -41,21 +41,21 @@ Por otra parte, también es importante tener en cuenta el porcentaje de tiempo q
 
 \begin{table}[h]
 	\centering
-	\begin{tabular}{ccccc}
+	\begin{tabular}{cccc}
 		\toprule
-		Intervalo (s) & Tolerancia (min.) & En bus (\%) & En auto (\%) & Ambos (\%) \\
+		Intervalo (s) & Tolerancia (min.) & En bus (\%) & En auto (\%) \\
 		\midrule
-		30            & 3                 & 80.34         & 89.16          & 84.75        \\
-		30            & 5                 & 85.86         & 91.56          & 88.71		\\
-		30            & 7                & 94.44         & 96.11          & 95.28        \\
-		30            & 10                & 95.83         & 97.22          & 96.53        \\
+		30            & 3                 & 80.34         & 89.16 \\
+		30            & 5                 & 85.86         & 91.56 \\
+		30            & 7                & 94.44         & 96.11  \\
+		30            & 10                & 95.83         & 97.22 \\
 		\bottomrule
 	\end{tabular}
 	\caption{Tiempos efectivos de rastreo}
 	\label{tab:prom_tiempo_efectivo_rastreo}
 \end{table}
 
-De las pruebas realizadas puede notarse que con una tolerancia de 10 minutos se obtienen coberturas del 96\%, tomándose dichos valores como apropiados para este trabajo.
+De las pruebas realizadas puede notarse que con una tolerancia de 10 minutos se obtienen coberturas del 95.83\% en bus y del 97.22\% en auto, tomándose dichos valores como apropiados para este trabajo.
 
 \section{Verificación de efectividad de MM}
 
@@ -71,34 +71,34 @@ Las pruebas del proceso de MM consistieron en observar su efectividad con difere
         \toprule
     	Intervalo (s) & Total de Puntos & Puntos Correctos & Tasa de Acierto (\%)\\
     	\midrule
-    	30 & 120  & 111 & 93 \\
-    	60 & 120 & 109 & 91 \\
-    	120 & 120 & 106 & 88 \\ 
+    	30 & 1227  & 1141 & 93 \\
+    	60 & 594 & 541 & 91 \\
+    	120 & 313 & 275 & 88 \\ 
     	\bottomrule
 	\end{tabular}
 	\caption{Efectividad del MM} 
 	\label{table:map_matching}
 \end{table}
 
-A continuación se presenta el desempeño del MM para un mismo recorrido utilizando los tres intervalos analizados. Se muestra con una línea roja el recorrido observado por el vehículo, y con una línea verde el recorrido aproximado después de realizar el MM. La \Cref{fig:mm_30s} corresponde a las muestras obtenidas utilizando un intervalo de muestreo de 30 segundos, las \Cref{fig:mm_1m,fig:mm_2m} corresponden a intervalos de 1 y 2 minutos respectivamente. Se puede observar que con intervalos más amplios, las localizaciones tomadas están más distanciadas entre si. Gracias al algoritmo de MM utilizado, el camino generado es prácticamente el mismo para todo los intervalos observados observadas.
+%A continuación se presenta el desempeño del MM para un mismo recorrido utilizando los tres intervalos analizados. Se muestra con una línea roja el recorrido observado por el vehículo, y con una línea verde el recorrido aproximado después de realizar el MM. La \Cref{fig:mm_30s} corresponde a las muestras obtenidas utilizando un intervalo de muestreo de 30 segundos, las \Cref{fig:mm_1m,fig:mm_2m} corresponden a intervalos de 1 y 2 minutos respectivamente. Se puede observar que con intervalos más amplios, las localizaciones tomadas están más distanciadas entre si. Gracias al algoritmo de MM utilizado, el camino generado es prácticamente el mismo para todo los intervalos observados observadas.
 
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=0.7\textwidth]{capitulos/7/figuras/figura1.jpg}
-	\caption{\label{fig:mm_30s} MM con intervalo de 30 segundos}	
-\end{figure}
-
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=0.7\textwidth]{capitulos/7/figuras/figura2.jpg}
-	\caption{\label{fig:mm_1m} MM con intervalo de 1 minuto}	
-\end{figure}
-
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=0.7\textwidth]{capitulos/7/figuras/figura3.jpg}
-	\caption{\label{fig:mm_2m} MM con intervalo de 2 minutos}	
-\end{figure}
+%\begin{figure}[!htb]
+%	\centering
+%	\includegraphics[width=0.7\textwidth]{capitulos/7/figuras/figura1.jpg}
+%	\caption{\label{fig:mm_30s} MM con intervalo de 30 segundos}	
+%\end{figure}
+%
+%\begin{figure}[!htb]
+%	\centering
+%	\includegraphics[width=0.7\textwidth]{capitulos/7/figuras/figura2.jpg}
+%	\caption{\label{fig:mm_1m} MM con intervalo de 1 minuto}	
+%\end{figure}
+%
+%\begin{figure}[!htb]
+%	\centering
+%	\includegraphics[width=0.7\textwidth]{capitulos/7/figuras/figura3.jpg}
+%	\caption{\label{fig:mm_2m} MM con intervalo de 2 minutos}	
+%\end{figure}
 
 \section{Análisis de Tráfico}
 
