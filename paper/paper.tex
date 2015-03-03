@@ -15,28 +15,26 @@
 \usepackage{algpseudocode}
 \usepackage[section]{placeins}
 \usepackage{pgfplots}
-%\usepackage[hidelinks]{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage{cleveref}
-  
-\bibliographystyle{ieeetr} % Numeros ordenados por entrada
+
+% Numeros ordenados por entrada
+\bibliographystyle{ieeetr} 
+
+% Correcciones para el paquete algorithmic
 \input{../spanish}
 
+% Para dibujar los gráficos de líneas
 \pgfplotsset{width=10cm,compat=1.9}
 
-\usetikzlibrary{shapes.geometric, arrows, positioning}
-
-% Definimos el caption para los listings, similar al de los algoritmos
-\DeclareCaptionFormat{lstcaption}{\hrule\hrule#1#2#3}
-\captionsetup[lstlisting]{format=lstcaption,labelfont=bf,singlelinecheck=off,labelsep=space}
-
-% Cambia el nombre de "cuadro" a "tabla" cuando se usa \cref{tab:alguna_tabla}
+% Cambia el nombre de "cuadro" a "tabla" cuando se usa \cref
 \crefname{table}{tabla}{tablas}
-\crefname{listing}{consulta}{consultas}
 
 % Incluimos los graficos en formato pdf_tex
-\graphicspath{
-	{apartados/figuras/}
-}
+\graphicspath{{apartados/figuras/}}
+
+% Para mostrar la numeración de los listados en itálicas
+\setlist[enumerate,1]{font=\itshape}
 
 \begin{document}
 
