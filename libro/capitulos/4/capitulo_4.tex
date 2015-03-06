@@ -47,7 +47,7 @@ El algoritmo más sencillo se denomina de \emph{punto a punto} \citep{white2000s
 	\label{fig:punto-a-punto} 
 \end{figure}
 
-Otra técnica utilizada se denomina \emph{punto a curva} \citep{white2000some}, y consiste en buscar para cada punto, la calle (curva) del mapa más cercana a dicho punto. Como tampoco se tiene en cuenta la conectividad entre las calles, se pueden tener los mismos errores que con la técnica anterior. Esta técnica no es efectiva en zonas urbanas que tienen una mayor densidad de calles debido al margen de error de las localizaciones. En la \Cref{fig:punto-a-curva} se puede apreciar cómo el punto $p_4$ es incorrectamente asignado a la línea comprendida entre los vértices $b_0$ y $a_0$ debido a que la distancia a esta línea es más corta que la distancia a la línea comprendida entre $a_0$ y $a_1$.
+Otra técnica utilizada se denomina \emph{punto a curva} \citep{white2000some}, y consiste en buscar para cada punto, la calle (curva) del mapa más cercana a dicho punto. Como tampoco se tiene en cuenta la conectividad entre las calles, se pueden tener los mismos errores que con la técnica anterior. Esta técnica no es efectiva en zonas urbanas que tienen una mayor densidad de calles debido al margen de error de las localizaciones. En la \Cref{fig:punto-a-curva} se puede apreciar cómo el punto $p_3$ es incorrectamente asignado a la línea comprendida entre los vértices $b_0$ y $a_0$ debido a que la distancia a esta línea es más corta que la distancia a la línea comprendida entre $a_0$ y $a_1$.
 
 \begin{figure}[h]
 	\centering
@@ -71,7 +71,7 @@ Se conoce como \emph{topología} a la relación entre las distintas formas geom�
 
 El algoritmo topológico desarrollado en \citep{greenfeld2002matching} utiliza distintos criterios de similaridad para determinar la mejor calle candidata para cada punto. Los criterios utilizados son la similaridad en la orientación entre dos puntos consecutivos y la calle candidata, la proximidad entre la localización del punto y la calle candidata y el tamaño del ángulo comprendido entre la dirección de desplazamiento del vehículo (\emph{bearing}) y la dirección de la calle candidata. Para cada calle candidata se realiza una suma ponderada de los criterios y se elige como mejor candidata a aquella con la mayor suma. 
 
-El mismo procedimiento es utilizado en \citep{quddus2003general} pero se agrega información adicional como la velocidad del vehículo y la posición relativa del punto con respecto al vértice más cercano, también se incorpora un proceso para identificar la posición real del vehículo en la calle. Para el primer punto de la trayectoria se utiliza la técnica de punto a punto para encontrar el vértice más cercano, luego se obtienen todos los enlaces conectados a dicho vértice y se aplican los criterios de similaridad para seleccionar el primer enlace. Los siguientes puntos se asignan al mismo enlace hasta que se detecta una intersección o una maniobra de giro y se vuelven a aplicar los criterios para determinar si el vehículo sigue en el mismo enlace o no. Una descripción general del algoritmo puede verse en la \Cref{fig:algoritmo-topologico}. Ambos algoritmos requieren que se identifique correctamente la primera calle, para luego ir eligiendo las calles que tienen conexión con la misma, nn fallo en la elección inicial puede llevar a resultados incorrectos.
+El mismo procedimiento es utilizado en \citep{quddus2003general} pero se agrega información adicional como la velocidad del vehículo y la posición relativa del punto con respecto al vértice más cercano, también se incorpora un proceso para identificar la posición real del vehículo en la calle. Para el primer punto de la trayectoria se utiliza la técnica de punto a punto para encontrar el vértice más cercano, luego se obtienen todos los enlaces conectados a dicho vértice y se aplican los criterios de similaridad para seleccionar el primer enlace. Los siguientes puntos se asignan al mismo enlace hasta que se detecta una intersección o una maniobra de giro y se vuelven a aplicar los criterios para determinar si el vehículo sigue en el mismo enlace o no. Una descripción general del algoritmo puede verse en la \Cref{fig:algoritmo-topologico}. Ambos algoritmos requieren que se identifique correctamente la primera calle, para luego ir eligiendo las calles que tienen conexión con la misma, un fallo en la elección inicial puede llevar a resultados incorrectos.
 
 \begin{figure}[h]
 \centering
@@ -88,9 +88,9 @@ El mismo procedimiento es utilizado en \citep{quddus2003general} pero se agrega 
 \draw [arrow] (pro1) -- (pro2);
 \draw [arrow] (pro2) -- (dec1);
 \draw [arrow] (pro3) -- (dec2);
-\draw [arrow] (dec1) -- node[anchor=east] {Sí} (pro3);
+\draw [arrow] (dec1) -- node[anchor=east] {No} (pro3);
 \draw [arrow] (dec2) -- node[anchor=east]  {Sí} (pro4);
-\draw [arrow] (dec1.east) -- ++(1cm,0cm) |- node[anchor=west, yshift=-2cm] {No} (pro2.east);
+\draw [arrow] (dec1.east) -- ++(1cm,0cm) |- node[anchor=west, yshift=-2cm] {Sí} (pro2.east);
 \draw [arrow] (dec2.west) -- ++(-2cm,0cm) |- node[anchor=east, yshift=-4cm] {No} (dec1.west);
 
 \end{tikzpicture}
@@ -103,7 +103,7 @@ El algoritmo desarrollado en \citep{lou2009map}, conocido como \emph{ST-Matching
 
 En \citep{yuan2010interactive} se propone un algoritmo basado en ST-Matching que incorpora el concepto de \emph{voto interactivo} para modelar la influencia mutua que tienen entre sí todos los puntos de la trayectoria del vehículo (a mayor distancia entre candidatos, menor la influencia). Para cada punto candidato existe un conjunto de caminos posibles que pasan por él, el objetivo es determinar cuál de los caminos es el óptimo para cada punto candidato, luego cada punto candidato vota por su “mejor camino” y finalmente se selecciona el camino óptimo global de acuerdo al resultado de esta votación.
 
-Los algoritomos presentados en \citep{lou2009map} y \citep{yuan2010interactive}, están específicamente diseñados para trabajar de forma \emph{off-line} y con una baja frecuencia de muestreo. En \citep{lou2009map} se  menciona que es posible utilizar el algoritmo en aplicaciones \emph{on-line} definiendo una “ventana” de localizaciones para las cuales se realiza el procedimiento de MM. En \citep{sakic2012map} se realizaron varias adaptaciones para utilizar el algoritmo en una aplicación de tiempo real, definiendo un tamaño de ventana en una localización, para convertir el algoritmo global en un algoritmo incremental.
+Los algoritomos presentados en \citep{lou2009map} y \citep{yuan2010interactive}, están específicamente diseñados para trabajar de forma \emph{off-line} y con una baja frecuencia de muestreo. En \citep{lou2009map} se  menciona que es posible utilizar el algoritmo en aplicaciones \emph{on-line} definiendo una “ventana” de localizaciones para las cuales se realiza el procedimiento de MM. En \citep{sakic2012map} se realizaron varias adaptaciones para utilizar el algoritmo en una aplicación de tiempo real, definiendo un tamaño de ventana de una localización, para convertir el algoritmo global en un algoritmo incremental.
 
 \subsection{Algoritmos estadísticos}
 
