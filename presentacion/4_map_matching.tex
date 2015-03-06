@@ -1,0 +1,64 @@
+\begin{frame}[c]
+	\begin{center}
+		\huge{Algoritmos de \emph{Map Matching} (MM)}
+    \end{center}
+\end{frame}
+
+\begin{frame}[c]{Definición del problema de MM}
+	\large
+	\begin{itemize}	 	
+		\item $p$: Muestra o punto (localización, velocidad, dirección, etc.)
+		\item $T$: Conjunto ordenado de puntos (trayectoria)
+		\item $V$: Conjunto de vértices (intersecciones de calles)
+		\item $E$: Conjunto de aristas (segmentos de calles)
+		\item $G(V,E)$: Grafo o red de calles
+		\item $R$: Secuencia ordenada de aristas (camino reconstruido)
+	\end{itemize}			
+\end{frame}
+
+\begin{frame}[c]{Definición del problema de MM}
+	\Large
+	\begin{center}
+		\emph{Dada una trayectoria $T$ y una red de calles $G(V,E)$, encontrar el camino $R$ que hace coincidir a $T$ con su reconstrucción más realista sobre $G(V,E)$}		
+	\end{center}
+\end{frame}
+
+\begin{frame}[c]{Definición del problema de MM}
+	\Large
+	\begin{center}
+		TODO Mostrar figura
+	\end{center}
+\end{frame}
+
+\begin{frame}[c]{Clasificación de algoritmos de MM}
+	\Large
+	\begin{itemize}	 	
+		\item De acuerdo a la técnica de implementación:
+		\begin{itemize}
+			\large
+			\item \emph{geométricos}
+			\item \emph{topológicos}
+			\item \emph{estadísticos}
+			\item \emph{avanzados}
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Clasificación de algoritmos de MM}
+	\Large
+	\begin{itemize}	 	
+		\item De acuerdo al momento del procesamiento:
+		\begin{itemize}
+			\large
+			\item \emph{incrementales} u \emph{on-line}
+			\item \emph{globales} u \emph{off-line}
+		\end{itemize}
+		\vspace{\baselineskip}
+		\item De acuerdo a la frecuencia de muestreo:
+		\begin{itemize}
+			\large
+			\item \emph{alta frecuencia}
+			\item \emph{baja frecuencia}
+		\end{itemize}
+	\end{itemize}
+\end{frame}
