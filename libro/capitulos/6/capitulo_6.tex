@@ -386,8 +386,8 @@ select
     count(l.id),     -- cantidad de muestras observadas
     sum(l.velocidad) -- sumatoria de velocidades observadas
 from localizacion as l, asu_2po_4pgr as pgr
-where l.wayId = r.id and l.fecha between :inicio and :fin
-group by r.id
+where l.wayId = pgr.id and l.fecha between :inicio and :fin
+group by pgr.id
 \end{lstlisting}
 
 Finalmente, para representar la información obtenida en intervalos que faciliten su interpretación, se definen cuatro posibles niveles de velocidad sobre cada segmento de calle:
