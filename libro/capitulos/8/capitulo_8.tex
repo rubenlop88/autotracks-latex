@@ -1,15 +1,15 @@
 \chapter{Conclusiones y Trabajos Futuros}
 \label{cap:8}
 
-En este trabajo se presentaron los detalles de implementación de un sistema inteligente de información de tráfico, denominado Autotracks, que permite recolectar y procesar información del tránsito vehicular que es obtenida a través de dispositivos móviles para aproximar el estado del tráfico en tiempo real. A continuación se presentan las conclusiones y principales aportes, y se proponen posibles trabajos futuros.
+En este trabajo se presentaron los detalles de implementación de un sistema inteligente de información de tráfico, denominado Autotracks, que permite recolectar y procesar información del tránsito vehicular obtenida a través de dispositivos móviles a los efectos de aproximar el estado del tráfico en tiempo real. A continuación se presentan las conclusiones y principales aportes, y se proponen posibles trabajos futuros.
 
 \section{Conclusiones}
 
-Del estudio de los conceptos de sistemas de coordenadas y de modelos de datos utilizados para representar la información geográfica, se determinó que el modelo de datos vectorial resulta adecuado para la implementación de algoritmos de análisis de tráfico, así como para la representación de los datos resultantes y de las trayectorias de los vehículos. Así también, se encontró apropiada la utilización de Bases de Datos GIS, con la que se consigue que la información tanto generada como recolectada por el sistema pueda estar disponible para su utilización futura.
+Del estudio de los conceptos de sistemas de coordenadas y de modelos de datos utilizados para representar la información geográfica, se determinó que el modelo de datos vectorial resulta adecuado para la implementación de algoritmos de análisis de tráfico, así como para la representación de los datos resultantes y de las trayectorias de los vehículos. Así también, se encontró apropiada la utilización de Bases de Datos GIS, con la que se consigue que la información tanto generada como recolectada por el sistema, pueda estar disponible para su utilización futura.
 
-Con respecto a la recolección de datos de tránsito, se encontró conveniente y efectiva la utilización de un modelo basado en FCD, en el cual los dispositivos móviles de los usuarios son utilizados como elementos AVL para recolectar muestras de las trayectorias de los usuarios en tránsito. En este mismo sentido, se encontró efectiva la aplicación de mecanismos de detección de actividad para realizar la captura de muestras sólo cuando los usuarios se encuentran abordo de un vehículo en movimiento, evitándose de esta forma un consumo innecesario de energía en los dispositivos respecto a que si se aplicare algún enfoque de seguimiento continuo.
+Con respecto a la recolección de datos de tránsito, se encontró conveniente y efectiva la utilización de un modelo basado en FCD, en el cual los dispositivos móviles de los usuarios son utilizados como elementos AVL para recolectar muestras de las trayectorias de los usuarios en tránsito. En este mismo sentido, se encontró efectiva la aplicación de mecanismos de detección de actividad para realizar la captura de muestras sólo cuando los usuarios se encuentran abordo de un vehículo en movimiento, evitándose de esta forma un consumo innecesario de energía en los dispositivos, respecto a que si se aplicare algún enfoque de seguimiento contínuo.
 
-Para la reconstrucción de trayectorias, se aplicó con éxito un esquema de muestreo periódico en conjunto con un algoritmo de MM denominado ST-Matching. Esto permitió que a partir de muestras poco frecuentes e imprecisas se consiga de forma eficiente información suficiente para proveer una estimación del estado de tráfico. También, con este esquema, en los dispositivos móviles no se requiere de un seguimiento activo que recolecte y transmita una gran cantidad de datos, ni de la utilización exclusiva de sensores GPS, permitiendo estos factores un uso eficiente de los recursos de los dispositivos.
+Para la reconstrucción de trayectorias, se aplicó con éxito un esquema de muestreo periódico en conjunto con un algoritmo de MM denominado ST-Matching. Esto permitió que a partir de muestras poco frecuentes e imprecisas se consiga, de forma eficiente, información suficiente para proveer una estimación del estado de tráfico. También, con este esquema, en los dispositivos móviles no se requiere de un seguimiento activo que recolecte y transmita una gran cantidad de datos, ni de la utilización exclusiva de sensores GPS, permitiendo estos factores un uso eficiente de los recursos de los dispositivos.
 
 A partir de las pruebas de campo realizadas y los resultados obtenidos, pueden derivarse las siguientes apreciaciones:
 \begin{itemize}
@@ -18,7 +18,7 @@ A partir de las pruebas de campo realizadas y los resultados obtenidos, pueden d
 
 \item Se comprueba que los dispositivos móviles pueden ser utilizados como alternativa válida para recolectar información de FCD y así estimar el estado del tránsito.
 
-\item Al utilizar un esquema de reconocimiento de actividad se evita un consumo excesivo de batería y se facilita la recolección de información ya que esta sucede de manera transparente para el usuario.
+\item Al utilizar un esquema de reconocimiento de actividad se evita un consumo excesivo de batería y se facilita la recolección de información, ya que ásta sucede de manera transparente para el usuario.
 
 \item Para evitar cortes en la captura de datos en un esquema de reconocimiento de actividad se hace necesario utilizar un tiempo de tolerancia antes de detener el seguimiento.
 
@@ -43,7 +43,7 @@ De manera a que pueda darse continuidad al trabajo iniciado con el presente proy
 
 \begin{itemize}
 
-\item Experimentar con datos FCD obtenidos mediante dispositivos  instalados en flotas de vehículos de circulación continua tales como buses y taxis.
+\item Experimentar con datos FCD obtenidos mediante dispositivos  instalados en flotas de vehículos de circulación contínua tales como buses y taxis.
 
 \item Realizar un estudio orientado a documentar la implementación de técnicas de reconocimiento de actividad e incorporar una solución propia en el sistema.
 

@@ -100,7 +100,7 @@ El \Cref{alg:deteccion_actividad} muestra el procedimiento ejecutado periódicam
 \subsection{Toma de localizaciones}
 \label{toma_localizaciones}
 
-Para obtener la ubicación de los teléfonos móviles existen varias opciones posibles, cada una con sus ventajas y desventajas, estas son: 
+Para obtener la ubicación de los teléfonos móviles existen varias opciones posibles, cada una con sus ventajas y desventajas, éstas son: 
 \begin{itemize}
 \item \textbf{Triangulación de antenas}: Utiliza las antenas de telefonía para determinar la posición. Requiere un uso mínimo de batería pero produce resultados de baja precisión, dependiendo de la técnica utilizada la precisión varía de 50 a 200 metros en áreas urbanas, y hasta más de 2 kilómetros en zonas suburbanas.
 \item \textbf{WiFi}: Utiliza las posiciones conocidas de los puntos de acceso Wifi para estimar la ubicación. El uso de la batería es moderado y produce resultados con una precisión de menos de 50 metros. No es apropiado para zonas rurales donde existe una escasa cantidad de puntos de acceso Wifi de referencia.
@@ -108,7 +108,7 @@ Para obtener la ubicación de los teléfonos móviles existen varias opciones po
 \end{itemize}
 A fin de tener la mayor flexibilidad posible, Autotracks es capaz de trabajar con cualquiera de estas opciones para obtener la ubicación de los dispositivos. Para ello se reutiliza una implementación denominada \emph{Fused Location Provider}\footnote{http://developer.android.com/training/location/receive-location-updates.html} que está disponible como parte \emph{Google Play Services}.
 
-En los casos en los que la localización es obtenida a través de las redes GSM o WiFi no se dispone de la información de velocidad, la cual es necesaria para el procesamiento posterior. Para paliar esta falta de información, la velocidad es estimada utilizando la localización anterior de la siguiente manera: \begin{equation} \label{eq:velocidad} v=\frac { d }{ t } \end{equation} donde $d$ es la distancia entre la localización actual y la anterior, y $t$ es el tiempo que transcurrió entre la toma de las localizaciones.
+En los casos en los que la localización es obtenida a través de las redes GSM o WiFi, no se dispone de la información de velocidad, la cual es necesaria para el procesamiento posterior. Para paliar esta falta de información, la velocidad es estimada utilizando la localización anterior de la siguiente manera: \begin{equation} \label{eq:velocidad} v=\frac { d }{ t } \end{equation} donde $d$ es la distancia entre la localización actual y la anterior, y $t$ es el tiempo que transcurrió entre la toma de las localizaciones.
 
 Algunas de las localizaciones capturadas pueden llegar a ser demasiado imprecisas como para ser utilizadas en el procesamiento posterior. Para evitar este tipo de localizaciones erróneas se utilizan dos técnicas de filtrado. El primer método consiste simplemente en descartar las localizaciones que reportan una precisión mayor a 200 metros. El segundo método consiste en determinar la velocidad a la que tuvo que haber viajado el vehículo para pasar de la posición anterior a la posición actual utilizando la \cref{eq:velocidad}, si dicha velocidad es mayor a un valor preestablecido, en este caso de 140 km/h, la localización es descartada. Además, también se descartan las localizaciones que son muy próximas entre sí debido a que el algoritmo de MM utilizado en una siguiente etapa requiere que las localizaciones sean relativamente distantes entre sí. Los valores de referencia fueron determinados empíricamente en sucesivas pruebas de campo. En el \Cref{alg:toma_de_localizaciones} se describe el procedimiento utilizado para registrar una localización.
 
@@ -137,7 +137,7 @@ Algunas de las localizaciones capturadas pueden llegar a ser demasiado imprecisa
 	\end{algorithmic}
 \end{algorithm}
 
-Otro aspecto importante a tener en cuenta es la frecuencia con la que se toman las localizaciones. En \citep{tao2012real} se sugiere que intervalos de entre 10 y 20 segundos son los recomendados en aplicaciones prácticas. En \citep{fontaine2005part} se reivindica que intervalos de muestras más largos permiten obtener información sobre mayores distancias y reduce la probabilidad de capturar velocidades no representativas. En \citep{lou2009map,giovannini2011novel} se utilizan localizaciones con intervalos de más de 3 minutos en aplicaciones \emph{off-line}. Para lograr un balance entre la frecuencia y el consumo de batería, se establece un intervalo de 60 segundos para el muestreo utilizado en Autotracks, dicho valor también fue determinado empíricamente realizando pruebas de campo en dispositivos de diversa gama.
+Otro aspecto importante a tener en cuenta es la frecuencia con la que se toman las localizaciones. En \citep{tao2012real} se sugiere que intervalos de entre 10 y 20 segundos son los recomendados en aplicaciones prácticas. En \citep{fontaine2005part} se reivindica que intervalos de muestras más largos permiten obtener información sobre mayores distancias y reduce la probabilidad de capturar velocidades no representativas. En \citep{lou2009map,giovannini2011novel} se utilizan localizaciones con intervalos de más de 3 minutos en aplicaciones \emph{off-line}. Para lograr un balance entre la frecuencia y el consumo de batería, se establece un intervalo de 60 segundos para el muestreo utilizado en Autotracks, dicho valor también fue determinado empíricamente, luego de realizar pruebas de campo en dispositivos de diversa gama.
 
 \subsection{Envío de datos}
 
@@ -180,7 +180,7 @@ La red de calles es modelada como un grafo dirigido $G(V,E)$, donde $V$ es el co
 	\caption{\label{fig:segmentos_de_calle} Representación de segmentos de calles}	
 \end{figure}
 
-La trayectoria $T$ de un vehículo es representada como una secuencia ordenada de puntos $p_1, p_2, \dots, p_n$ donde cada punto $p_i$ tiene además como datos su latitud $p.lat$, su longitud $p.lon$, su velocidad aproximada $p.v$, su dirección de desplazamiento $p.d$ y el tiempo $p.t$ en que fue tomada la muestra. La trayectoria está ordenada con respecto al tiempo de tal manera que $p_i.t < p_{i + 1}.t$ para $1 \le i < n$. La \Cref{fig:trayectoria} muestra un ejemplo de una trayectoria correspondiente a un vehículo de prueba.
+La trayectoria $T$ de un vehículo es representada como una secuencia ordenada de puntos $p_1, p_2, \dots, p_n$ donde cada punto $p_i$ tiene además como datos su latitud $p.lat$, su longitud $p.lon$, su velocidad aproximada $p.v$, su dirección de desplazamiento $p.d$ y el tiempo $p.t$ en que fue tomada la muestra. La trayectoria está ordenada con respecto al tiempo, de tal manera que $p_i.t < p_{i + 1}.t$ para $1 \le i < n$. La \Cref{fig:trayectoria} muestra un ejemplo de una trayectoria correspondiente a un vehículo de prueba.
 
 \begin{figure}[h*]
 	\centering
@@ -197,7 +197,7 @@ En base a estas definiciones, el problema de MM se puede expresar de la siguient
 
 La primera etapa del proceso es la selección de puntos candidatos. Un punto candidato $c$ es un punto perteneciente a un segmento de calle $e$, que puede formar parte del camino real recorrido por un vehículo, y que es obtenido a partir de un punto $p$ de una trayectoria. Dada una trayectoria $T = \{p_1, p_2, \dots, p_n\}$, el proceso de selección de candidatos consiste en encontrar para cada punto $p_i$, $1\le i\le n$, el conjunto de puntos candidatos $C_i = \{c_{i}^{1}, c_{i}^{2}, \dots, c_{i}^{m}\}$ correspondiente.
 
-El primer paso es seleccionar todos los segmentos de calles $e \in E$ tales que la distancia entre un punto $p_i$ y un segmento $e$ sea menor a un radio $r$, de esta forma se obtiene un conjunto de segmentos $E_i = \{ e : \text{ } e \in E \text{ } \wedge \text{ } dist(p_i, e) < r \}$. Luego, para cada segmento $e_{i}^{j}$ perteneciente al conjunto $E_i = \{e_{i}^{1}, e_{i}^{2}, \dots, e_{i}^{m}\}$ resultante, se obtiene un punto candidato $c_{i}^{j}$ realizando una proyección del punto $p_i$ sobre el segmento $e_{i}^{j}$. La proyección $proy(p, e)$ de un punto $p$ sobre un segmento $e$ se define como el punto $c$ perteneciente a $e$ más cercano a $p$, es decir, $c = \text{arg } min(dist(c_i, p)) \text{ } \forall c_i \in e$. Así, se obtiene el conjunto de puntos candidatos $C_i = \{ proy(p_i, e_j) \text{ } \forall e_j \in E_i \}$. Como se puede apreciar en la \Cref{fig:puntos_candidatos} un punto candidato puede ser cualquier punto del segmento, como en el caso de $c_{i}^{1}$ y $c_{i}^{2}$, o uno de sus vértices como en el caso de $c_{i}^{3}$.
+El primer paso consiste en seleccionar todos los segmentos de calles $e \in E$ tales que la distancia entre un punto $p_i$ y un segmento $e$ sea menor a un radio $r$, de esta forma se obtiene un conjunto de segmentos $E_i = \{ e : \text{ } e \in E \text{ } \wedge \text{ } dist(p_i, e) < r \}$. Luego, para cada segmento $e_{i}^{j}$ perteneciente al conjunto $E_i = \{e_{i}^{1}, e_{i}^{2}, \dots, e_{i}^{m}\}$ resultante, se obtiene un punto candidato $c_{i}^{j}$ realizando una proyección del punto $p_i$ sobre el segmento $e_{i}^{j}$. La proyección $proy(p, e)$ de un punto $p$ sobre un segmento $e$ se define como el punto $c$ perteneciente a $e$ más cercano a $p$, es decir, $c = \text{arg } min(dist(c_i, p)) \text{ } \forall c_i \in e$. Así, se obtiene el conjunto de puntos candidatos $C_i = \{ proy(p_i, e_j) \text{ } \forall e_j \in E_i \}$. Como se puede apreciar en la \Cref{fig:puntos_candidatos} un punto candidato puede ser cualquier punto del segmento, como en el caso de $c_{i}^{1}$ y $c_{i}^{2}$, o uno de sus vértices como en el caso de $c_{i}^{3}$.
 
 \begin{figure}[h*]
 	\centering
@@ -236,7 +236,7 @@ from (
 ) a
 \end{lstlisting}
 
-Una vez que se han obtenidos todos los conjuntos $C_i = \{c_{i}^{1}, c_{i}^{2}, \dots, c_{i}^{m}\}$ correspondientes a cada punto $p_i$ de la trayectoria $T$, el problema de MM se reduce a cómo seleccionar un punto candidato $c_i$ de cada conjunto $C_i$, a partir del cual se obtiene el segmento de calle $e_i$, de manera tal que el camino real resultante $R = \{ e_1, e_2, \dots, e_n \}$ sea lo más aproximado posible a $T = \{ p_1, p_2, \dots, p_n\}$, conforme se describe en los siguientes apartados.
+Una vez que se han obtenido todos los conjuntos $C_i = \{c_{i}^{1}, c_{i}^{2}, \dots, c_{i}^{m}\}$ correspondientes a cada punto $p_i$ de la trayectoria $T$, el problema de MM se reduce a cómo seleccionar un punto candidato $c_i$ de cada conjunto $C_i$, a partir del cual se obtiene el segmento de calle $e_i$, de manera tal que el camino real resultante $R = \{ e_1, e_2, \dots, e_n \}$ sea lo más aproximado posible a $T = \{ p_1, p_2, \dots, p_n\}$, conforme se describe en los siguientes apartados.
 
 \subsection{Análisis Espacial y Temporal}
 
@@ -252,7 +252,7 @@ N(c_{i}^{j}) = \frac {1}{\sqrt { 2 \pi \sigma }} {e}^{\frac {{(x_{i}^{j} - \mu)}
 \end{equation}
 donde $x_{i}^{j} = dist(c_{i}^{j},p_i)$ es la distancia entre $p_i$ y el punto candidato $c_{i}^{j}$. En este trabajo se utiliza una media $\mu = 50\text{m}$ y una desviación estándar $\sigma = 100\text{m}$. Estos valores fueron determinados empíricamente y son distintos a los valores utilizados en \citep{lou2009map} y \citep{budigm2012algorithm} debido a que, a diferencia de estos trabajos anteriores, no todas las muestras son obtenidas mediante el uso de GPS.
 
-El cálculo de la probabilidad de observación tiene en cuenta únicamente la posición de los puntos $p_i$ y $c_{i}^{j}$, ignorando la topología y la posición relativa de los puntos con respecto a los demás puntos de la trayectoria. Debido a esto pueden darse casos en los que un punto candidato es seleccionado erróneamente por ser el más cercano aún cuando existen otros puntos candidatos más adecuados. Esta situación se puede presentar en las intersecciones de calles o en calles paralelas muy cercanas como se muestra en la \Cref{fig:probabilidad_transmision}.
+El cálculo de la probabilidad de observación tiene en cuenta únicamente la posición de los puntos $p_i$ y $c_{i}^{j}$, ignorando la topología y la posición relativa de los puntos con respecto a los demás puntos de la trayectoria. Debido a ésto, pueden darse casos en los que un punto candidato sea seleccionado erróneamente por ser el más cercano aún cuando existan otros puntos candidatos más adecuados. Esta situación puede presentarse en las intersecciones de calles o en calles paralelas muy cercanas como se muestra en la \Cref{fig:probabilidad_transmision}.
 
 \begin{figure}[h*]
 	\centering
@@ -275,7 +275,7 @@ Como resultado del análisis espacial se asigna un valor numérico a todos los p
 
 \subsubsection{Análisis Temporal}
 
-Existen casos en los que el análisis espacial no es suficiente para identificar un segmento de calle correctamente. En la \Cref{fig:analisis_temporal} la línea más gruesa representa a una autopista mientras que la línea más delgada representa a una calle vecinal, el límite de velocidad de la autopista es superior al de la calle vecinal cercana, utilizando sólo el análisis espacial se podría seleccionar incorrectamente una de las dos. Para evitar esto se calcula la velocidad promedio entre dos puntos consecutivos $p_{i-1}$ y $p_i$ y se compara con los límites de velocidad promedio de los segmentos de calles comprendidos entre dos puntos candidatos $c_{i-1}^{j}$ y $c_{i}^{k}$ con el fin de seleccionar el segmento cuya velocidad es la más cercana a la velocidad promedio de desplazamiento del vehículo.
+Existen casos en los que el análisis espacial no es suficiente para identificar correctamente un segmento de calle. En la \Cref{fig:analisis_temporal} la línea más gruesa representa a una autopista mientras que la línea más delgada representa a una calle vecinal, el límite de velocidad de la autopista es superior al de la calle vecinal cercana, utilizando sólo el análisis espacial se podría seleccionar incorrectamente una de las dos. Para evitar ésto, se calcula la velocidad promedio entre dos puntos consecutivos $p_{i-1}$ y $p_i$ y se compara con los límites de velocidad promedio de los segmentos de calles comprendidos entre dos puntos candidatos $c_{i-1}^{j}$ y $c_{i}^{k}$ con el fin de seleccionar el segmento cuya velocidad es la más cercana a la velocidad promedio de desplazamiento del vehículo.
 
 \begin{figure}[h*]
 	\centering

@@ -3,7 +3,7 @@
 
 En el presente capítulo se describen las pruebas de campo realizadas y los resultados obtenidos. En primer lugar se realizó un grupo de pruebas empíricas que tuvo por objetivo determinar los valores más adecuados para los parámetros utilizados en la recolección de FCD. Otro grupo de pruebas empíricas se realizó con el objetivo determinar un valor apropiado para el parámetro que interviene en la detección del camino recorrido.
 
-Por último, por medio de la distribución de la aplicación móvil que conforma la plataforma diseñada para este trabajo, se procedió a capturar y evaluar datos reales que luego permitieron derivar resultados que representan una caracterización realista del tráfico, siendo los datos analizados correspondientes al periodo de mayor cantidad de usuarios finales.
+Por último, por medio de la distribución de la aplicación móvil que conforma la plataforma diseñada para este trabajo, se procedió a capturar y evaluar datos reales que luego permitieron llegar a resultados que representan una caracterización realista del tráfico, correspondiendo los datos analizados al periodo de mayor cantidad de usuarios finales.
 
 \section{Deducción de parámetros para FCD}
 
@@ -195,7 +195,7 @@ En la \Cref{table:localizaciones_por_hora} se puede observar la distribución de
 	\label{table:localizaciones_por_hora}
 \end{table}
 
-Finalmente, para caracterizar el flujo de tráfico se escogió como medida la velocidad promedio de desplazamiento de los vehículos, siendo valores mayores de esta mejores y peores los valores bajos. Así, en la \Cref{table:velocidad_por_hora} y la \Cref{fig:promedio_velocidad} se presentan el promedio de velocidad por hora del día y se aprecia que por las mañanas el promedio más bajo de velocidad ocurre entre las 6 y las 9 horas, mientras que por las tardes esto sucede de 18 a 21 horas. También se observa una disminución en la velocidad promedio durante el mediodía. 
+Finalmente, para caracterizar el flujo de tráfico se escogió como medida la velocidad promedio de desplazamiento de los vehículos, siendo mejores los valores mayores de ésta y peores los valores menores. Así, en la \Cref{table:velocidad_por_hora} y la \Cref{fig:promedio_velocidad} se presentan el promedio de velocidad por hora del día y se aprecia que por las mañanas el promedio más bajo de velocidad ocurre entre las 6 y las 9 horas, mientras que por las tardes esto sucede de 18 a 21 horas. También se observa una disminución en la velocidad promedio durante el mediodía. 
 
 \begin{table}[h]
 	\centering
@@ -306,7 +306,7 @@ En la \Cref{fig:promedio_velocidad_es_fs} se realiza una comparación de modo a 
 
 \section{Aproximación del Tráfico en Tiempo Real}
 
-Para aproximar el estado del tráfico en tiempo real, se obtiene el promedio de velocidad de todos los puntos que hayan sido asociados a un segmento de calle en particular durante la última hora. De esta forma, es posible presentar información del estado del tráfico en aquellas calles que han sido transitadas recientemente. En contrapartida, para aquellas calles que no cuentan con información reciente, no se presentan una aproximación de su estado. Cabe destacar que dada la cantidad de usuarios activos durante las pruebas, se da el caso de que no es posible presentar el estado del tráfico de manera continua en todas las calles. También es posible consultar el estado del tráfico en momento particular del pasado siguiendo la misma lógica, es decir, eligiendo un momento en particular y hallando el promedio de las velocidades registradas en la última hora hasta ese momento.
+Para aproximar el estado del tráfico en tiempo real, se obtiene el promedio de velocidad de todos los puntos que hayan sido asociados a un segmento de calle en particular durante la última hora. De esta forma, es posible presentar información del estado del tráfico en aquellas calles que han sido transitadas recientemente. En contrapartida, para aquellas calles que no cuentan con información reciente, no se presentan una aproximación de su estado. Cabe destacar que dada la cantidad de usuarios activos durante las pruebas, se da el caso de que no es posible presentar el estado del tráfico de manera contínua en todas las calles. También es posible consultar el estado del tráfico en momento particular del pasado siguiendo la misma lógica, es decir, eligiendo un momento en particular y hallando el promedio de las velocidades registradas en la última hora hasta ese momento.
 
 Los momentos en los que se registraron mayor cantidad de segmentos de calles con información de tráfico se corresponden a las franjas horarias denominadas horas pico y que se identificaron anteriormente a partir de las muestras obtenidas. En la \Cref{fig:trafico_lunes} se puede observar un ejemplo del estado del tráfico observado en un día lunes entre las 8 y las 9 de la mañana, puede verse que existe una gran cantidad de calles con niveles de velocidad bajo. La \Cref{fig:trafico_sabado} corresponde al estado del tráfico observado para la misma zona un día sábado, también entre las 8 y las 9 de la mañana, y se puede apreciar que existe una menor cantidad de información y que los niveles de velocidad son más variados con relación a lo recabado para el día lunes.
 
